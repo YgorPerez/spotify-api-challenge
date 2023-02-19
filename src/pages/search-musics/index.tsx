@@ -1,14 +1,15 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { api } from "../../utils/api";
 
-import { api } from "../utils/api";
-
-import { AuthShowcase } from "./components/signin";
-
-const Home: NextPage = () => {
-  const hello = api.spotify.hello.useQuery({ text: "from tRPC" });
-
+const SearchMusicsPage: NextPage = () => {
+  const spotifyPlaylist = api.spotify.getSpotifyPlaylist.useQuery({
+    id: "3cEYpjA9oz9GiPac4AsH4n",
+  });
+  const userId = api.user.getUserId.useQuery();
+  console.debug(spotifyPlaylist);
+  console.debug(userId);
   return (
     <>
       <Head>
@@ -44,9 +45,8 @@ const Home: NextPage = () => {
           </div>
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
-              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+              {/* {spotifyPlaylist.data ? spotifyPlaylist.data.greeting : "Loading tRPC query..."} */}
             </p>
-            <AuthShowcase />
           </div>
         </div>
       </main>
@@ -54,4 +54,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default SearchMusicsPage;

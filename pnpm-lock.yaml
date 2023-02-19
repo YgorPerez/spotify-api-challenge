@@ -8,10 +8,11 @@ specifiers:
   '@trpc/next': ^10.9.0
   '@trpc/react-query': ^10.9.0
   '@trpc/server': ^10.9.0
-  '@types/node': ^18.11.18
+  '@types/node': ^18.13.0
   '@types/prettier': ^2.7.2
   '@types/react': ^18.0.26
   '@types/react-dom': ^18.0.10
+  '@types/spotify-api': ^0.0.20
   '@typescript-eslint/eslint-plugin': ^5.47.1
   '@typescript-eslint/parser': ^5.47.1
   autoprefixer: ^10.4.7
@@ -50,6 +51,7 @@ devDependencies:
   '@types/prettier': 2.7.2
   '@types/react': 18.0.28
   '@types/react-dom': 18.0.11
+  '@types/spotify-api': 0.0.20
   '@typescript-eslint/eslint-plugin': 5.52.0_6cfvjsbua5ptj65675bqcn6oza
   '@typescript-eslint/parser': 5.52.0_7kw3g6rralp5ps6mg3uyzz6azm
   autoprefixer: 10.4.13_postcss@8.4.21
@@ -424,6 +426,10 @@ packages:
 
   /@types/semver/7.3.13:
     resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
+    dev: true
+
+  /@types/spotify-api/0.0.20:
+    resolution: {integrity: sha512-HRBwiOthYAT0r/vUQlGlNTdXMnPg/CS3MzTuQKDy2PtalUDXhj0Ep9YZ4tXmL68K0j7FMcLFcYTzy7k7nVu5mg==}
     dev: true
 
   /@typescript-eslint/eslint-plugin/5.52.0_6cfvjsbua5ptj65675bqcn6oza:
