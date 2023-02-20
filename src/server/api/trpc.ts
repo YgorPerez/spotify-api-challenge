@@ -16,7 +16,7 @@
  * database, the session, etc.
  */
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { type Session } from "next-auth";
+import { TokenSet, type Session } from "next-auth";
 
 import { getServerAuthSession } from "../auth";
 import { prisma } from "../db";
@@ -118,6 +118,96 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   });
 });
 
+const IsAccessTokenValidated = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.session || !ctx.session.user) {
+    throw new TRPCError({
+      message: "User is not logged in",
+      code: "UNAUTHORIZED",
+    });
+  }
+  const id = ctx.session.user.id;
+  let accessToken: string = "test";
+  const accountQuery = await ctx.prisma.account.findFirst({
+    where: {
+      userId: id,
+    },
+  });
+
+  if (!accountQuery?.expires_at) {
+    throw new TRPCError({
+      message: `User account not found id: ${id}`,
+      code: "INTERNAL_SERVER_ERROR",
+    });
+  }
+
+  const ACCESS_TOKEN_EXPIRES_IN = 3600;
+  const ACCESS_TOKEN_EXPIRES_AT =
+    Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXPIRES_IN;
+  const tokenExpired = accountQuery.expires_at < ACCESS_TOKEN_EXPIRES_AT;
+  if (tokenExpired) {
+    try {
+      const spotifyTokenResponse = await fetch(
+        "https://accounts.spotify.com/api/token?",
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            client_id: process.env.SPOTIFY_CLIENT_ID as string,
+            client_secret: process.env.SPOTIFY_CLIENT_SECRET as string,
+            grant_type: "refresh_token",
+            refresh_token: accountQuery.refresh_token ?? "",
+          }),
+          method: "POST",
+        }
+      );
+
+      const tokens: TokenSet = await spotifyTokenResponse.json();
+
+      if (!spotifyTokenResponse.ok) throw tokens;
+      if (!tokens?.access_token) throw tokens?.access_token;
+      accessToken = tokens.access_token;
+      await ctx.prisma.account.update({
+        data: {
+          access_token: tokens.access_token,
+          expires_at: ACCESS_TOKEN_EXPIRES_AT,
+          refresh_token: tokens.refresh_token ?? accountQuery.refresh_token,
+        },
+        where: {
+          provider_providerAccountId: {
+            provider: "spotify",
+            providerAccountId: accountQuery.providerAccountId,
+          },
+        },
+      });
+    } catch (error) {
+      throw new TRPCError({
+        message: `Error refreshing access token`,
+        code: "INTERNAL_SERVER_ERROR",
+        cause: error,
+      });
+    }
+  }
+  if (!accessToken) {
+    throw new TRPCError({
+      message: `Access token does not exist`,
+      code: "INTERNAL_SERVER_ERROR",
+    });
+  }
+
+  return next({
+    ctx: {
+      ...ctx,
+      // infers the `session` as non-nullable
+      session: {
+        ...ctx.session,
+        user: ctx.session.user,
+      },
+      accessToken: accessToken,
+    },
+  });
+});
+
 /**
  * Protected (authenticated) procedure
  *
@@ -128,3 +218,6 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const protectedProcedureAccessTokenValidator = t.procedure.use(
+  IsAccessTokenValidated
+);

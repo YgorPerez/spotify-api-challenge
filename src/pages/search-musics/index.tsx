@@ -3,13 +3,10 @@ import Head from "next/head";
 import Link from "next/link";
 import { api } from "../../utils/api";
 
-const SearchMusicsPage: NextPage = () => {
+export const SearchMusicsPage: NextPage = () => {
   const spotifyPlaylist = api.spotify.getSpotifyPlaylist.useQuery({
     id: "3cEYpjA9oz9GiPac4AsH4n",
   });
-  const userId = api.user.getUserId.useQuery();
-  console.debug(spotifyPlaylist);
-  console.debug(userId);
   return (
     <>
       <Head>
