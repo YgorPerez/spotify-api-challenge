@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { api } from "../../utils/api";
 
-const SearchMusicsPage: NextPage = () => {
+const SignInPage: NextPage = () => {
   const spotifyPlaylist = api.spotify.getSpotifyPlaylist.useQuery({
     id: "3cEYpjA9oz9GiPac4AsH4n",
   });
@@ -51,4 +51,4 @@ const SearchMusicsPage: NextPage = () => {
   );
 };
 
-export default SearchMusicsPage;
+export default SignInPage;
