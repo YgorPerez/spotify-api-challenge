@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { api } from "../utils/api";
 
-import { AuthShowcase } from "./components/signin";
+import { AuthShowcase } from "../components/sign-in";
 
 const Home: NextPage = () => {
   const hello = api.spotify.hello.useQuery({ text: "from tRPC" });
