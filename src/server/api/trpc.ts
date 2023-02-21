@@ -16,7 +16,7 @@
  * database, the session, etc.
  */
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { TokenSet, type Session } from "next-auth";
+import { type TokenSet, type Session } from "next-auth";
 
 import { getServerAuthSession } from "../auth";
 import { prisma } from "../db";
@@ -118,7 +118,7 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   });
 });
 
-const IsAccessTokenValidated = t.middleware(async ({ ctx, next }) => {
+const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
     throw new TRPCError({
       message: "User is not logged in",
@@ -126,7 +126,7 @@ const IsAccessTokenValidated = t.middleware(async ({ ctx, next }) => {
     });
   }
   const id = ctx.session.user.id;
-  let accessToken: string = "test";
+  let accessToken = "test";
   const accountQuery = await ctx.prisma.account.findFirst({
     where: {
       userId: id,
@@ -156,12 +156,15 @@ const IsAccessTokenValidated = t.middleware(async ({ ctx, next }) => {
             client_id: process.env.SPOTIFY_CLIENT_ID as string,
             client_secret: process.env.SPOTIFY_CLIENT_SECRET as string,
             grant_type: "refresh_token",
-            refresh_token: accountQuery.refresh_token ?? "",
+            refresh_token:
+              (process.env.SPOTIFY_REFRESH_TOKEN as string) ??
+              accountQuery.refresh_token,
           }),
           method: "POST",
         }
       );
 
+      /* eslint-disable @typescript-eslint/no-unsafe-assignment */
       const tokens: TokenSet = await spotifyTokenResponse.json();
 
       if (!spotifyTokenResponse.ok) throw tokens;
@@ -201,9 +204,11 @@ const IsAccessTokenValidated = t.middleware(async ({ ctx, next }) => {
       // infers the `session` as non-nullable
       session: {
         ...ctx.session,
-        user: ctx.session.user,
+        user: {
+            ...ctx.session.user,
+            accessToken: accessToken
+        }
       },
-      accessToken: accessToken,
     },
   });
 });
@@ -218,6 +223,6 @@ const IsAccessTokenValidated = t.middleware(async ({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
-export const protectedProcedureAccessTokenValidator = t.procedure.use(
-  IsAccessTokenValidated
+export const protectedTokenProcedure = t.procedure.use(
+  IsAccessTokenValid
 );

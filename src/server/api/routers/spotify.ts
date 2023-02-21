@@ -1,9 +1,10 @@
+import { Cache, Client } from "spotify-api.js";
 import { z } from "zod";
 
 import {
   createTRPCRouter,
   protectedProcedure,
-  protectedProcedureAccessTokenValidator,
+  protectedTokenProcedure,
   publicProcedure,
 } from "../trpc";
 
@@ -18,28 +19,48 @@ export const spotifyRouter = createTRPCRouter({
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
-  getSpotifyPlaylist: protectedProcedureAccessTokenValidator
-    .input(z.object({ id: z.string() }))
+  getSpotifyPlaylist: protectedTokenProcedure
+    .input(z.object({ playlistId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const accessToken = ctx.accessToken;
-            const spotifyPlaylistUrl = "https://api.spotify.com/v1/playlists";
-      const spotifyPlaylistResponse = await fetch(
-        `${spotifyPlaylistUrl}/${input.id}`,
+      const client = new Client({
+        token: ctx.session.user.accessToken,
+        cacheSettings: {
+          playlists: true,
+        },
+        retryOnRateLimit: true,
+      });
+      const playlist = await client.playlists.get(input.playlistId);
+      Cache.playlists.get(input.playlistId)
+      return playlist ;
+    }),
+  getSpotifyAlbum: protectedTokenProcedure
+    .input(z.object({ albumId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const client = new Client({
+        token: ctx.session.user.accessToken,
+        cacheSettings: {
+          albums: true,
+        },
+        retryOnRateLimit: true,
+      });
+      const album = await client.albums.get(input.albumId);
+      Cache.albums.get(input.albumId);
+      // cache the album
+      return album;
+    }),
+  getSpotifySearchAlbum: protectedTokenProcedure
+    .input(z.object({ searchQuery: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const client = new Client({
+        token: ctx.session.user.accessToken,
+        retryOnRateLimit: true,
+      });
+      const { tracks, albums, artists } = await client.search(
+        input.searchQuery,
         {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
+          types: ["track", "album", "artist"],
         }
       );
-
-
-      //   type Playlist = z.infer<typeof PlaylistValidator>;
-      //   const responseValidator = z.array(PlaylistValidator);
-      //   const validResponse = responseValidator.safeParse(
-      //     spotifyPlaylistResponse.json()
-      //   );
-      // data is valid and typed
-         return await spotifyPlaylistResponse.json();
+      return { tracks, albums, artists };
     }),
 });

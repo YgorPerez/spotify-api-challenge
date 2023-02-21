@@ -5,7 +5,7 @@ import { api } from "../../utils/api";
 
 const SignInPage: NextPage = () => {
   const spotifyPlaylist = api.spotify.getSpotifyPlaylist.useQuery({
-    id: "3cEYpjA9oz9GiPac4AsH4n",
+    playlistId: "3cEYpjA9oz9GiPac4AsH4n",
   });
   return (
     <>

@@ -5,7 +5,10 @@ import { api } from "../../utils/api";
 
 const SearchMusicsPage: NextPage = () => {
   const spotifyPlaylist = api.spotify.getSpotifyPlaylist.useQuery({
-    id: "3cEYpjA9oz9GiPac4AsH4n",
+    playlistId: "3cEYpjA9oz9GiPac4AsH4n",
+  });
+  const spotifySearch = api.spotify.getSpotifySearchAlbum.useQuery({
+    searchQuery: "blurry face",
   });
   return (
     <>
