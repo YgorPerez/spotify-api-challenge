@@ -23,7 +23,7 @@ export const spotifyRouter = createTRPCRouter({
 		.input(z.object({ playlistId: z.string() }))
 		.query(async ({ ctx, input }) => {
 			const client = new Client({
-				token: ctx.session.user.accessToken,
+				token: ctx.session.accessToken,
 				cacheSettings: {
 					playlists: true,
 				},
@@ -37,7 +37,7 @@ export const spotifyRouter = createTRPCRouter({
 		.input(z.object({ albumId: z.string() }))
 		.query(async ({ ctx, input }) => {
 			const client = new Client({
-				token: ctx.session.user.accessToken,
+				token: ctx.session.accessToken,
 				cacheSettings: {
 					albums: true,
 				},
@@ -52,7 +52,7 @@ export const spotifyRouter = createTRPCRouter({
 		.input(z.object({ searchQuery: z.string() }))
 		.query(async ({ ctx, input }) => {
 			const client = new Client({
-				token: ctx.session.user.accessToken,
+				token: ctx.session.accessToken,
 				retryOnRateLimit: true,
 			});
 			const { tracks, albums, artists } = await client.search(
