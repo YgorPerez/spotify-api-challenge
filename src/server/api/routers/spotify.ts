@@ -1,4 +1,4 @@
-import { Cache, Client } from "spotify-api.js";
+import { Client } from "spotify-api.js";
 import { z } from "zod";
 
 import {
@@ -19,7 +19,7 @@ export const spotifyRouter = createTRPCRouter({
 	getSecretMessage: protectedProcedure.query(() => {
 		return "you can now see this secret message!";
 	}),
-	getSpotifyPlaylist: protectedTokenProcedure
+	getPlaylist: protectedTokenProcedure
 		.input(z.object({ playlistId: z.string() }))
 		.query(async ({ ctx, input }) => {
 			const client = new Client({
@@ -30,10 +30,9 @@ export const spotifyRouter = createTRPCRouter({
 				retryOnRateLimit: true,
 			});
 			const playlist = await client.playlists.get(input.playlistId);
-			Cache.playlists.get(input.playlistId);
 			return playlist;
 		}),
-	getSpotifyAlbum: protectedTokenProcedure
+	getAlbumTracks: protectedTokenProcedure
 		.input(z.object({ albumId: z.string() }))
 		.query(async ({ ctx, input }) => {
 			const client = new Client({
@@ -44,11 +43,38 @@ export const spotifyRouter = createTRPCRouter({
 				retryOnRateLimit: true,
 			});
 			const album = await client.albums.get(input.albumId);
-			Cache.albums.get(input.albumId);
-			// cache the album
-			return album;
+			const tracks = await client.albums.getTracks(input.albumId);
+			return { album, tracks };
 		}),
-	getSpotifySearchAlbum: protectedTokenProcedure
+	getArtistAlbums: protectedTokenProcedure
+		.input(z.object({ artistId: z.string() }))
+		.query(async ({ ctx, input }) => {
+			const client = new Client({
+				token: ctx.session.accessToken,
+				cacheSettings: {
+					artists: true,
+					albums: true,
+				},
+				retryOnRateLimit: true,
+			});
+			const artist = await client.artists.get(input.artistId);
+			const albums = await client.artists.getAlbums(input.artistId);
+			return { artist, albums };
+		}),
+	getTrack: protectedTokenProcedure
+		.input(z.object({ trackId: z.string() }))
+		.query(async ({ ctx, input }) => {
+			const client = new Client({
+				token: ctx.session.accessToken,
+				cacheSettings: {
+					tracks: true,
+				},
+				retryOnRateLimit: true,
+			});
+			const track = await client.tracks.get(input.trackId);
+			return track;
+		}),
+	getSearch: protectedTokenProcedure
 		.input(z.object({ searchQuery: z.string() }))
 		.query(async ({ ctx, input }) => {
 			const client = new Client({
@@ -59,6 +85,7 @@ export const spotifyRouter = createTRPCRouter({
 				input.searchQuery,
 				{
 					types: ["track", "album", "artist"],
+					includeExternalAudio: true,
 				}
 			);
 			return { tracks, albums, artists };
