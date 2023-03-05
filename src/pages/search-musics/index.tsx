@@ -37,7 +37,9 @@ const SearchMusicsPage: NextPage = () => {
 						</div>
 						<div className=" my-4 flex w-full max-w-full flex-wrap items-center justify-center gap-6 bg-gray-900">
 							{spotifySearch.data?.albums?.map((album) => {
-								return <AlbumCard album={album} />;
+								return (
+									<AlbumCard key={album.id} album={album} />
+								);
 							})}
 						</div>
 					</div>

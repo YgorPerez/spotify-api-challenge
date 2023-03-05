@@ -8,11 +8,11 @@ const formatMilliseconds = ({
 	function pad(num: number) {
 		return `${num}`.padStart(2, "0");
 	}
-	let asSeconds = milliseconds / 1000;
+	const asSeconds = milliseconds / 1000;
 
 	let hours = undefined;
 	let minutes = Math.floor(asSeconds / 60);
-	let seconds = Math.floor(asSeconds % 60);
+	const seconds = Math.floor(asSeconds % 60);
 
 	if (minutes > 59) {
 		hours = Math.floor(minutes / 60);

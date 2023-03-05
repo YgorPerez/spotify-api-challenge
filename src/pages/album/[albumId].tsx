@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import Error from "next/error";
 import { useRouter } from "next/router";
 import BigAlbumCard from "../../components/big-album-card";
@@ -27,7 +27,7 @@ const SingleAlbumPage: NextPage = () => {
 	const { album, tracks } = data;
 
 	return (
-		<div className="min-h-screen bg-gray-900">
+		<div className="min-h-screen min-w-max bg-gray-900">
 			<header className="flex">
 				<Header />
 				<div className="mt-8 ml-6">

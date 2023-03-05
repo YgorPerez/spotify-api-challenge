@@ -2,17 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import albumPlaceholderImage from "public/images/gray-square-placeholder.jpg";
 import React from "react";
-import { Album as albumType } from "spotify-api.js";
+import { type Album as albumType } from "spotify-api.js";
 
 const AlbumCard: React.FC<{ album: albumType }> = ({ album }) => {
 	return (
-		<div className="my-2 w-64 items-center justify-center text-center">
+		<div className="my-2 w-64 max-w-xs items-center justify-center text-center">
 			<Link className="" href={`/album/${album.id}`}>
 				<Image
 					src={album.images?.[0]?.url || albumPlaceholderImage}
 					alt="album cover"
-					height={250}
-					width={250}
+					height={album.images?.[0]?.height as number}
+					width={album.images?.[0]?.width as number}
 				/>
 				<p className=" text-white">{album.name}</p>
 			</Link>

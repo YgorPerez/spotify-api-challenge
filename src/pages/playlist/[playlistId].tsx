@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import Error from "next/error";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -28,13 +28,14 @@ const SinglePlaylistPage: NextPage = () => {
 			<div>
 				<ol>
 					{data?.tracks?.map(({ track }) => {
+						if (!track) return;
 						return (
-							<li>
-								<h2>{track?.name}</h2>
-								<span>{track?.type}</span>
+							<li key={track.id}>
+								<h2>{track.name}</h2>
+								<span>{track.type}</span>
 								<Link
-									href={`/track/${track?.id}`}
-								>{`/tracks/${track?.id}`}</Link>
+									href={`/track/${track.id}`}
+								>{`/tracks/${track.id}`}</Link>
 							</li>
 						);
 					})}

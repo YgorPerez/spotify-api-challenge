@@ -7,6 +7,7 @@ const SignInPage: NextPage = () => {
 	const spotifyPlaylist = api.spotify.getPlaylist.useQuery({
 		playlistId: "3cEYpjA9oz9GiPac4AsH4n",
 	});
+	console.log(spotifyPlaylist);
 	return (
 		<>
 			<Head>

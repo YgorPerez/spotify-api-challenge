@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import Error from "next/error";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -25,9 +25,9 @@ const SingleArtistPage: NextPage = () => {
 		<div>
 			<h1>{data?.artist?.name}</h1>
 			<p>{data?.artist?.totalFollowers}</p>
-			<Link
-				href={`/album/${data?.albums?.[0]?.id}`}
-			>{`/album/${data?.albums?.[0]?.id}`}</Link>
+			<Link href={`/album/${data?.albums?.[0]?.id as string}`}>{`/album/${
+				data?.albums?.[0]?.id as string
+			}`}</Link>
 		</div>
 	);
 };

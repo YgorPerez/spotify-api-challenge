@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import Error from "next/error";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -25,8 +25,8 @@ const SingleTrackPage: NextPage = () => {
 		<div>
 			<h1>{data?.name}</h1>
 			<p>{data?.duration}</p>
-			<Link href={`/album/${data?.album?.id}`}>
-				{`/album/${data?.album?.id}`}
+			<Link href={`/album/${data?.album?.id as string}`}>
+				{`/album/${data?.album?.id as string}`}
 			</Link>
 		</div>
 	);
