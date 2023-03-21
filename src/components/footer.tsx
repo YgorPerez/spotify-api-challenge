@@ -1,11 +1,7 @@
 import React from "react";
 
 const Footer: React.FC = () => {
-	return (
-		<div className="ml-6 w-16 pt-2">
-			<hr color="white" />
-		</div>
-	);
+	return <div className="mt-16 border border-b-4 bg-dark-gray"></div>;
 };
 
 export default Footer;

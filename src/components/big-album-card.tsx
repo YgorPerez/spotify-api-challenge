@@ -6,7 +6,7 @@ import { type Album as albumType } from "spotify-api.js";
 
 const BigAlbumCard: React.FC<{ album: albumType }> = ({ album }) => {
 	return (
-		<div className="my-2 items-center justify-center text-center lg:max-w-lg">
+		<div className="my-2 items-center justify-center text-center md:max-w-[10rem] lg:max-w-xs 2xl:max-w-md">
 			<div className="flex justify-center">
 				<Image
 					src={album.images?.[0]?.url || albumPlaceholderImage}
@@ -16,10 +16,12 @@ const BigAlbumCard: React.FC<{ album: albumType }> = ({ album }) => {
 					className="h-full w-full"
 				/>
 			</div>
-			<div>
-				<h1 className="text-2xl text-white">{album.name}</h1>
+			<div className="pt-2">
+				<h1 className=" text-3xl text-white-gray 2xl:text-4xl">
+					{album.name}
+				</h1>
 				<Link href={`/albums/${album.artists?.[0]?.id as string}`}>
-					<h2 className="text-1xl  text-gray-300">
+					<h2 className="pt-1 text-xl text-light-gray 2xl:text-2xl">
 						{album.artists?.[0]?.name}
 					</h2>
 				</Link>

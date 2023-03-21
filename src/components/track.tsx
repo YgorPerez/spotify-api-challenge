@@ -8,13 +8,13 @@ const Track: React.FC<{ track: TrackType }> = ({ track }) => {
 		milliseconds: track.duration,
 	});
 	return (
-		<li>
+		<li className="py-1 text-center text-lg 2xl:mb-1 2xl:text-2xl">
 			<Link
 				href={`/track/${track.id}`}
-				className="ml-4 flex w-screen justify-between text-center leading-8 xl:max-w-lg 2xl:max-w-4xl"
+				className="ml-4 flex w-screen justify-between md:max-w-xs xl:max-w-xl 2xl:max-w-5xl"
 			>
-				<h2 className="text-gray-50">{track.name}</h2>
-				<span className="text-gray-400">
+				<h2 className="text-white-gray">{track.name}</h2>
+				<span className="text-light-gray">
 					{trackDurationInReadableTime}
 				</span>
 			</Link>

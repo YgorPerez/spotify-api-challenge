@@ -10,17 +10,29 @@ import {
 
 export const spotifyRouter = createTRPCRouter({
 	hello: publicProcedure
-		.input(z.object({ text: z.string() }))
+		.meta({ description: "Returns hello + your text" })
+		.input(
+			z.object({
+				text: z.string().describe("The name to say hello too."),
+			})
+		)
 		.query(({ input }) => {
 			return {
 				greeting: `Hello ${input.text}`,
 			};
 		}),
-	getSecretMessage: protectedProcedure.query(() => {
-		return "you can now see this secret message!";
-	}),
+	getSecretMessage: protectedProcedure
+		.meta({ description: "Shows a message if the user is logged in" })
+		.query(() => {
+			return "you can now see this secret message!";
+		}),
 	getPlaylist: protectedTokenProcedure
-		.input(z.object({ playlistId: z.string() }))
+		.meta({ description: "Gets the playlist using the id" })
+		.input(
+			z.object({
+				playlistId: z.string().describe("The id to get the playlist."),
+			})
+		)
 		.query(async ({ ctx, input }) => {
 			const client = new Client({
 				token: ctx.session.accessToken,
@@ -33,7 +45,15 @@ export const spotifyRouter = createTRPCRouter({
 			return playlist;
 		}),
 	getAlbumTracks: protectedTokenProcedure
-		.input(z.object({ albumId: z.string() }))
+		.meta({
+			description:
+				"Gets the album and it's tracks using the id of an album",
+		})
+		.input(
+			z.object({
+				albumId: z.string().describe("The id to get the album."),
+			})
+		)
 		.query(async ({ ctx, input }) => {
 			const client = new Client({
 				token: ctx.session.accessToken,
@@ -47,7 +67,15 @@ export const spotifyRouter = createTRPCRouter({
 			return { album, tracks };
 		}),
 	getArtistAlbums: protectedTokenProcedure
-		.input(z.object({ artistId: z.string() }))
+		.meta({
+			description:
+				"Gets the artist and it's albums using the id of an album",
+		})
+		.input(
+			z.object({
+				artistId: z.string().describe("The id to get the artist."),
+			})
+		)
 		.query(async ({ ctx, input }) => {
 			const client = new Client({
 				token: ctx.session.accessToken,
@@ -62,7 +90,12 @@ export const spotifyRouter = createTRPCRouter({
 			return { artist, albums };
 		}),
 	getTrack: protectedTokenProcedure
-		.input(z.object({ trackId: z.string() }))
+		.meta({ description: "Gets a track using an id" })
+		.input(
+			z.object({
+				trackId: z.string().describe("The id to get the track."),
+			})
+		)
 		.query(async ({ ctx, input }) => {
 			const client = new Client({
 				token: ctx.session.accessToken,
@@ -75,7 +108,15 @@ export const spotifyRouter = createTRPCRouter({
 			return track;
 		}),
 	getSearch: protectedTokenProcedure
-		.input(z.object({ searchQuery: z.string() }))
+		.meta({
+			description:
+				"Gets 50 search results for tracks, albums and artists based on text",
+		})
+		.input(
+			z.object({
+				searchQuery: z.string().describe("The text to be searched."),
+			})
+		)
 		.query(async ({ ctx, input }) => {
 			const client = new Client({
 				token: ctx.session.accessToken,
@@ -86,6 +127,7 @@ export const spotifyRouter = createTRPCRouter({
 				{
 					types: ["track", "album", "artist"],
 					includeExternalAudio: true,
+					limit: 50,
 				}
 			);
 			return { tracks, albums, artists };

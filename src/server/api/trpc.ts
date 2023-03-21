@@ -67,13 +67,17 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
  */
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
+import { type TRPCPanelMeta } from "trpc-panel";
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
-	transformer: superjson,
-	errorFormatter({ shape }) {
-		return shape;
-	},
-});
+const t = initTRPC
+	.context<typeof createTRPCContext>()
+	.meta<TRPCPanelMeta>()
+	.create({
+		transformer: superjson,
+		errorFormatter({ shape }) {
+			return shape;
+		},
+	});
 
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)

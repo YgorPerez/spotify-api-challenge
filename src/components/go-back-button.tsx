@@ -7,7 +7,7 @@ const GoToPreviousPage: React.FC = () => {
 	return (
 		<button
 			onClick={() => router.back()}
-			className="ml-8 flex items-center text-gray-50"
+			className="ml-8 flex items-center text-xl text-white-gray"
 		>
 			<FontAwesomeIcon icon={faAngleLeft} />
 			<span className="ml-2">Voltar</span>
