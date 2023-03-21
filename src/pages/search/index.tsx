@@ -7,9 +7,9 @@ import Header from "../../components/header";
 import Search from "../../components/search-input";
 import { api } from "../../utils/api";
 
-const SearchMusicsPage: NextPage = () => {
+const SearchPage: NextPage = () => {
   const router = useRouter();
-  const { search } = router.query;
+  const { search = "" } = router.query;
   const spotifySearch = api.spotify.getSearch.useQuery({
     searchQuery: search as string,
   });
@@ -51,4 +51,4 @@ const SearchMusicsPage: NextPage = () => {
   );
 };
 
-export default SearchMusicsPage;
+export default SearchPage;

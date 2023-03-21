@@ -5,7 +5,7 @@ const Search: React.FC<{ search: string }> = ({ search }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const setSearchQueryParam = (value: string) => {
-    router.push({
+    void router.push({
       pathname: router.pathname,
       query: { search: value },
     });
