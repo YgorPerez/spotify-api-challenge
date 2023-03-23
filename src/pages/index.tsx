@@ -5,7 +5,7 @@ import SignInOut from "../components/sign-in-out-button";
 import { api } from "../utils/api";
 
 const Home: NextPage = () => {
-  const hello = api.spotify.hello.useQuery({ text: "from tRPC" });
+  const hello = api.user.hello.useQuery({ text: "from tRPC" });
 
   return (
     <>

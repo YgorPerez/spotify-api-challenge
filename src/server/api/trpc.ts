@@ -152,23 +152,21 @@ const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
     (userAccountQuery.expires_at as number) < accessTokenExpiresAt;
   if (tokenExpired) {
     try {
-      const spotifyTokenResponse = await fetch(
-        "https://accounts.spotify.com/api/token?",
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            client_id: process.env.SPOTIFY_CLIENT_ID as string,
-            client_secret: process.env.SPOTIFY_CLIENT_SECRET as string,
-            grant_type: "refresh_token",
-            refresh_token:
-              (process.env.SPOTIFY_REFRESH_TOKEN as string) ??
-              userAccountQuery.refresh_token,
-          }),
-          method: "POST",
-        }
-      );
+      const spotifyTokenApiUrl = "https://accounts.spotify.com/api/token?";
+      const spotifyTokenResponse = await fetch(spotifyTokenApiUrl, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          client_id: process.env.SPOTIFY_CLIENT_ID as string,
+          client_secret: process.env.SPOTIFY_CLIENT_SECRET as string,
+          grant_type: "refresh_token",
+          refresh_token:
+            (process.env.SPOTIFY_REFRESH_TOKEN as string) ??
+            userAccountQuery.refresh_token,
+        }),
+        method: "POST",
+      });
 
       /* eslint-disable @typescript-eslint/no-unsafe-assignment */
       const tokens: TokenSet = await spotifyTokenResponse.json();
