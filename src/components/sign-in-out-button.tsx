@@ -4,7 +4,7 @@ import { api } from "../utils/api";
 const SignInOut: React.FC = () => {
   const { data: sessionData } = useSession();
 
-  const { data: secretMessage } = api.spotify.getSecretMessage.useQuery(
+  const { data: secretMessage } = api.user.getSecretMessage.useQuery(
     undefined, // no input
     { enabled: sessionData?.user !== undefined }
   );
