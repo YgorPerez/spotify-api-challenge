@@ -1,18 +1,46 @@
+import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+import type { GetServerSidePropsContext } from "next";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import superjson from "superjson";
 import AlbumCard from "../../components/album-card";
 import Footer from "../../components/footer";
 import Header from "../../components/header";
-import Search from "../../components/search-input";
+import SearchForm from "../../components/search-form";
+import { appRouter } from "../../server/api/root";
+import { createInnerTRPCContext } from "../../server/api/trpc";
+import { getServerAuthSession } from "../../server/auth";
 import { api } from "../../utils/api";
 
-const SearchPage: NextPage = () => {
+const SearchPage: NextPage = (props) => {
   const router = useRouter();
-  const { search = "" } = router.query;
-  const spotifySearch = api.spotify.getSearch.useQuery({
-    searchQuery: search as string,
-  });
+  const { search: searchQuery = "" } = router.query;
+  const {
+    data: spotifySearchData,
+    isError,
+    isFetching,
+    error,
+    isLoadingError,
+    failureReason,
+  } = api.spotify.getSearch.useQuery(
+    {
+      searchQuery: searchQuery as string,
+    },
+    {
+      enabled: !!searchQuery,
+      cacheTime: Infinity,
+    }
+  );
+
+  console.debug(error, isLoadingError, failureReason, isError);
+
+  const albumCardPlaceholder = [];
+  for (let i = 1; i <= 8; i++) {
+    albumCardPlaceholder.push(<AlbumCard key={i} album={null} />);
+  }
+
+  console.debug(props);
 
   return (
     <>
@@ -22,27 +50,27 @@ const SearchPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="bg-dark-gray">
-        <Header />
-        <main className="flex min-h-max flex-col">
-          <div className=" bg-dark-gray">
-            <div className="mx-32 mb-8">
-              <form>
-                <label className="ml-2 text-left text-xl  text-white-gray">
-                  Busque por artistas, álbuns ou músicas
-                </label>
-                <Search search={search as string} />
-              </form>
-              <h2 className="my-4 mt-14 text-3xl text-white-gray">
-                Álbuns buscados recentemente
-              </h2>
+        <div className="min-h-[calc(100vh_-_4em_-_5px)]">
+          <Header />
+          <main className="flex min-h-max flex-col">
+            <div>
+              <div className="mx-32 mb-8">
+                <SearchForm search={searchQuery as string} />
+                <h2 className="my-4 mt-14 text-3xl text-white-gray">
+                  Álbuns buscados recentemente
+                </h2>
+              </div>
+              <div className="m-auto flex w-5/6 flex-wrap justify-center gap-6 bg-dark-gray 2xl:w-11/12 2xl:gap-12 ">
+                {spotifySearchData
+                  ? spotifySearchData.albums?.map((album) => {
+                      return <AlbumCard key={album.id} album={album} />;
+                    })
+                  : ""}
+                {isFetching ? albumCardPlaceholder : ""}
+              </div>
             </div>
-            <div className="m-auto flex w-5/6  flex-wrap justify-center gap-6 bg-dark-gray 2xl:w-11/12 2xl:gap-12 ">
-              {spotifySearch.data?.albums?.map((album) => {
-                return <AlbumCard key={album.id} album={album} />;
-              })}
-            </div>
-          </div>
-        </main>
+          </main>
+        </div>
         <footer>
           <Footer />
         </footer>
@@ -50,5 +78,28 @@ const SearchPage: NextPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps(
+  context: GetServerSidePropsContext<{ searchQuery: string }>
+) {
+  const session = await getServerAuthSession(context);
+  // this is actually used for ssr and ssg
+  const ssg = createProxySSGHelpers({
+    router: appRouter,
+    ctx: createInnerTRPCContext({ session }),
+    transformer: superjson,
+  });
+  const searchQuery = context.query?.search as string;
+  console.log("search query ", searchQuery);
+  // if (searchQuery) {
+  await ssg.spotify.getSearch.fetch({ searchQuery: searchQuery });
+  // }
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      searchQuery: searchQuery,
+    },
+  };
+}
 
 export default SearchPage;

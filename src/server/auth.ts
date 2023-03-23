@@ -23,7 +23,6 @@ declare module "next-auth" {
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
-    accessToken: string | undefined | null;
   }
 
   // interface User {
@@ -54,9 +53,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.SPOTIFY_CLIENT_SECRET,
       authorization: {
         params: {
-          scope: `user-read-currently-playing playlist-read-collaborative
- user-read-recently-played user-top-read user-read-email playlist-read-private
-`,
+          scope: `user-read-currently-playing playlist-read-collaborative user-read-recently-played user-top-read user-read-email playlist-read-private`,
         },
       },
     }),

@@ -18,6 +18,17 @@ import getBaseUrl from "./get-base-url";
 export const api = createTRPCNext<AppRouter>({
   config() {
     return {
+      queryClientConfig: {
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
+            refetchOnReconnect: false,
+            retry: 3,
+          },
+        },
+      },
+
       /**
        * Transformer used for data de-serialization from the server.
        *
@@ -50,7 +61,7 @@ export const api = createTRPCNext<AppRouter>({
    *
    * @see https://trpc.io/docs/nextjs#ssr-boolean-default-false
    */
-  ssr: false,
+  ssr: true,
 });
 
 /**
