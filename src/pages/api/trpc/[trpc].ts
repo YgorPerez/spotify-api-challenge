@@ -22,6 +22,12 @@ const nextApiHandler = createNextApiHandler({
 })
 
 async function handler(req: AxiomAPIRequest, res: NextApiResponse) {
+  const ONE_DAY_IN_SECONDS = 60 * 60 * 24
+  const MAX_CACHE_TIME = ONE_DAY_IN_SECONDS * 31
+  res.setHeader(
+    'cache-control',
+    `s-maxage=${MAX_CACHE_TIME}, stale-while-revalidate=${MAX_CACHE_TIME}`,
+  )
   return nextApiHandler(req, res)
 }
 
