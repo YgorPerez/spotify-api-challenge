@@ -1,32 +1,22 @@
-import { z } from "zod";
-
-import { createTRPCRouter, protectedTokenProcedure } from "../trpc";
+import { z } from 'zod'
+import { createTRPCRouter, protectedTokenProcedure } from '../trpc'
 
 export const spotifyRouter = createTRPCRouter({
-  getPlaylist: protectedTokenProcedure
-    .meta({ description: "Gets the playlist using the id" })
-    .input(
-      z.object({
-        playlistId: z.string().describe("The id to get the playlist."),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const playlist = await ctx.session.client.playlists.get(input.playlistId);
-      return playlist;
-    }),
   getAlbumTracks: protectedTokenProcedure
     .meta({
       description: "Gets the album and it's tracks using the id of an album",
     })
     .input(
       z.object({
-        albumId: z.string().describe("The id to get the album."),
-      })
+        albumId: z.string().describe('The id to get the album.'),
+      }),
     )
     .query(async ({ ctx, input }) => {
-      const album = await ctx.session.client.albums.get(input.albumId);
-      const tracks = await ctx.session.client.albums.getTracks(input.albumId);
-      return { album, tracks };
+      const album = await ctx.session.spotifyClient.albums.get(input.albumId)
+      const tracks = await ctx.session.spotifyClient.albums.getTracks(
+        input.albumId,
+      )
+      return { album, tracks }
     }),
   getArtistAlbums: protectedTokenProcedure
     .meta({
@@ -34,44 +24,64 @@ export const spotifyRouter = createTRPCRouter({
     })
     .input(
       z.object({
-        artistId: z.string().describe("The id to get the artist."),
-      })
+        artistId: z.string().describe('The id to get the artist.'),
+      }),
     )
     .query(async ({ ctx, input }) => {
-      const artist = await ctx.session.client.artists.get(input.artistId);
-      const albums = await ctx.session.client.artists.getAlbums(input.artistId);
-      return { artist, albums };
+      const artist = await ctx.session.spotifyClient.artists.get(input.artistId)
+      const albums = await ctx.session.spotifyClient.artists.getAlbums(
+        input.artistId,
+      )
+      return { artist, albums }
     }),
   getTrack: protectedTokenProcedure
-    .meta({ description: "Gets a track using an id" })
+    .meta({ description: 'Gets a track using an id' })
     .input(
       z.object({
-        trackId: z.string().describe("The id to get the track."),
-      })
+        trackId: z.string().describe('The id to get the track.'),
+      }),
     )
     .query(async ({ ctx, input }) => {
-      const track = await ctx.session.client.tracks.get(input.trackId);
-      return track;
+      const track = await ctx.session.spotifyClient.tracks.get(input.trackId)
+      return track
     }),
   getSearch: protectedTokenProcedure
     .meta({
       description:
-        "Gets 50 search results for tracks, albums and artists based on text",
+        'Gets the search results for the specified media types based on text',
     })
     .input(
       z.object({
-        searchQuery: z.string().describe("The text to be searched."),
-      })
+        searchQuery: z
+          .string()
+          .min(1)
+          .max(30)
+          .describe('The text to be searched.'),
+        mediaType: z
+          .array(z.enum(['track', 'album', 'artist']))
+          .min(1)
+          .max(3)
+          .optional()
+          .describe('The media type to be retrieved from search.'),
+        includeExternalAudio: z
+          .boolean()
+          .optional()
+          .describe('Includes the url with the audio if true'),
+        amount: z
+          .number()
+          .min(5)
+          .max(100)
+          .optional()
+          .describe('Number of objects to retrieve from each type'),
+      }),
     )
     .query(async ({ ctx, input }) => {
-      const { tracks, albums, artists } = await ctx.session.client.search(
-        input.searchQuery,
-        {
-          types: ["track", "album", "artist"],
-          includeExternalAudio: true,
-          limit: 50,
-        }
-      );
-      return { tracks, albums, artists };
+      const { tracks, albums, artists } =
+        await ctx.session.spotifyClient.search(input.searchQuery, {
+          types: input.mediaType || ['track', 'album', 'artist'],
+          includeExternalAudio: input.includeExternalAudio || false,
+          limit: input.amount || 20,
+        })
+      return { tracks, albums, artists }
     }),
-});
+})

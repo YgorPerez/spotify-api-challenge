@@ -43,3 +43,6 @@ yarn-error.log*
 
 # local https
 /.cert
+
+# prisma auto generated files
+/prisma/generated/

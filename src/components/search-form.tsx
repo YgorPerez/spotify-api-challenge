@@ -5,10 +5,14 @@ const SearchForm: React.FC<{ search: string }> = ({ search }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const setSearchQueryParam = (value: string) => {
-    void router.push({
-      pathname: router.pathname,
-      query: { search: value },
-    });
+    void router.push(
+      {
+        pathname: router.pathname,
+        query: { search: value },
+      },
+      undefined,
+      { shallow: true }
+    );
   };
   function submitHandler(e: React.FormEvent) {
     e.preventDefault();
