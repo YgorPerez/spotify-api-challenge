@@ -3,7 +3,6 @@ module.exports = {
   plugins: [require.resolve("prettier-plugin-tailwindcss")],
   arrowParens: "avoid",
   bracketSpacing: true,
-  htmlWhitespaceSensitivity: "css",
   insertPragma: false,
   jsxBracketSameLine: false,
   jsxSingleQuote: true,

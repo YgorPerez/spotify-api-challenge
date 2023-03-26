@@ -14,8 +14,12 @@
  * These allow you to access things when processing a request, like the
  * database, the session, etc.
  */
+import { initTRPC, type inferAsyncReturnType } from '@trpc/server'
 import { type CreateNextContextOptions } from '@trpc/server/adapters/next'
-import { type Session, type TokenSet } from 'next-auth'
+import { type Session } from 'next-auth'
+import { type TRPCPanelMeta } from 'trpc-panel'
+import { ZodError } from 'zod'
+import { transformer } from '../../utils/transformer'
 import { getServerAuthSession } from '../lib/auth'
 import { prisma } from '../lib/db'
 
@@ -57,21 +61,19 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   })
 }
 
+type TRPCContext = inferAsyncReturnType<typeof createTRPCContext>
 /**
  * 2. INITIALIZATION
  *
  * This is where the tRPC API is initialized, connecting the context and
  * transformer.
  */
-import { initTRPC, TRPCError } from '@trpc/server'
-import { type TRPCPanelMeta } from 'trpc-panel'
-import { transformer } from '../../utils/transformer'
 
 const t = initTRPC
-  .context<typeof createTRPCContext>()
+  .context<TRPCContext>()
   .meta<TRPCPanelMeta>()
   .create({
-    transformer,
+    transformer: transformer,
     errorFormatter({ shape, error }) {
       return {
         ...shape,
@@ -113,22 +115,25 @@ export const publicProcedure = t.procedure
  * Reusable middleware that enforces users are logged in before running the
  * procedure.
  */
-import type { Client } from 'spotify-api.js'
-import { ZodError } from 'zod'
+
+import { TRPCError } from '@trpc/server'
+import { type Client } from 'spotify-api.js'
 import { AccountFindFirstSchema } from '../../../prisma/generated/schema/schemas'
-import { env } from '../../env.mjs'
 import { ratelimit } from '../lib/redis-ratelimit'
 import { globalForSpotifyClient, spotifyClient } from '../lib/spotify-api'
 
-const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
+function isUserAuthed(ctx: TRPCContext) {
   if (!ctx.session || !ctx.session.user) {
     throw new TRPCError({
       message: 'you need to be logged in first',
       code: 'UNAUTHORIZED',
     })
   }
+}
+
+async function ratelimiter(ctx: TRPCContext) {
   if (ratelimit) {
-    const { success } = await ratelimit.limit(ctx.session.user.id)
+    const { success } = await ratelimit.limit(ctx.session?.user?.id as string)
     if (!success) {
       throw new TRPCError({
         message: 'Wait 10s and try again',
@@ -136,37 +141,28 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
       })
     }
   }
+}
+
+const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
+  isUserAuthed(ctx)
+  ratelimiter(ctx)
+
   return next({
     ctx: {
       ...ctx,
       // infers the `session` as non-nullable
       session: {
         ...ctx.session,
-        user: ctx.session.user,
+        user: ctx.session?.user,
       },
     },
   })
 })
 
 const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.user) {
-    throw new TRPCError({
-      message: 'you need to be logged in first',
-      code: 'UNAUTHORIZED',
-    })
-  }
-  const userId = ctx.session.user.id
-
-  if (ratelimit) {
-    const { success } = await ratelimit.limit(userId)
-    if (!success) {
-      throw new TRPCError({
-        message: 'Wait 10s and try again',
-        code: 'TOO_MANY_REQUESTS',
-      })
-    }
-  }
-
+  isUserAuthed(ctx)
+  ratelimiter(ctx)
+  const userId = ctx.session?.user?.id
   const userAccount = await ctx.prisma.account.findFirst({
     where: {
       userId,
@@ -181,88 +177,13 @@ const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
     })
   }
 
+  let client: Client
   let accessToken: string | null | undefined = userAccount.access_token
-  let refreshToken: string | undefined =
-    (env.SPOTIFY_REFRESH_TOKEN as string) ?? userAccount.refresh_token
-  let client: Client | null = null
-  const clientId = env.SPOTIFY_CLIENT_ID
-  const clientSecret = env.SPOTIFY_CLIENT_SECRET
-  const redirectUrl = env.NEXTAUTH_URL
 
   if (accessToken) {
-    client = spotifyClient(
-      accessToken,
-      clientId,
-      clientSecret,
-      refreshToken,
-      redirectUrl,
-    )
-    const ACCESS_TOKEN_EXPIRES_IN_S = 3600
-    const accessTokenExpiresAt =
-      Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXPIRES_IN_S
-    console.log('accessTokenExpiresAt', accessTokenExpiresAt)
-    const tokenExpired =
-      (userAccount.expires_at as number) < accessTokenExpiresAt
-    if (tokenExpired) {
-      try {
-        const spotifyTokenApiUrl = 'https://accounts.spotify.com/api/token?'
-        const spotifyTokenResponse = await fetch(spotifyTokenApiUrl, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            client_id: process.env.SPOTIFY_CLIENT_ID as string,
-            client_secret: process.env.SPOTIFY_CLIENT_SECRET as string,
-            grant_type: 'refresh_token',
-            refresh_token:
-              (process.env.SPOTIFY_REFRESH_TOKEN as string) ??
-              userAccount.refresh_token,
-          }),
-          method: 'POST',
-        })
-
-        /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-        const tokens: TokenSet = await spotifyTokenResponse.json()
-
-        if (!spotifyTokenResponse.ok) throw tokens
-        if (!tokens?.access_token) throw tokens.access_token
-        accessToken = tokens.access_token
-        await ctx.prisma.account.update({
-          data: {
-            access_token: tokens.access_token,
-            expires_at: accessTokenExpiresAt,
-            refresh_token: tokens.refresh_token ?? userAccount.refresh_token,
-          },
-          where: {
-            provider_providerAccountId: {
-              provider: 'spotify',
-              providerAccountId: userAccount.providerAccountId as string,
-            },
-          },
-        })
-      } catch (error) {
-        throw new TRPCError({
-          message: `Error refreshing access token`,
-          code: 'INTERNAL_SERVER_ERROR',
-          cause: error,
-        })
-      }
-    }
-    if (!accessToken) {
-      throw new TRPCError({
-        message: `Access token does not exist`,
-        code: 'INTERNAL_SERVER_ERROR',
-      })
-    }
-  }
-  if (!client) {
-    client = spotifyClient(
-      env.SPOTIFY_REFRESH_TOKEN as string,
-      clientId,
-      clientSecret,
-      refreshToken,
-      redirectUrl,
-    )
+    client = spotifyClient(userAccount)
+  } else {
+    client = spotifyClient(userAccount)
   }
   globalForSpotifyClient.spotifyClient = client
 
@@ -273,7 +194,7 @@ const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
       session: {
         ...ctx.session,
         user: {
-          ...ctx.session.user,
+          ...ctx.session?.user,
         },
         spotifyClient: client,
       },
@@ -281,14 +202,5 @@ const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
   })
 })
 
-/**
- * Protected (authenticated) procedure
- *
- * If you want a query or mutation to ONLY be accessible to logged in users, use
- * this. It verifies the session is valid and guarantees `ctx.session.user` is
- * not null.
- *
- * @see https://trpc.io/docs/procedures
- */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed)
 export const protectedTokenProcedure = t.procedure.use(IsAccessTokenValid)
+export const protectedProcedure = t.procedure.use(enforceUserIsAuthed)

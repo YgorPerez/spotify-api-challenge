@@ -3,7 +3,7 @@ import type { GetServerSidePropsContext } from 'next'
 import {
   getServerSession,
   type DefaultSession,
-  type NextAuthOptions,
+  type NextAuthOptions
 } from 'next-auth'
 import SpotifyProvider from 'next-auth/providers/spotify'
 import { env } from '../../env.mjs'
@@ -73,6 +73,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/signin',
   },
+  debug: env.NODE_ENV === 'development',
 }
 
 /**

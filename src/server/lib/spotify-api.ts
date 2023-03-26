@@ -1,52 +1,62 @@
+import { Account } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { Client } from 'spotify-api.js'
+import { env } from '../../env.mjs'
 import { prisma } from './db'
 
 export const globalForSpotifyClient = globalThis as unknown as {
   spotifyClient: Client
 }
 
-export const spotifyClient = (
-  accessToken: string,
-  clientId: string,
-  clientSecret: string,
-  refreshToken: string,
-  redirectUrl: string,
-) => {
+export const spotifyClient = (userAccount: Account) => {
   return (
     globalForSpotifyClient.spotifyClient ||
     new Client({
       token: {
-        token: accessToken,
-        clientID: clientId,
-        clientSecret,
-        refreshToken,
-        redirectURL: redirectUrl,
+        token: userAccount.access_token as string,
+        clientID: env.SPOTIFY_CLIENT_ID,
+        clientSecret: env.SPOTIFY_CLIENT_SECRET,
+        refreshToken: userAccount.refresh_token as string,
+        redirectURL: env.NEXTAUTH_URL,
       },
-      refreshToken: true,
       cacheSettings: {
         albums: true,
         tracks: true,
         artists: true,
       },
+      refreshToken: true,
+      userAuthorizedToken: true,
+      onReady(client) {
+        console.log('Client started')
+        client.refreshMeta = {
+          clientID: env.SPOTIFY_CLIENT_ID,
+          clientSecret: env.SPOTIFY_CLIENT_SECRET,
+          refreshToken: userAccount.refresh_token as string,
+          redirectURL: env.NEXTAUTH_URL,
+        }
+      },
       async onRefresh() {
         const ACCESS_TOKEN_EXPIRES_IN_S = 3600
-        const accessTokenExpiresAt =
-          Math.floor(Date.now() / 1000) + ACCESS_TOKEN_EXPIRES_IN_S
-        const newRefreshToken =
-          globalForSpotifyClient.spotifyClient.refreshMeta?.refreshToken
-        const newAccessToken = globalForSpotifyClient.spotifyClient.token
+        const nowInSeconds = Math.floor(Date.now() / 1000)
+        const accessTokenExpiresAt = nowInSeconds + ACCESS_TOKEN_EXPIRES_IN_S
+
+        const client = globalForSpotifyClient.spotifyClient
+        const accessToken = client.auth.token
+        const refreshToken = client.refreshMeta?.refreshToken as string
+
         await prisma.account.update({
           data: {
-            access_token: newRefreshToken,
-            refresh_token: newAccessToken,
+            access_token: accessToken,
             expires_at: accessTokenExpiresAt,
+            refresh_token: refreshToken,
           },
           where: {
-            access_token: newAccessToken,
+            provider_providerAccountId: {
+              provider: 'spotify',
+              providerAccountId: client.user.id,
+            },
           },
         })
-        console.log('database updated with the accessToken ', newAccessToken)
       },
       onFail(error) {
         throw new TRPCError({

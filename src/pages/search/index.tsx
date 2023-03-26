@@ -34,9 +34,9 @@ const SearchPage: NextPage = (
       staleTime: Infinity,
       placeholderData: albumCardPlaceholder,
       onSuccess(searchSuccessdata) {
-        searchSuccessdata.albums?.map(album => {
-          utils.spotify.getAlbumTracks.prefetch({ albumId: album.id })
-        })
+        // searchSuccessdata.albums?.map(album => {
+        //   utils.spotify.getAlbumTracks.prefetch({ albumId: album.id })
+        // })
         searchSuccessdata.tracks?.map(track => {
           utils.spotify.getTrack.setData({ trackId: track.id }, track)
         })
@@ -98,7 +98,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
   return {
     props: {
-      // trpcState: ssg.dehydrate().queries[0],
+      // trpcState: ssg.dehydrate(),
     },
   }
 }
