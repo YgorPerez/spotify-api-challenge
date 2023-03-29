@@ -7,7 +7,7 @@ import '../styles/globals.css'
 import { api } from '../utils/api'
 
 if (process.env.NODE_ENV === 'development') {
-  import('@impulse.dev/runtime').then(impulse => impulse.run())
+  void import('@impulse.dev/runtime').then(impulse => impulse.run())
 }
 
 const ReactQueryDevtoolsProduction = lazy(() =>
@@ -18,7 +18,6 @@ const ReactQueryDevtoolsProduction = lazy(() =>
 
 const MyApp: AppType<{
   session: Session | null
-  // dehydratedState: DehydratedState
 }> = ({ Component, pageProps: { session, ...pageProps } }) => {
   const [showDevtools, setShowDevtools] = useState(false)
 

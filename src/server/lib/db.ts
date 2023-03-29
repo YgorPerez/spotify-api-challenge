@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { env } from '../../env.mjs'
-import { cacheMiddleware } from './redis-cache-middleware'
+import { cacheMiddleware } from './prisma-redis-middleware'
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 

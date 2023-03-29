@@ -117,23 +117,16 @@ export const publicProcedure = t.procedure
  */
 
 import { TRPCError } from '@trpc/server'
-import { type Client } from 'spotify-api.js'
 import { AccountFindFirstSchema } from '../../../prisma/generated/schema/schemas'
 import { ratelimit } from '../lib/redis-ratelimit'
-import { globalForSpotifyClient, spotifyClient } from '../lib/spotify-api'
+import {
+  globalForSpotifyClient,
+  spotifyClientOauth,
+} from '../lib/spotify-api-js'
 
-function isUserAuthed(ctx: TRPCContext) {
-  if (!ctx.session || !ctx.session.user) {
-    throw new TRPCError({
-      message: 'you need to be logged in first',
-      code: 'UNAUTHORIZED',
-    })
-  }
-}
-
-async function ratelimiter(ctx: TRPCContext) {
+const ratelimiter = async (userId: string) => {
   if (ratelimit) {
-    const { success } = await ratelimit.limit(ctx.session?.user?.id as string)
+    const { success } = await ratelimit.limit(userId)
     if (!success) {
       throw new TRPCError({
         message: 'Wait 10s and try again',
@@ -143,9 +136,20 @@ async function ratelimiter(ctx: TRPCContext) {
   }
 }
 
+const unauthorizedError = () => {
+  return new TRPCError({
+    message: 'you need to be logged in first',
+    code: 'UNAUTHORIZED',
+  })
+}
+
 const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
-  isUserAuthed(ctx)
-  ratelimiter(ctx)
+  if (!ctx.session || !ctx.session.user) {
+    throw unauthorizedError()
+  }
+
+  const userId = ctx.session?.user?.id
+  await ratelimiter(userId)
 
   return next({
     ctx: {
@@ -153,40 +157,37 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
       // infers the `session` as non-nullable
       session: {
         ...ctx.session,
-        user: ctx.session?.user,
+        user: ctx.session.user,
       },
     },
   })
 })
 
 const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
-  isUserAuthed(ctx)
-  ratelimiter(ctx)
+  if (!ctx.session || !ctx.session.user) {
+    throw unauthorizedError()
+  }
   const userId = ctx.session?.user?.id
-  const userAccount = await ctx.prisma.account.findFirst({
-    where: {
-      userId,
-    },
-  })
-  AccountFindFirstSchema.parse(userAccount)
+  await ratelimiter(userId)
 
-  if (!userAccount) {
-    throw new TRPCError({
-      message: `User account not found id: ${userId}`,
-      code: 'INTERNAL_SERVER_ERROR',
+  if (!globalForSpotifyClient.spotifyClient) {
+    const userAccount = await ctx.prisma.account.findFirst({
+      where: {
+        userId,
+      },
     })
+    AccountFindFirstSchema.parse(userAccount)
+
+    if (!userAccount) {
+      throw new TRPCError({
+        message: `User account not found id: ${userId}`,
+        code: 'INTERNAL_SERVER_ERROR',
+      })
+    }
+    const client = spotifyClientOauth(userAccount)
+    // : spotifyClient(token)
+    globalForSpotifyClient.spotifyClient = client
   }
-
-  let client: Client
-  let accessToken: string | null | undefined = userAccount.access_token
-
-  if (accessToken) {
-    client = spotifyClient(userAccount)
-  } else {
-    client = spotifyClient(userAccount)
-  }
-  globalForSpotifyClient.spotifyClient = client
-
   return next({
     ctx: {
       ...ctx,
@@ -196,7 +197,7 @@ const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
         user: {
           ...ctx.session?.user,
         },
-        spotifyClient: client,
+        spotifyClient: globalForSpotifyClient.spotifyClient,
       },
     },
   })

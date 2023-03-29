@@ -52,7 +52,7 @@ export const spotifyRouter = createTRPCRouter({
     })
     .input(
       z.object({
-        searchQuery: z
+        searchTerm: z
           .string()
           .min(1)
           .max(30)
@@ -77,7 +77,7 @@ export const spotifyRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const { tracks, albums, artists } =
-        await ctx.session.spotifyClient.search(input.searchQuery, {
+        await ctx.session.spotifyClient.search(input.searchTerm, {
           types: input.mediaType || ['track', 'album', 'artist'],
           includeExternalAudio: input.includeExternalAudio || false,
           limit: input.amount || 20,

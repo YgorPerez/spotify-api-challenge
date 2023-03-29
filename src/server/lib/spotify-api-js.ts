@@ -1,4 +1,4 @@
-import { Account } from '@prisma/client'
+import { type Account } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 import { Client } from 'spotify-api.js'
 import { env } from '../../env.mjs'
@@ -8,7 +8,7 @@ export const globalForSpotifyClient = globalThis as unknown as {
   spotifyClient: Client
 }
 
-export const spotifyClient = (userAccount: Account) => {
+export const spotifyClientOauth = (userAccount: Account) => {
   return (
     globalForSpotifyClient.spotifyClient ||
     new Client({
@@ -26,8 +26,8 @@ export const spotifyClient = (userAccount: Account) => {
       },
       refreshToken: true,
       userAuthorizedToken: true,
+      retryOnRateLimit: true,
       onReady(client) {
-        console.log('Client started')
         client.refreshMeta = {
           clientID: env.SPOTIFY_CLIENT_ID,
           clientSecret: env.SPOTIFY_CLIENT_SECRET,
@@ -35,7 +35,7 @@ export const spotifyClient = (userAccount: Account) => {
           redirectURL: env.NEXTAUTH_URL,
         }
       },
-      async onRefresh() {
+      onRefresh() {
         const ACCESS_TOKEN_EXPIRES_IN_S = 3600
         const nowInSeconds = Math.floor(Date.now() / 1000)
         const accessTokenExpiresAt = nowInSeconds + ACCESS_TOKEN_EXPIRES_IN_S
@@ -44,19 +44,51 @@ export const spotifyClient = (userAccount: Account) => {
         const accessToken = client.auth.token
         const refreshToken = client.refreshMeta?.refreshToken as string
 
-        await prisma.account.update({
-          data: {
-            access_token: accessToken,
-            expires_at: accessTokenExpiresAt,
-            refresh_token: refreshToken,
-          },
-          where: {
-            provider_providerAccountId: {
-              provider: 'spotify',
-              providerAccountId: client.user.id,
-            },
-          },
+        // iife
+        void (async () => {
+          try {
+            await prisma.account.update({
+              data: {
+                access_token: accessToken,
+                expires_at: accessTokenExpiresAt,
+                refresh_token: refreshToken,
+              },
+              where: {
+                provider_providerAccountId: {
+                  provider: 'spotify',
+                  providerAccountId: client.user.id,
+                },
+              },
+            })
+          } catch (error) {
+            throw new TRPCError({
+              message: `erron on spotify-api.js on refresh`,
+              code: 'INTERNAL_SERVER_ERROR',
+              cause: error,
+            })
+          }
+        })()
+      },
+      onFail(error) {
+        throw new TRPCError({
+          message: `spotify-api.js error: ${error.message}`,
+          code: 'INTERNAL_SERVER_ERROR',
+          cause: error.cause,
         })
+      },
+    })
+  )
+}
+
+export const spotifyClient = (token: string) => {
+  return (
+    globalForSpotifyClient.spotifyClient ||
+    new Client({
+      token: token,
+      cacheSettings: {
+        albums: true,
+        tracks: true,
+        artists: true,
       },
       onFail(error) {
         throw new TRPCError({
