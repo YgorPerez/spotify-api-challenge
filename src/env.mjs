@@ -27,7 +27,6 @@ const server = z.object({
   UPSTASH_REDIS_REST_TOKEN: z.string(),
   REDIS_URL: z.string().url(),
   LOCALHOST_HTTPS: z.boolean().optional(),
-  VERCEL_URL: z.string().url().optional(),
   PORT: z.number().optional(),
 })
 
@@ -57,7 +56,6 @@ const processEnv = {
   UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
   REDIS_URL: process.env.REDIS_URL,
   LOCALHOST_HTTPS: process.env.LOCALHOST_HTTPS,
-  VERCEL_URL: process.env.VERCEL_URL,
   PORT: process.env.PORT,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 }
