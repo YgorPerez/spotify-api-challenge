@@ -3,7 +3,7 @@ import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
 import GoBack from '../../components/GoBack'
 import Header from '../../components/Header'
-import ImageCard from '../../components/ImageCard'
+import SpotifyCard from '../../components/SpotifyCard'
 import Track from '../../components/Track'
 import { api } from '../../utils/api'
 import { generateSSGHelper } from '../../utils/ssgHelper'
@@ -40,7 +40,7 @@ const SingleAlbumPage: NextPage<IProps> = ({
       </header>
       <main className='mt-6 flex'>
         <div className='ml-36'>
-          <ImageCard cardData={album} big />
+          <SpotifyCard cardData={album} big />
         </div>
         <div className='ml-16'>
           <ol className='mx-2 list-decimal text-light-gray'>

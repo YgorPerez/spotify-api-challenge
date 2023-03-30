@@ -55,7 +55,7 @@ const CardMain: React.FC<{
   )
 }
 
-const ImageCard: React.FC<{
+const SpotifyCard: React.FC<{
   cardData: CardData
   big?: boolean
 }> = ({ cardData = null, big = false }) => {
@@ -94,7 +94,10 @@ const ImageCard: React.FC<{
             images: cardData.images || null,
             slugUrl: 'albums',
           },
-          cardSubData: null,
+          cardSubData: {
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            name: `Followers: ${cardData.totalFollowers}`,
+          },
         }
       }
     }
@@ -115,13 +118,19 @@ const ImageCard: React.FC<{
           <h1 className=' text-3xl text-white-gray 2xl:text-4xl'>
             {cardData.name || 'loading...'}
           </h1>
-          <Link
-            href={cardData ? `/${cardSubData.slugUrl}/${cardSubData.id}` : '#'}
-          >
-            <h2 className='pt-1 text-xl text-light-gray 2xl:text-2xl'>
+          {cardSubData?.slugUrl && (
+            <Link
+              href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
+              className='pt-2 text-xl text-light-gray'
+            >
               {cardSubData.name}
-            </h2>
-          </Link>
+            </Link>
+          )}
+          {cardSubData?.name && (
+            <span className='pt-2 text-xl text-light-gray'>
+              {cardSubData.name}
+            </span>
+          )}
         </div>
       </div>
     )
@@ -135,16 +144,19 @@ const ImageCard: React.FC<{
       ) : (
         <CardMain cardMainData={cardMainData} cardData={cardData} />
       )}
-      {cardSubData && (
+      {cardSubData?.slugUrl && (
         <Link
-          href={cardData ? `/${cardSubData.slugUrl}/${cardSubData.id}` : '#'}
+          href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
           className='pt-2 text-xl text-light-gray'
         >
           {cardSubData.name}
         </Link>
       )}
+      {cardSubData?.name && (
+        <span className='pt-2 text-xl text-light-gray'>{cardSubData.name}</span>
+      )}
     </div>
   )
 }
 
-export default ImageCard
+export default SpotifyCard

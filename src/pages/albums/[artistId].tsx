@@ -1,10 +1,13 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
-import Link from 'next/link'
 import { api } from '../../utils/api'
 import { generateSSGHelper } from '../../utils/ssgHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
+import GoBack from '../../components/GoBack'
+import Header from '../../components/Header'
+import SpotifyCard from '../../components/SpotifyCard'
+import Album from '../../components/Album'
 
 interface IProps {
   artistId: string
@@ -24,12 +27,25 @@ const SingleArtistPage: NextPage<IProps> = ({
   const { artist, albums } = getAritstsAlbumsData
 
   return (
-    <div>
-      <h1>{artist.name}</h1>
-      <p>{artist.totalFollowers}</p>
-      <Link href={`/album/${albums?.[0]?.id as string}`}>{`/album/${
-        albums?.[0]?.id as string
-      }`}</Link>
+    <div className='min-h-screen min-w-max bg-dark-gray'>
+      <header className='flex'>
+        <Header />
+        <div className='mt-8 ml-6'>
+          <GoBack />
+        </div>
+      </header>
+      <main className='mt-6 flex'>
+        <div className='ml-36'>
+          <SpotifyCard cardData={artist} big />
+        </div>
+        <div className='ml-16'>
+          <ol className='mx-2 list-decimal text-light-gray'>
+            {albums.map(album => (
+              <Album key={album.id} album={album} />
+            ))}
+          </ol>
+        </div>
+      </main>
     </div>
   )
 }

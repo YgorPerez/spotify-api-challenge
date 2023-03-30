@@ -7,8 +7,8 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
-import ImageCard from '../../components/ImageCard'
 import SearchForm from '../../components/SearchForm'
+import SpotifyCard from '../../components/SpotifyCard'
 import useDebounce from '../../hooks/useDebounce'
 import useGetSearch from '../../hooks/useGetSearch'
 import { useScrollRestoration } from '../../hooks/useScrollRestoration'
@@ -18,13 +18,16 @@ import { stringOrNull } from '../../utils/stringOrNull'
 const SearchPage: NextPage = () => {
   useScrollRestoration()
   const router = useRouter()
+
   const searchTerm = stringOrNull(router.query?.search)
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
+
   const { data: spotifySearchData, isError } = useGetSearch({
     searchTerm: debouncedSearchTerm as string,
     enabled: Boolean(debouncedSearchTerm),
   })
   const shouldDisplayData = spotifySearchData && searchTerm && !isError
+
   return (
     <>
       <Head>
@@ -47,19 +50,19 @@ const SearchPage: NextPage = () => {
                 {shouldDisplayData &&
                   spotifySearchData?.albums?.map((album, index) => {
                     return (
-                      <ImageCard key={album.id || index} cardData={album} />
+                      <SpotifyCard key={album.id || index} cardData={album} />
                     )
                   })}
                 {shouldDisplayData &&
                   spotifySearchData?.artists?.map((artist, index) => {
                     return (
-                      <ImageCard key={artist.id || index} cardData={artist} />
+                      <SpotifyCard key={artist.id || index} cardData={artist} />
                     )
                   })}
                 {shouldDisplayData &&
                   spotifySearchData?.tracks?.map((track, index) => {
                     return (
-                      <ImageCard key={track.id || index} cardData={track} />
+                      <SpotifyCard key={track.id || index} cardData={track} />
                     )
                   })}
               </div>
