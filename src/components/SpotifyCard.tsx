@@ -1,8 +1,9 @@
 import { log } from 'next-axiom'
 import Image from 'next/image'
 import Link from 'next/link'
-import cardPlaceholderImage from 'public/images/gray-square-placeholder.jpg'
+import loadingImagePlaceholder from 'public/images/gray-square-placeholder.jpg'
 import React from 'react'
+import artistPlaceholder from '../../public/images/artist-placeholder.jpg'
 import type {
   Album as AlbumType,
   Artist as ArtistType,
@@ -21,28 +22,32 @@ const CardMain: React.FC<{
   cardMainData: CardMainData
   cardData: CardData
   big?: boolean
-}> = ({ cardMainData = null, cardData = null, big = false }) => {
+}> = ({ cardMainData, cardData, big }) => {
   const imageSize = big ? 600 : 288
-  if (big) {
-    return (
-      <>
-        <div className='flex justify-center'>
-          <Image
-            src={cardMainData?.images?.[0]?.url || cardPlaceholderImage}
-            alt='album cover'
-            width={imageSize}
-            height={imageSize}
-            className='h-full w-full'
-          />
-        </div>
-      </>
-    )
+  const placeholderImage = () => {
+    if (cardData && 'totalFollowers' in cardData) {
+      return artistPlaceholder
+    } else {
+      return loadingImagePlaceholder
+    }
   }
-  return (
+  return big ? (
+    <>
+      <div className='flex justify-center'>
+        <Image
+          src={cardMainData?.images?.[0]?.url || placeholderImage()}
+          alt='album cover'
+          width={imageSize}
+          height={imageSize}
+          className='h-full w-full'
+        />
+      </div>
+    </>
+  ) : (
     <>
       <Image
         className='aspect-square'
-        src={cardMainData?.images?.[0]?.url || cardPlaceholderImage}
+        src={cardMainData?.images?.[0]?.url || placeholderImage()}
         blurDataURL={'public/images/gray-square-placeholder.jpg'}
         alt='album cover'
         height={imageSize}
@@ -58,7 +63,7 @@ const CardMain: React.FC<{
 const SpotifyCard: React.FC<{
   cardData: CardData
   big?: boolean
-}> = ({ cardData = null, big = false }) => {
+}> = ({ cardData, big }) => {
   //iife
   const { cardMainData, cardSubData } = (() => {
     if (cardData) {
@@ -113,20 +118,19 @@ const SpotifyCard: React.FC<{
   if (big && cardMainData && cardSubData && cardData) {
     return (
       <div className='my-2 items-center justify-center text-center md:max-w-[10rem] lg:max-w-xs 2xl:max-w-md'>
-        <CardMain cardMainData={cardMainData} cardData={cardData} big={true} />
+        <CardMain cardMainData={cardMainData} cardData={cardData} big />
         <div className='pt-4'>
           <h1 className=' text-3xl text-white-gray 2xl:text-4xl'>
             {cardData.name || 'loading...'}
           </h1>
-          {cardSubData?.slugUrl && (
+          {cardSubData.slugUrl ? (
             <Link
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
               className='pt-2 text-xl text-light-gray'
             >
               {cardSubData.name}
             </Link>
-          )}
-          {cardSubData?.name && (
+          ) : (
             <span className='pt-2 text-xl text-light-gray'>
               {cardSubData.name}
             </span>
@@ -144,16 +148,17 @@ const SpotifyCard: React.FC<{
       ) : (
         <CardMain cardMainData={cardMainData} cardData={cardData} />
       )}
-      {cardSubData?.slugUrl && (
+      {cardSubData?.slugUrl ? (
         <Link
           href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
           className='pt-2 text-xl text-light-gray'
         >
           {cardSubData.name}
         </Link>
-      )}
-      {cardSubData?.name && (
-        <span className='pt-2 text-xl text-light-gray'>{cardSubData.name}</span>
+      ) : (
+        <span className='pt-2 text-xl text-light-gray'>
+          {cardSubData?.name}
+        </span>
       )}
     </div>
   )

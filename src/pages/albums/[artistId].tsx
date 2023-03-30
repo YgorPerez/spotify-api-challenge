@@ -1,13 +1,13 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
-import { api } from '../../utils/api'
-import { generateSSGHelper } from '../../utils/ssgHelper'
-import { stringOrNull } from '../../utils/stringOrNull'
+import Album from '../../components/Album'
 import GoBack from '../../components/GoBack'
 import Header from '../../components/Header'
 import SpotifyCard from '../../components/SpotifyCard'
-import Album from '../../components/Album'
+import { api } from '../../utils/api'
+import { generateSSGHelper } from '../../utils/ssgHelper'
+import { stringOrNull } from '../../utils/stringOrNull'
 
 interface IProps {
   artistId: string
