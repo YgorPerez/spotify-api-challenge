@@ -16,7 +16,12 @@ interface IProps {
 const SingleTrackPage: NextPage<IProps> = ({
   trackId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data: getTrackData } = api.spotify.getTrack.useQuery({ trackId })
+  const { data: getTrackData } = api.spotify.getTrack.useQuery(
+    { trackId },
+    {
+      staleTime: Infinity,
+    },
+  )
 
   if (!getTrackData || !getTrackData.track) {
     return <Error statusCode={404} />

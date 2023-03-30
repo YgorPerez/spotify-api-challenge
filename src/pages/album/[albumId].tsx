@@ -16,9 +16,12 @@ interface IProps {
 const SingleAlbumPage: NextPage<IProps> = ({
   albumId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data: getAlbumTracksData } = api.spotify.getAlbumTracks.useQuery({
-    albumId,
-  })
+  const { data: getAlbumTracksData } = api.spotify.getAlbumTracks.useQuery(
+    {
+      albumId,
+    },
+    { staleTime: Infinity },
+  )
 
   if (
     !getAlbumTracksData ||

@@ -16,9 +16,14 @@ interface IProps {
 const SingleArtistPage: NextPage<IProps> = ({
   artistId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data: getAritstsAlbumsData } = api.spotify.getArtistAlbums.useQuery({
-    artistId,
-  })
+  const { data: getAritstsAlbumsData } = api.spotify.getArtistAlbums.useQuery(
+    {
+      artistId,
+    },
+    {
+      staleTime: Infinity,
+    },
+  )
 
   if (!getAritstsAlbumsData || !getAritstsAlbumsData.artist) {
     return <Error statusCode={404} />

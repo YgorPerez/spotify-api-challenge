@@ -25,6 +25,8 @@ export const api = createTRPCNext<AppRouter>({
             refetchOnMount: false,
             refetchOnReconnect: false,
             retry: 3,
+            cacheTime: Infinity,
+            staleTime: Infinity,
           },
         },
       },

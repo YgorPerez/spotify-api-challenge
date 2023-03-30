@@ -19,9 +19,8 @@ export default function useGetSearch({
       searchTerm,
     },
     {
-      cacheTime: Infinity,
-      enabled,
       staleTime: Infinity,
+      enabled,
       placeholderData,
       // onSuccess(searchSuccessdata) {
       // searchSuccessdata.albums?.map(album => {
