@@ -1,6 +1,11 @@
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
-import { SearchContentSchema } from '../../../schema/spotifyApiSchema'
+import {
+  AlbumSchema,
+  ArtistSchema,
+  SearchContentSchema,
+  TrackSchema,
+} from '../../../schema/spotifyApiSchema'
 import { createTRPCRouter, protectedTokenProcedure } from '../trpc'
 
 export const spotifyRouter = createTRPCRouter({
@@ -13,12 +18,30 @@ export const spotifyRouter = createTRPCRouter({
         albumId: z.string().describe('The id to get the album.'),
       }),
     )
+    .output(z.object({ album: AlbumSchema, tracks: TrackSchema.array() }))
     .query(async ({ ctx, input }) => {
       const album = await ctx.session.spotifyClient.albums.get(input.albumId)
       const tracks = await ctx.session.spotifyClient.albums.getTracks(
         input.albumId,
       )
-      return { album, tracks }
+      const validatedAlbum = AlbumSchema.safeParse(album)
+      const validatedTracks = TrackSchema.array().safeParse(tracks)
+      if (!validatedAlbum.success) {
+        throw new TRPCError({
+          message: 'returned type from spotify-api.js get album not valid',
+          code: 'INTERNAL_SERVER_ERROR',
+          cause: validatedAlbum?.error,
+        })
+      }
+      if (!validatedTracks.success) {
+        throw new TRPCError({
+          message:
+            'returned type from spotify-api.js  get album tracks not valid',
+          code: 'INTERNAL_SERVER_ERROR',
+          cause: validatedTracks?.error,
+        })
+      }
+      return { album: validatedAlbum.data, tracks: validatedTracks.data }
     }),
   getArtistAlbums: protectedTokenProcedure
     .meta({
@@ -29,12 +52,30 @@ export const spotifyRouter = createTRPCRouter({
         artistId: z.string().describe('The id to get the artist.'),
       }),
     )
+    .output(z.object({ artist: ArtistSchema, albums: AlbumSchema.array() }))
     .query(async ({ ctx, input }) => {
       const artist = await ctx.session.spotifyClient.artists.get(input.artistId)
       const albums = await ctx.session.spotifyClient.artists.getAlbums(
         input.artistId,
       )
-      return { artist, albums }
+      const validatedArtist = ArtistSchema.safeParse(artist)
+      const validatedAlbums = AlbumSchema.array().safeParse(albums)
+      if (!validatedArtist.success) {
+        throw new TRPCError({
+          message: 'returned type from spotify-api.js get artist not valid',
+          code: 'INTERNAL_SERVER_ERROR',
+          cause: validatedArtist?.error,
+        })
+      }
+      if (!validatedAlbums.success) {
+        throw new TRPCError({
+          message:
+            'returned type from spotify-api.js  get artist albums not valid',
+          code: 'INTERNAL_SERVER_ERROR',
+          cause: validatedAlbums?.error,
+        })
+      }
+      return { artist: validatedArtist.data, albums: validatedAlbums.data }
     }),
   getTrack: protectedTokenProcedure
     .meta({ description: 'Gets a track using an id' })
@@ -43,9 +84,19 @@ export const spotifyRouter = createTRPCRouter({
         trackId: z.string().describe('The id to get the track.'),
       }),
     )
+    .output(z.object({ track: TrackSchema }))
     .query(async ({ ctx, input }) => {
       const track = await ctx.session.spotifyClient.tracks.get(input.trackId)
-      return track
+      const validatedTrack = TrackSchema.safeParse(track)
+      if (validatedTrack.success) {
+        return { track: validatedTrack.data }
+      } else {
+        throw new TRPCError({
+          message: 'returned type from spotify-api.js get track not valid',
+          code: 'INTERNAL_SERVER_ERROR',
+          cause: validatedTrack.error,
+        })
+      }
     }),
   getSearch: protectedTokenProcedure
     .meta({
@@ -77,6 +128,7 @@ export const spotifyRouter = createTRPCRouter({
           .describe('Number of objects to retrieve from each type'),
       }),
     )
+    .output(SearchContentSchema)
     .query(async ({ ctx, input }) => {
       const searchContent = await ctx.session.spotifyClient.search(
         input.searchTerm,
@@ -86,14 +138,15 @@ export const spotifyRouter = createTRPCRouter({
           limit: input.amount || 20,
         },
       )
-      const validatedData = SearchContentSchema.safeParse(searchContent)
-      if (validatedData.success) {
-        return validatedData.data
+      const validatedSearchContent =
+        SearchContentSchema.safeParse(searchContent)
+      if (validatedSearchContent.success) {
+        return validatedSearchContent.data
       } else {
         throw new TRPCError({
           message: 'returned type from spotify-api.js not valid',
           code: 'INTERNAL_SERVER_ERROR',
-          cause: validatedData.error,
+          cause: validatedSearchContent.error,
         })
       }
     }),

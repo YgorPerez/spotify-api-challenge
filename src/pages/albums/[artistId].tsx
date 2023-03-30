@@ -1,35 +1,59 @@
-import { type NextPage } from "next";
-import Error from "next/error";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { api } from "../../utils/api";
+import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { type InferGetServerSidePropsType, type NextPage } from 'next'
+import Error from 'next/error'
+import Link from 'next/link'
+import { api } from '../../utils/api'
+import { generateSSGHelper } from '../../utils/ssgHelper'
+import { stringOrNull } from '../../utils/stringOrNull'
 
-const SingleArtistPage: NextPage = () => {
-	const router = useRouter();
+interface IProps {
+  artistId: string
+}
 
-	const artistId = router.query.artistId as string;
+const SingleArtistPage: NextPage<IProps> = ({
+  artistId,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const { data: getAritstsAlbumsData } = api.spotify.getArtistAlbums.useQuery({
+    artistId,
+  })
 
-	const { data, isLoading } = api.spotify.getArtistAlbums.useQuery({
-		artistId: artistId,
-	});
+  if (!getAritstsAlbumsData || !getAritstsAlbumsData.artist) {
+    return <Error statusCode={404} />
+  }
 
-	if (isLoading) {
-		return <p>Carregando artista...</p>;
-	}
+  const { artist, albums } = getAritstsAlbumsData
 
-	if (!data) {
-		return <Error statusCode={404} />;
-	}
+  return (
+    <div>
+      <h1>{artist.name}</h1>
+      <p>{artist.totalFollowers}</p>
+      <Link href={`/album/${albums?.[0]?.id as string}`}>{`/album/${
+        albums?.[0]?.id as string
+      }`}</Link>
+    </div>
+  )
+}
 
-	return (
-		<div>
-			<h1>{data?.artist?.name}</h1>
-			<p>{data?.artist?.totalFollowers}</p>
-			<Link href={`/album/${data?.albums?.[0]?.id as string}`}>{`/album/${
-				data?.albums?.[0]?.id as string
-			}`}</Link>
-		</div>
-	);
-};
+export const getServerSideProps: GetServerSideProps<IProps> = async (
+  context: GetServerSidePropsContext,
+) => {
+  const artistId = stringOrNull(context.query.artistId)
 
-export default SingleArtistPage;
+  if (!artistId || artistId.length < 1) {
+    return {
+      notFound: true,
+    }
+  }
+
+  const ssg = await generateSSGHelper(context)
+  await ssg.spotify.getArtistAlbums.prefetch({ artistId })
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      artistId: artistId,
+    },
+  }
+}
+
+export default SingleArtistPage

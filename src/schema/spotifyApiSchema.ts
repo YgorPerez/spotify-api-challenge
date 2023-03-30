@@ -96,6 +96,7 @@ export const ArtistSchema = z.object({
   externalURL: ExternalUrlSchema,
   id: z.string(),
   name: z.string(),
+  href: z.string().optional(),
   type: SpotifyTypeSchema,
   uri: z.string(),
   images: z.array(ImageSchema).optional(),

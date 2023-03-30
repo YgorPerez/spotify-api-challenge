@@ -9,22 +9,26 @@ import { api } from '../../utils/api'
 import { generateSSGHelper } from '../../utils/ssgHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
 
-const SingleAlbumPage: NextPage = ({
+interface IProps {
+  albumId: string
+}
+
+const SingleAlbumPage: NextPage<IProps> = ({
   albumId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data, isLoading } = api.spotify.getAlbumTracks.useQuery({
-    albumId: albumId as string,
+  const { data: getAlbumTracksData } = api.spotify.getAlbumTracks.useQuery({
+    albumId,
   })
 
-  if (isLoading) {
-    return <p>Carregando album...</p>
-  }
-
-  if (!data || !data.album) {
+  if (
+    !getAlbumTracksData ||
+    !getAlbumTracksData.album ||
+    !getAlbumTracksData.tracks
+  ) {
     return <Error statusCode={404} />
   }
 
-  const { album, tracks } = data
+  const { album, tracks } = getAlbumTracksData
 
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
@@ -50,29 +54,24 @@ const SingleAlbumPage: NextPage = ({
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (
+export const getServerSideProps: GetServerSideProps<IProps> = async (
   context: GetServerSidePropsContext,
 ) => {
   const albumId = stringOrNull(context.query.albumId)
-  const ssg = await generateSSGHelper(context)
 
-  await ssg.spotify.getAlbumTracks.prefetch({
-    albumId: albumId as string,
-  })
-  if (typeof albumId === 'string' && albumId.length >= 1) {
-    await ssg.spotify.getAlbumTracks.prefetch({
-      albumId: albumId,
-    })
-  } else {
+  if (!albumId || albumId.length < 1) {
     return {
       notFound: true,
     }
   }
 
+  const ssg = await generateSSGHelper(context)
+  await ssg.spotify.getAlbumTracks.prefetch({ albumId })
+
   return {
     props: {
-      // trpcState: ssg.dehydrate(),
-      albumId: albumId,
+      trpcState: ssg.dehydrate(),
+      albumId,
     },
   }
 }
