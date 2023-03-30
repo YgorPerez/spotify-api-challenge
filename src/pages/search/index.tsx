@@ -11,12 +11,14 @@ import ImageCard from '../../components/ImageCard'
 import SearchForm from '../../components/SearchForm'
 import useDebounce from '../../hooks/useDebounce'
 import useGetSearch from '../../hooks/useGetSearch'
+import { useScrollRestoration } from '../../hooks/useScrollRestoration'
 import { generateSSGHelper } from '../../utils/ssgHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
 
 const SearchPage: NextPage = () =>
   // props: InferGetServerSidePropsType<typeof getServerSideProps>,
   {
+    useScrollRestoration()
     const router = useRouter()
     const searchTerm = stringOrNull(router.query?.search)
     const debouncedSearchTerm = useDebounce(searchTerm, 500)
