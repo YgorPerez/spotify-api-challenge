@@ -5,15 +5,17 @@ import React from 'react'
 
 const Header: React.FC = () => {
   return (
-    <div className='ml-6 block w-16 pt-4'>
-      <Link href={`/`}>
-        <FontAwesomeIcon
-          icon={faSpotify}
-          className='rounded-full text-white'
-          size='3x'
-        />
-      </Link>
-    </div>
+    <header>
+      <div className='ml-6 block w-16 pt-4'>
+        <Link href={`/`}>
+          <FontAwesomeIcon
+            icon={faSpotify}
+            className='rounded-full text-white'
+            size='3x'
+          />
+        </Link>
+      </div>
+    </header>
   )
 }
 

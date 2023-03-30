@@ -27,6 +27,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.56.0
   '@upstash/ratelimit': ^0.4.0
   '@upstash/redis': ^1.20.1
+  '@vercel/analytics': ^0.1.11
   autoprefixer: ^10.4.14
   cross-env: ^7.0.3
   devalue: ^4.3.0
@@ -76,6 +77,7 @@ dependencies:
   '@trpc/server': 10.11.1
   '@upstash/ratelimit': 0.4.0_@upstash+redis@1.20.1
   '@upstash/redis': 1.20.1
+  '@vercel/analytics': 0.1.11_react@18.2.0
   devalue: 4.3.0
   ioredis: 5.3.1
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
@@ -1223,6 +1225,14 @@ packages:
       isomorphic-fetch: 3.0.0
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /@vercel/analytics/0.1.11_react@18.2.0:
+    resolution: {integrity: sha512-mj5CPR02y0BRs1tN3oZcBNAX9a8NxsIUl9vElDPcqxnMfP0RbRc9fI9Ud7+QDg/1Izvt5uMumsr+6YsmVHcyuw==}
+    peerDependencies:
+      react: ^16.8||^17||^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@vitest/expect/0.29.2:

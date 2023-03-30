@@ -1,4 +1,5 @@
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Analytics } from '@vercel/analytics/react'
 import { type Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
 import { type AppType } from 'next/app'
@@ -31,6 +32,7 @@ const MyApp: AppType<{
   return (
     <SessionProvider session={session}>
       <Component {...pageProps} />
+      <Analytics />
       <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
       {showDevtools && (
         <Suspense fallback={null}>
