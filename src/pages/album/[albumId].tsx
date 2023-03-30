@@ -59,22 +59,20 @@ export const getServerSideProps: GetServerSideProps = async (
   await ssg.spotify.getAlbumTracks.prefetch({
     albumId: albumId as string,
   })
-  // if (typeof albumId === 'string' && albumId.length >= 1) {
-  //   await ssg.spotify.getAlbumTracks.prefetch({
-  //   albumId: albumId,
-  // })
-  // } else {
-  //   return {
-  //     notFound: true,
-  //     props: {
-  //       albumId,
-  //     },
-  //   }
-  // }
+  if (typeof albumId === 'string' && albumId.length >= 1) {
+    await ssg.spotify.getAlbumTracks.prefetch({
+      albumId: albumId,
+    })
+  } else {
+    return {
+      notFound: true,
+    }
+  }
 
   return {
     props: {
-      albumId: albumId as string,
+      // trpcState: ssg.dehydrate(),
+      albumId: albumId,
     },
   }
 }

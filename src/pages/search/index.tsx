@@ -78,21 +78,17 @@ export const getServerSideProps: GetServerSideProps = async (
   const searchTerm = stringOrNull(context.query.search)
   const ssg = await generateSSGHelper(context)
 
-  await ssg.spotify.getSearch.prefetch({
-    searchTerm: searchTerm as string,
-  })
-
-  // if (typeof searchTerm === 'string' && searchTerm.length >= 1) {
-  //   // `prefetch` does not return the result and never throws - if
-  //   // you need that behavior, use `fetch` instead.
-  //   await ssg.spotify.getSearch.prefetch({
-  //     searchTerm: searchTerm,
-  //   })
-  // }
+  if (typeof searchTerm === 'string' && searchTerm.length >= 1) {
+    // `prefetch` does not return the result and never throws - if
+    // you need that behavior, use `fetch` instead.
+    await ssg.spotify.getSearch.prefetch({
+      searchTerm: searchTerm,
+    })
+  }
 
   return {
     props: {
-      // trpcState: ssg.dehydrate(),
+      trpcState: ssg.dehydrate(),
     },
   }
 }

@@ -1,4 +1,6 @@
+import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
+import { SearchContentSchema } from '../../../schema/spotifyApiSchema'
 import { createTRPCRouter, protectedTokenProcedure } from '../trpc'
 
 export const spotifyRouter = createTRPCRouter({
@@ -76,12 +78,23 @@ export const spotifyRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { tracks, albums, artists } =
-        await ctx.session.spotifyClient.search(input.searchTerm, {
+      const searchContent = await ctx.session.spotifyClient.search(
+        input.searchTerm,
+        {
           types: input.mediaType || ['track', 'album', 'artist'],
           includeExternalAudio: input.includeExternalAudio || false,
           limit: input.amount || 20,
+        },
+      )
+      const validatedData = SearchContentSchema.safeParse(searchContent)
+      if (validatedData.success) {
+        return validatedData.data
+      } else {
+        throw new TRPCError({
+          message: 'returned type from spotify-api.js not valid',
+          code: 'INTERNAL_SERVER_ERROR',
+          cause: validatedData.error,
         })
-      return { tracks, albums, artists }
+      }
     }),
 })

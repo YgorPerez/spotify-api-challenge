@@ -8,7 +8,7 @@ import type {
   Artist as ArtistType,
   Image as ImageType,
   Track as TrackType,
-} from 'spotify-api.js'
+} from '../schema/spotifyApiTypes'
 
 type CardData = AlbumType | TrackType | ArtistType | null
 
