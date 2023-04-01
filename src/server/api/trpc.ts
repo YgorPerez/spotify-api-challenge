@@ -119,7 +119,7 @@ export const publicProcedure = t.procedure
 import { TRPCError } from '@trpc/server'
 import { AccountFindFirstSchema } from '../../../prisma/generated/schema/schemas'
 import { ratelimit } from '../lib/redis-ratelimit'
-import { globalForSpotifyApi, spotifyWebApi } from '../lib/spotify-api-js'
+import { globalForSpotifyApi, spotifyWebApi } from '../lib/spotify-web-api'
 
 const ratelimiter = async (userId: string) => {
   if (ratelimit) {
@@ -167,67 +167,70 @@ const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
   const userId = ctx.session?.user?.id
   await ratelimiter(userId)
 
-  const userAccount = await ctx.prisma.account.findFirst({
-    where: {
-      userId,
-    },
-  })
-  AccountFindFirstSchema.parse(userAccount)
-
-  if (!userAccount) {
-    throw new TRPCError({
-      message: `User account not found id: ${userId}`,
-      code: 'INTERNAL_SERVER_ERROR',
+  if (!globalForSpotifyApi.spotifyApi) {
+    const userAccount = await ctx.prisma.account.findFirst({
+      where: {
+        userId,
+      },
     })
-  }
+    AccountFindFirstSchema.parse(userAccount)
 
-  const client = spotifyWebApi(userAccount)
-  globalForSpotifyApi.spotifyApi = client
-
-  globalForSpotifyApi.spotifyApi.refreshAccessToken().then(
-    async data => {
-      const spotifyApi = globalForSpotifyApi.spotifyApi
-      const { body: userProfile } = await spotifyApi.getMe()
-      const userId = userProfile['id']
-      const accessToken = data.body['access_token']
-      const refreshToken = data.body['refresh_token']
-      spotifyApi.setAccessToken(accessToken)
-      const nowInSeconds = Math.floor(Date.now() / 1000)
-      const accessTokenExpiresAt = nowInSeconds + data.body['expires_in']
-
-      // iife
-      void (async () => {
-        try {
-          await prisma.account.update({
-            data: {
-              access_token: accessToken,
-              expires_at: accessTokenExpiresAt,
-              refresh_token: refreshToken,
-            },
-            where: {
-              provider_providerAccountId: {
-                provider: 'spotify',
-                providerAccountId: userId,
-              },
-            },
-          })
-        } catch (error) {
-          throw new TRPCError({
-            message: `erron on spotify-web-api on prisma update `,
-            code: 'INTERNAL_SERVER_ERROR',
-            cause: error,
-          })
-        }
-      })()
-    },
-    err => {
+    if (!userAccount) {
       throw new TRPCError({
-        message: `erron on spotify-web-api on refresh`,
+        message: `User account not found id: ${userId}`,
         code: 'INTERNAL_SERVER_ERROR',
-        cause: err,
       })
-    },
-  )
+    }
+
+    const client = spotifyWebApi(userAccount)
+    globalForSpotifyApi.spotifyApi = client
+
+    globalForSpotifyApi.spotifyApi.refreshAccessToken().then(
+      async data => {
+        const spotifyApi = globalForSpotifyApi.spotifyApi
+        const { body: userSpotifyProfile } = await spotifyApi.getMe()
+        const userSpotifyId = userSpotifyProfile['id']
+        const accessToken = data.body['access_token']
+        const refreshToken = data.body['refresh_token']
+        spotifyApi.setAccessToken(accessToken)
+        refreshToken && spotifyApi.setRefreshToken(refreshToken)
+        const nowInSeconds = Math.floor(Date.now() / 1000)
+        const accessTokenExpiresAt = nowInSeconds + data.body['expires_in']
+
+        // iife
+        void (async () => {
+          try {
+            await prisma.account.update({
+              data: {
+                access_token: accessToken,
+                expires_at: accessTokenExpiresAt,
+                refresh_token: refreshToken || userAccount.refresh_token,
+              },
+              where: {
+                provider_providerAccountId: {
+                  provider: 'spotify',
+                  providerAccountId: userSpotifyId,
+                },
+              },
+            })
+          } catch (error) {
+            throw new TRPCError({
+              message: `erron on spotify-web-api on prisma update `,
+              code: 'INTERNAL_SERVER_ERROR',
+              cause: error,
+            })
+          }
+        })()
+      },
+      err => {
+        throw new TRPCError({
+          message: `erron on spotify-web-api on refresh`,
+          code: 'INTERNAL_SERVER_ERROR',
+          cause: err,
+        })
+      },
+    )
+  }
 
   return next({
     ctx: {

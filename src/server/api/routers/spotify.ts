@@ -106,7 +106,7 @@ export const spotifyRouter = createTRPCRouter({
         })
       }
     }),
-  getSearchTracks: protectedTokenProcedure
+  getSearch: protectedTokenProcedure
     .meta({
       description:
         'Gets the search results for the specified media types based on text',

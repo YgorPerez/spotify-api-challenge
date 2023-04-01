@@ -14,7 +14,7 @@ export default function useGetSearch({
   for (let i = 1; i < placeholderAmount; i++) {
     placeholderData.albums.push({ album: null })
   }
-  return api.spotify.getSearchTracks.useQuery(
+  return api.spotify.getSearch.useQuery(
     {
       searchTerm,
     },

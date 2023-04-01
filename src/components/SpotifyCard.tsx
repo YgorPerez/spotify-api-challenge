@@ -10,6 +10,7 @@ import type {
   Image as ImageType,
   Track as TrackType,
 } from '../schema/spotifyApiTypes'
+import formatFollowers from '../utils/formatFollowers'
 
 type CardData = AlbumType | TrackType | ArtistType | null
 
@@ -100,8 +101,7 @@ const SpotifyCard: React.FC<{
             slugUrl: 'albums',
           },
           cardSubData: {
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            name: `Followers: ${cardData.followers.total}`,
+            name: `Followers: ${formatFollowers(cardData.followers.total)}`,
           },
         }
       }
