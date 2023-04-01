@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { type Album } from './spotifyApiTypes'
 
 export const ExternalUrlSchema = z.object({
   spotify: z.string(),
@@ -15,65 +14,45 @@ export const SpotifyTypeSchema = z.union([
   z.literal('artist'),
 ])
 
-export const SimplifiedArtistSchema = z.object({
-  externalURL: ExternalUrlSchema,
-  href: z.string().optional(),
-  id: z.string(),
-  name: z.string(),
-  type: SpotifyTypeSchema,
-  uri: z.string(),
-})
-
 export const LinkedTrackSchema = z.object({
-  externalURL: ExternalUrlSchema,
+  external_urls: ExternalUrlSchema,
   id: z.string(),
   type: SpotifyTypeSchema,
   uri: z.string(),
 })
 
-export const RestrictionSchema = z.object({
-  reason: z.union([
-    z.literal('market'),
-    z.literal('product'),
-    z.literal('explicit'),
-  ]),
-})
-
-export const SimplifiedTrackSchema = z.object({
-  artists: z.array(SimplifiedArtistSchema),
-  availableMarkets: z.array(z.string()).optional(),
-  discNumber: z.number(),
-  durationMs: z.number(),
-  explicit: z.boolean(),
-  externalURL: ExternalUrlSchema,
-  href: z.string(),
-  id: z.string(),
-  isLocal: z.boolean(),
-  isPlayable: z.boolean().optional(),
-  linkedFrom: LinkedTrackSchema.optional(),
-  name: z.string(),
-  previewURL: z.string(),
-  restrictions: z.array(RestrictionSchema),
-  trackNumber: z.number(),
-  type: SpotifyTypeSchema,
-  uri: z.string(),
-})
-
-export const ImageSchema = z.object({
-  height: z.number().nullable(),
-  url: z.string(),
-  width: z.number().nullable(),
-})
-
-export const ExternalIDSchema = z.object({
-  ean: z.string().optional(),
-  isrc: z.string().optional(),
-  upc: z.string().optional(),
+const RestrictionsSchema = z.object({
+  reason: z.string(),
 })
 
 export const FollowersSchema = z.object({
-  href: z.string().nullable(),
+  href: z.null(),
   total: z.number(),
+})
+
+export const ImageSchema = z.object({
+  height: z.union([z.number(), z.undefined()]).optional(),
+  url: z.string(),
+  width: z.union([z.number(), z.undefined()]).optional(),
+})
+
+export const ContextObjectSchema = z.object({
+  type: z.union([
+    z.literal('artist'),
+    z.literal('playlist'),
+    z.literal('album'),
+    z.literal('show'),
+    z.literal('episode'),
+  ]),
+  href: z.string(),
+  external_urls: ExternalUrlSchema,
+  uri: z.string(),
+})
+
+export const SimplifiedArtistSchema = ContextObjectSchema.extend({
+  name: z.string(),
+  id: z.string(),
+  type: z.literal('artist'),
 })
 
 export const AlbumTypeSchema = z.union([
@@ -92,87 +71,101 @@ export const CopyrightSchema = z.object({
   type: z.union([z.literal('C'), z.literal('P')]),
 })
 
-export const ArtistSchema = z.object({
-  externalURL: ExternalUrlSchema,
-  id: z.string(),
-  name: z.string(),
-  href: z.string().optional(),
-  type: SpotifyTypeSchema,
-  uri: z.string(),
-  images: z.array(ImageSchema).optional(),
-  popularity: z.number().optional(),
-  genres: z.array(z.string()).optional(),
-  totalFollowers: z.number().optional(),
-})
-
-export const SimplifiedAlbumSchema = z.object({
-  artists: z.array(SimplifiedArtistSchema),
-  albumType: AlbumTypeSchema,
-  availableMarkets: z.array(z.string()).optional(),
-  externalURL: ExternalUrlSchema,
-  id: z.string(),
+export const ArtistSchema = SimplifiedArtistSchema.extend({
+  followers: FollowersSchema,
+  genres: z.array(z.string()),
   images: z.array(ImageSchema),
-  name: z.string(),
-  href: z.string().optional(),
-  releaseDate: z.string(),
-  releaseDatePrecision: z.string(),
-  restrictions: z.array(RestrictionSchema),
-  totalTracks: z.number(),
-  type: SpotifyTypeSchema,
-  uri: z.string(),
-  albumGroup: AlbumGroupSchema.optional(),
+  popularity: z.number(),
 })
 
-export const TrackSchema = z.object({
-  artists: z.array(ArtistSchema),
-  availableMarkets: z.array(z.string()),
-  discNumber: z.number(),
-  duration: z.number(),
-  explicit: z.boolean(),
-  externalURL: ExternalUrlSchema,
-  id: z.string(),
-  isLocal: z.boolean(),
-  name: z.string(),
-  previewURL: z.string().nullable(),
-  restrictions: z.array(RestrictionSchema.optional()).optional(),
-  isPlayable: z.boolean().optional(),
-  linkedFrom: LinkedTrackSchema.optional(),
-  trackNumber: z.number(),
-  type: SpotifyTypeSchema,
-  uri: z.string(),
-  album: z.lazy(() => AlbumSchema.optional()),
-  externalID: ExternalIDSchema.optional(),
-  popularity: z.number().optional(),
-})
-
-export const AlbumSchema: z.ZodType<Album> = z.object({
-  artists: z.array(ArtistSchema),
-  albumType: AlbumTypeSchema,
-  availableMarkets: z.array(z.string()),
-  externalURL: ExternalUrlSchema,
-  id: z.string(),
-  images: z.array(ImageSchema),
-  name: z.string(),
-  releaseDate: z.string(),
-  releaseDatePrecision: z.string(),
-  restrictions: z.array(RestrictionSchema.optional()).optional(),
-  totalTracks: z.number(),
-  type: SpotifyTypeSchema,
-  uri: z.string(),
-  copyrights: z.array(CopyrightSchema).optional(),
-  externalID: ExternalIDSchema.optional(),
-  genres: z.array(z.string()).optional(),
-  label: z.string().optional(),
-  popularity: z.number().optional(),
-  tracks: z.array(TrackSchema).optional(),
-  albumGroup: z
+export const SimplifiedAlbumSchema = ContextObjectSchema.extend({
+  album_group: z
     .union([
       z.literal('album'),
       z.literal('single'),
       z.literal('compilation'),
       z.literal('appears_on'),
+      z.undefined(),
     ])
     .optional(),
+  album_type: z.union([
+    z.literal('album'),
+    z.literal('single'),
+    z.literal('compilation'),
+  ]),
+  artists: z.array(SimplifiedArtistSchema),
+  available_markets: z.union([z.array(z.string()), z.undefined()]).optional(),
+  id: z.string(),
+  images: z.array(ImageSchema),
+  name: z.string(),
+  release_date: z.string(),
+  release_date_precision: z.union([
+    z.literal('year'),
+    z.literal('month'),
+    z.literal('day'),
+  ]),
+  restrictions: z.union([RestrictionsSchema, z.undefined()]).optional(),
+  type: z.literal('album'),
+  total_tracks: z.number(),
+})
+
+const ExternalIdSchema = z.object({
+  isrc: z.union([z.string(), z.undefined()]).optional(),
+  ean: z.union([z.string(), z.undefined()]).optional(),
+  upc: z.union([z.string(), z.undefined()]).optional(),
+})
+
+const TrackLinkSchema = z.object({
+  external_urls: ExternalUrlSchema,
+  href: z.string(),
+  id: z.string(),
+  type: z.literal('track'),
+  uri: z.string(),
+})
+
+export const SimplifiedTrackSchema = z.object({
+  artists: z.array(SimplifiedArtistSchema),
+  available_markets: z.union([z.array(z.string()), z.undefined()]).optional(),
+  disc_number: z.number(),
+  duration_ms: z.number(),
+  explicit: z.boolean(),
+  external_urls: ExternalUrlSchema,
+  href: z.string(),
+  id: z.string(),
+  is_playable: z.union([z.boolean(), z.undefined()]).optional(),
+  linked_from: z.union([TrackLinkSchema, z.undefined()]).optional(),
+  restrictions: z.union([RestrictionsSchema, z.undefined()]).optional(),
+  name: z.string(),
+  preview_url: z.string().nullable(),
+  track_number: z.number(),
+  type: z.literal('track'),
+  uri: z.string(),
+})
+
+const PagingTrackSchema = z.object({
+  href: z.string(),
+  items: z.array(SimplifiedTrackSchema),
+  limit: z.number(),
+  next: z.string().nullable(),
+  offset: z.number(),
+  previous: z.string().nullable(),
+  total: z.number(),
+})
+
+export const TrackSchema = SimplifiedTrackSchema.extend({
+  album: SimplifiedAlbumSchema,
+  external_ids: ExternalIdSchema,
+  popularity: z.number(),
+  is_local: z.union([z.boolean(), z.undefined()]).optional(),
+})
+
+export const AlbumSchema = SimplifiedAlbumSchema.extend({
+  copyrights: z.array(CopyrightSchema),
+  external_ids: ExternalIdSchema,
+  genres: z.array(z.string()),
+  label: z.string(),
+  popularity: z.number(),
+  tracks: PagingTrackSchema,
 })
 
 export const SearchContentSchema = z.object({

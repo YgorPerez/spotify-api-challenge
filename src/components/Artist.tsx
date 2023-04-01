@@ -1,15 +1,15 @@
-import Link from "next/link";
-import React from "react";
-import { type Artist as ArtistType } from "spotify-api.js";
+import Link from 'next/link'
+import React from 'react'
+import { type Artist as ArtistType } from '../schema/spotifyApiTypes'
 
 const Artist: React.FC<{ artist: ArtistType }> = ({ artist }) => {
-	return (
-		<li>
-			<h2>{artist.name}</h2>
-			<span>{artist.genres}</span>
-			<Link href={`/albums/${artist.id}`}>{`/albums/${artist.id}`}</Link>
-		</li>
-	);
-};
+  return (
+    <li>
+      <h2>{artist.name}</h2>
+      <span>{artist.genres}</span>
+      <Link href={`/albums/${artist.id}`}>{`/albums/${artist.id}`}</Link>
+    </li>
+  )
+}
 
-export default Artist;
+export default Artist

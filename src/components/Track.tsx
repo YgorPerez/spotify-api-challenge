@@ -5,7 +5,7 @@ import formatMilliseconds from '../utils/formatMilliseconds'
 
 const Track: React.FC<{ track: TrackType }> = ({ track }) => {
   const trackDurationInReadableTime = formatMilliseconds({
-    milliseconds: track.duration,
+    milliseconds: track.duration_ms,
   })
   return (
     <li className='py-1 text-center text-lg 2xl:mb-1 2xl:text-2xl'>

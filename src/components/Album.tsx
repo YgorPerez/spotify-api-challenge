@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
-import { type Album as AlbumType } from '../schema/spotifyApiTypes'
+import { type SimplifiedAlbum as AlbumType } from '../schema/spotifyApiTypes'
 
 const Album: React.FC<{ album: AlbumType }> = ({ album }) => {
   return (

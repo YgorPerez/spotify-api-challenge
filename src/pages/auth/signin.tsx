@@ -36,7 +36,7 @@ const SignIn = ({ providers }: SignInProps) => {
 export const getServerSideProps = async () => {
   const providers = await getProviders()
   if (!providers) {
-    throw Error('no providers found')
+    throw Error('no providers found, check your .env next auth url')
   }
   return {
     props: { providers },

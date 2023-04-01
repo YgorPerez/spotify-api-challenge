@@ -5,7 +5,7 @@ import loadingImagePlaceholder from 'public/images/gray-square-placeholder.jpg'
 import React from 'react'
 import artistPlaceholder from '../../public/images/artist-placeholder.jpg'
 import type {
-  Album as AlbumType,
+  SimplifiedAlbum as AlbumType,
   Artist as ArtistType,
   Image as ImageType,
   Track as TrackType,
@@ -25,7 +25,7 @@ const CardMain: React.FC<{
 }> = ({ cardMainData, cardData, big }) => {
   const imageSize = big ? 600 : 288
   const placeholderImage = () => {
-    if (cardData && 'totalFollowers' in cardData) {
+    if (cardData && 'followers' in cardData) {
       return artistPlaceholder
     } else {
       return loadingImagePlaceholder
@@ -53,7 +53,7 @@ const CardMain: React.FC<{
         height={imageSize}
         width={imageSize}
       />
-      <p className='pt-4 pb-1 text-2xl text-white-gray'>
+      <p className='pb-1 pt-4 text-2xl text-white-gray'>
         {cardData?.name || 'loading...'}
       </p>
     </>
@@ -68,7 +68,7 @@ const SpotifyCard: React.FC<{
   const { cardMainData, cardSubData } = (() => {
     if (cardData) {
       // Handle album data
-      if ('albumType' in cardData) {
+      if ('album_type' in cardData) {
         return {
           cardMainData: { images: cardData.images, slugUrl: 'album' },
           cardSubData: {
@@ -79,7 +79,7 @@ const SpotifyCard: React.FC<{
         }
       }
       // Handle track data
-      if ('trackNumber' in cardData) {
+      if ('track_number' in cardData) {
         return {
           cardMainData: {
             images: cardData.album?.images || null,
@@ -93,7 +93,7 @@ const SpotifyCard: React.FC<{
         }
       }
       // Handle artist data
-      if ('totalFollowers' in cardData) {
+      if ('followers' in cardData) {
         return {
           cardMainData: {
             images: cardData.images || null,
@@ -101,7 +101,7 @@ const SpotifyCard: React.FC<{
           },
           cardSubData: {
             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            name: `Followers: ${cardData.totalFollowers}`,
+            name: `Followers: ${cardData.followers.total}`,
           },
         }
       }
