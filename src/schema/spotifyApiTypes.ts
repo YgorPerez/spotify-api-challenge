@@ -24,7 +24,7 @@ export interface Track extends SimplifiedTrack {
   is_local?: boolean | undefined
 }
 
-interface SimplifiedTrack {
+export interface SimplifiedTrack {
   artists: SimplifiedArtist[]
   available_markets?: string[] | undefined
   disc_number: number

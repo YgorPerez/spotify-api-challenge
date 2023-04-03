@@ -15,8 +15,10 @@ function formatFollowers(input: number) {
   ]
 
   for (let index = ranges.length - 1; index >= 0; index--) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     if (ranges[index]?.divider && input > ranges[index]?.divider) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       let quotient = input / ranges[index].divider
 
@@ -26,7 +28,7 @@ function formatFollowers(input: number) {
         quotient = Math.floor(quotient)
       }
 
-      return quotient.toString() + ranges[index]?.suffix
+      return `${quotient.toString()}${ranges[index]?.suffix || ''}`
     }
   }
 

@@ -4,6 +4,7 @@ import { type Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
 import { type AppType } from 'next/app'
 import { lazy, Suspense, useEffect, useState } from 'react'
+import ErrorBoundary from '../components/ErrorBoundary'
 import '../styles/globals.css'
 import { api } from '../utils/api'
 
@@ -31,7 +32,9 @@ const MyApp: AppType<{
   // trpc already adds the query client provider
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <ErrorBoundary>
+        <Component {...pageProps} />
+      </ErrorBoundary>
       <Analytics />
       <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
       {showDevtools && (
