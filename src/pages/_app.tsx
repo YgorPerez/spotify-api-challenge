@@ -1,13 +1,15 @@
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Analytics } from '@vercel/analytics/react'
 import { type Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
 import { type AppType } from 'next/app'
 import { lazy, Suspense, useEffect, useState } from 'react'
+import ErrorBoundary from '../components/ErrorBoundary'
 import '../styles/globals.css'
 import { api } from '../utils/api'
 
 if (process.env.NODE_ENV === 'development') {
-  import('@impulse.dev/runtime').then(impulse => impulse.run())
+  void import('@impulse.dev/runtime').then(impulse => impulse.run())
 }
 
 const ReactQueryDevtoolsProduction = lazy(() =>
@@ -18,7 +20,6 @@ const ReactQueryDevtoolsProduction = lazy(() =>
 
 const MyApp: AppType<{
   session: Session | null
-  // dehydratedState: DehydratedState
 }> = ({ Component, pageProps: { session, ...pageProps } }) => {
   const [showDevtools, setShowDevtools] = useState(false)
 
@@ -31,7 +32,10 @@ const MyApp: AppType<{
   // trpc already adds the query client provider
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <ErrorBoundary>
+        <Component {...pageProps} />
+      </ErrorBoundary>
+      <Analytics />
       <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
       {showDevtools && (
         <Suspense fallback={null}>

@@ -1,35 +1,80 @@
-import { type NextPage } from "next";
-import Error from "next/error";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { api } from "../../utils/api";
+import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { type InferGetServerSidePropsType, type NextPage } from 'next'
+import Error from 'next/error'
+import Album from '../../components/Album'
+import GoBack from '../../components/GoBack'
+import Header from '../../components/Header'
+import SpotifyCard from '../../components/SpotifyCard'
+import { api } from '../../utils/api'
+import { generateSSGHelper } from '../../utils/ssgHelper'
+import { stringOrNull } from '../../utils/stringOrNull'
 
-const SingleArtistPage: NextPage = () => {
-	const router = useRouter();
+interface IProps {
+  artistId: string
+}
 
-	const artistId = router.query.artistId as string;
+const SingleArtistPage: NextPage<IProps> = ({
+  artistId,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const { data: getAritstsAlbumsData } = api.spotify.getArtistAlbums.useQuery(
+    {
+      artistId,
+    },
+    {
+      staleTime: Infinity,
+    },
+  )
 
-	const { data, isLoading } = api.spotify.getArtistAlbums.useQuery({
-		artistId: artistId,
-	});
+  if (!getAritstsAlbumsData || !getAritstsAlbumsData.artist) {
+    return <Error statusCode={404} />
+  }
 
-	if (isLoading) {
-		return <p>Carregando artista...</p>;
-	}
+  const { artist, albums } = getAritstsAlbumsData
 
-	if (!data) {
-		return <Error statusCode={404} />;
-	}
+  return (
+    <div className='min-h-screen min-w-max bg-dark-gray'>
+      <header className='flex'>
+        <Header />
+        <div className='ml-6 mt-8'>
+          <GoBack />
+        </div>
+      </header>
+      <main className='mt-6 flex'>
+        <div className='ml-36'>
+          <SpotifyCard cardData={artist} big />
+        </div>
+        <div className='ml-16'>
+          <ol className='mx-2 list-decimal text-light-gray'>
+            {albums.map(album => (
+              <Album key={album.id} album={album} />
+            ))}
+          </ol>
+        </div>
+      </main>
+    </div>
+  )
+}
 
-	return (
-		<div>
-			<h1>{data?.artist?.name}</h1>
-			<p>{data?.artist?.totalFollowers}</p>
-			<Link href={`/album/${data?.albums?.[0]?.id as string}`}>{`/album/${
-				data?.albums?.[0]?.id as string
-			}`}</Link>
-		</div>
-	);
-};
+export const getServerSideProps: GetServerSideProps<IProps> = async (
+  context: GetServerSidePropsContext,
+) => {
+  const artistId = stringOrNull(context.query.artistId)
 
-export default SingleArtistPage;
+  if (!artistId || artistId.length < 1) {
+    return {
+      notFound: true,
+    }
+  }
+
+  const ssg = await generateSSGHelper(context)
+  await ssg.spotify.getArtistAlbums.prefetch({ artistId })
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      artistId: artistId,
+    },
+  }
+}
+
+export default SingleArtistPage

@@ -11,7 +11,7 @@ import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server'
 import { devtoolsLink } from 'trpc-client-devtools-link'
 
 import { type AppRouter } from '../server/api/root'
-import getBaseUrl from './get-base-url'
+import getBaseUrl from './getBaseUrl'
 import { transformer } from './transformer'
 
 /** A set of type-safe react-query hooks for your tRPC API. */
@@ -25,6 +25,8 @@ export const api = createTRPCNext<AppRouter>({
             refetchOnMount: false,
             refetchOnReconnect: false,
             retry: 3,
+            cacheTime: Infinity,
+            staleTime: Infinity,
           },
         },
       },

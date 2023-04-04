@@ -5,17 +5,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// generator docs {
-//   provider = "node node_modules/prisma-docs-generator"
-//   output = "./generated/docs"
-// }
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+  output = "./generated/docs"
+}
 
-// generator zod {
-//   provider = "prisma-zod-generator"
-//   output = "./generated/schema"
-//   isGenerateSelect  = false
-//   isGenerateInclude = false
-// }
+generator zod {
+  provider = "prisma-zod-generator"
+  output = "./generated/schema"
+  isGenerateSelect  = false
+  isGenerateInclude = false
+}
 
 datasource db {
   provider     = "mysql"

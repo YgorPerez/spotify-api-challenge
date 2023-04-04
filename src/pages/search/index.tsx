@@ -1,49 +1,33 @@
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
-  InferGetServerSidePropsType,
   NextPage,
 } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import AlbumCard from '../../components/album-card'
-import Footer from '../../components/footer'
-import Header from '../../components/header'
-import SearchForm from '../../components/search-form'
-import { api } from '../../utils/api'
+import Footer from '../../components/Footer'
+import Header from '../../components/Header'
+import SearchForm from '../../components/SearchForm'
+import SpotifyCard from '../../components/SpotifyCard'
+import useDebounce from '../../hooks/useDebounce'
+import useGetSearch from '../../hooks/useGetSearch'
+import { useScrollRestoration } from '../../hooks/useScrollRestoration'
 import { generateSSGHelper } from '../../utils/ssgHelper'
+import { stringOrNull } from '../../utils/stringOrNull'
 
-const SearchPage: NextPage = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) => {
+const SearchPage: NextPage = () => {
+  useScrollRestoration()
   const router = useRouter()
-  const { search: searchQuery = '' } = router.query
-  const shouldFetch = searchQuery.length >= 1
-  const albumCardPlaceholder = { albums: [{ album: null }] }
-  for (let i = 1; i <= 7; i++) {
-    albumCardPlaceholder.albums.push({ album: null })
-  }
-  const utils = api.useContext()
-  const { data: spotifySearchData, isError } = api.spotify.getSearch.useQuery(
-    {
-      searchQuery: searchQuery as string,
-    },
-    {
-      cacheTime: Infinity,
-      enabled: shouldFetch,
-      staleTime: Infinity,
-      placeholderData: albumCardPlaceholder,
-      onSuccess(searchSuccessdata) {
-        // searchSuccessdata.albums?.map(album => {
-        //   utils.spotify.getAlbumTracks.prefetch({ albumId: album.id })
-        // })
-        searchSuccessdata.tracks?.map(track => {
-          utils.spotify.getTrack.setData({ trackId: track.id }, track)
-        })
-      },
-    },
-  )
-  const shouldDisplayData = spotifySearchData && shouldFetch && !isError
+
+  const searchTerm = stringOrNull(router.query?.search)
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+
+  const { data: spotifySearchData, isError } = useGetSearch({
+    searchTerm: debouncedSearchTerm as string,
+    enabled: Boolean(debouncedSearchTerm),
+  })
+  const shouldDisplayData = spotifySearchData && searchTerm && !isError
+
   return (
     <>
       <Head>
@@ -57,19 +41,28 @@ const SearchPage: NextPage = (
           <main className='flex min-h-max flex-col'>
             <div>
               <div className='mx-32 mb-8'>
-                <SearchForm search={searchQuery as string} />
+                <SearchForm search={searchTerm} />
                 <h2 className='my-4 mt-14 text-3xl text-white-gray'>
                   Álbuns buscados recentemente
                 </h2>
               </div>
               <div className='m-auto flex w-5/6 flex-wrap justify-center gap-6 bg-dark-gray 2xl:w-11/12 2xl:gap-12 '>
                 {shouldDisplayData &&
-                  spotifySearchData.albums?.map((album, index) => {
+                  spotifySearchData?.albums?.map((album, index) => {
                     return (
-                      <AlbumCard
-                        key={album.id || index}
-                        albumCardData={album}
-                      />
+                      <SpotifyCard key={album.id || index} cardData={album} />
+                    )
+                  })}
+                {shouldDisplayData &&
+                  spotifySearchData?.artists?.map((artist, index) => {
+                    return (
+                      <SpotifyCard key={artist.id || index} cardData={artist} />
+                    )
+                  })}
+                {shouldDisplayData &&
+                  spotifySearchData?.tracks?.map((track, index) => {
+                    return (
+                      <SpotifyCard key={track.id || index} cardData={track} />
                     )
                   })}
               </div>
@@ -85,20 +78,20 @@ const SearchPage: NextPage = (
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext,
 ) => {
-  const { search: searchQuery = '' } = context.query
-  const ssg = await generateSSGHelper(context)
+  const searchTerm = stringOrNull(context.query.search)
 
-  if (searchQuery?.length && searchQuery.length >= 1) {
-    // `prefetch` does not return the result and never throws - if
-    // you need that behavior, use `fetch` instead.
-    await ssg.spotify.getSearch.prefetch({
-      searchQuery: searchQuery as string,
-    })
+  if (!searchTerm || searchTerm.length < 1) {
+    return { props: {} }
   }
+
+  const ssg = await generateSSGHelper(context)
+  await ssg.spotify.getSearch.prefetch({
+    searchTerm: searchTerm,
+  })
 
   return {
     props: {
-      // trpcState: ssg.dehydrate(),
+      trpcState: ssg.dehydrate(),
     },
   }
 }
