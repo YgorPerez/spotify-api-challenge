@@ -54,6 +54,7 @@
     "@typescript-eslint/parser": "^5.56.0",
     "autoprefixer": "^10.4.14",
     "cross-env": "^7.0.3",
+    "edge-runtime": "^2.1.2",
     "eslint": "^8.36.0",
     "eslint-config-next": "^13.2.4",
     "postcss": "^8.4.21",

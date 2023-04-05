@@ -18,15 +18,19 @@ import type {
   SignedInAuthObject,
   SignedOutAuthObject,
 } from '@clerk/nextjs/dist/api'
+import { type RequestLike } from '@clerk/nextjs/dist/server/types'
 import { getAuth } from '@clerk/nextjs/server'
 import { initTRPC, type inferAsyncReturnType } from '@trpc/server'
-import { type CreateNextContextOptions } from '@trpc/server/adapters/next'
+import { type OutgoingHttpHeaders } from 'http2'
+import type { NextRequest, NextResponse } from 'next/server'
 import { type TRPCPanelMeta } from 'trpc-panel'
 import { ZodError } from 'zod'
 import { transformer } from '../../utils/transformer'
 
 interface AuthContext {
   auth: SignedInAuthObject | SignedOutAuthObject
+  req: RequestLike
+  resHeaders?: NextResponse['headers']
 }
 
 /**
@@ -39,9 +43,15 @@ interface AuthContext {
  *
  * @see https://create.t3.gg/en/usage/trpc#-servertrpccontextts
  */
-export const createInnerTRPCContext = ({ auth }: AuthContext) => {
+export const createInnerTRPCContext = ({
+  auth,
+  req,
+  resHeaders,
+}: AuthContext) => {
   return {
     auth,
+    req,
+    resHeaders,
   }
 }
 
@@ -51,8 +61,14 @@ export const createInnerTRPCContext = ({ auth }: AuthContext) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = (opts: CreateNextContextOptions) => {
-  return createInnerTRPCContext({ auth: getAuth(opts.req) })
+export function createTRPCContext({
+  req,
+  resHeaders,
+}: {
+  req: NextRequest
+  resHeaders: NextResponse['headers']
+}) {
+  return createInnerTRPCContext({ req, resHeaders, auth: getAuth(req) })
 }
 
 type TRPCContext = inferAsyncReturnType<typeof createTRPCContext>
@@ -111,6 +127,7 @@ export const publicProcedure = t.procedure
  */
 
 import { TRPCError } from '@trpc/server'
+import { type Client } from 'spotify-api.js'
 import { env } from '../../env.mjs'
 import { UserTokenSchema } from '../../schema/clerkSchemas'
 import { ratelimit } from '../lib/redis-ratelimit'
@@ -118,7 +135,6 @@ import {
   globalForSpotifyClient,
   spotifyClientOauth,
 } from '../lib/spotify-api-js'
-import { type Client } from 'spotify-api.js'
 
 const ratelimiter = async (userId: string) => {
   if (ratelimit) {

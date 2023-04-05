@@ -92,7 +92,6 @@ export const spotifyRouter = createTRPCRouter({
     .output(z.object({ track: TrackSchema }))
     .query(async ({ ctx, input }) => {
       const track = await ctx.spotifyApi.tracks.get(input.trackId)
-      console.log(track)
       const validatedTrack = TrackSchema.safeParse(track)
       if (validatedTrack.success) {
         return { track: validatedTrack.data }
