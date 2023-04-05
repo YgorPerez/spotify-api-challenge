@@ -2,15 +2,15 @@ import { createProxySSGHelpers } from '@trpc/react-query/ssg'
 import type { GetServerSidePropsContext } from 'next'
 import { appRouter } from '../server/api/root'
 import { createInnerTRPCContext } from '../server/api/trpc'
-import { getServerAuthSession } from '../server/lib/auth'
 import { transformer } from './transformer'
+import { getAuth } from '@clerk/nextjs/server'
 
-export const generateSSGHelper = async (context: GetServerSidePropsContext) => {
-  const session = await getServerAuthSession(context)
+export const generateSSGHelper = (context: GetServerSidePropsContext) => {
+  const auth = getAuth(context.req)
   return createProxySSGHelpers({
     router: appRouter,
     ctx: createInnerTRPCContext({
-      session: session,
+      auth,
     }),
     transformer,
   })

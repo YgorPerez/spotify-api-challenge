@@ -33,7 +33,7 @@ const SingleTrackPage: NextPage<IProps> = ({
     <div className='min-h-screen min-w-max bg-dark-gray'>
       <header className='flex'>
         <Header />
-        <div className='mt-8 ml-6'>
+        <div className='ml-6 mt-8'>
           <GoBack />
         </div>
       </header>
@@ -62,7 +62,7 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
     }
   }
 
-  const ssg = await generateSSGHelper(context)
+  const ssg = generateSSGHelper(context)
   await ssg.spotify.getTrack.prefetch({ trackId })
 
   return {

@@ -1,7 +1,6 @@
+import { ClerkProvider } from '@clerk/nextjs'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Analytics } from '@vercel/analytics/react'
-import { type Session } from 'next-auth'
-import { SessionProvider } from 'next-auth/react'
 import { type AppType } from 'next/app'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import ErrorBoundary from '../components/ErrorBoundary'
@@ -18,9 +17,7 @@ const ReactQueryDevtoolsProduction = lazy(() =>
   })),
 )
 
-const MyApp: AppType<{
-  session: Session | null
-}> = ({ Component, pageProps: { session, ...pageProps } }) => {
+const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   const [showDevtools, setShowDevtools] = useState(false)
 
   useEffect(() => {
@@ -31,7 +28,7 @@ const MyApp: AppType<{
   // this way the react query devtools can be downloaded in production using window.toggleDevtools() on console
   // trpc already adds the query client provider
   return (
-    <SessionProvider session={session}>
+    <ClerkProvider {...pageProps}>
       <ErrorBoundary>
         <Component {...pageProps} />
       </ErrorBoundary>
@@ -42,7 +39,7 @@ const MyApp: AppType<{
           <ReactQueryDevtoolsProduction />
         </Suspense>
       )}
-    </SessionProvider>
+    </ClerkProvider>
   )
 }
 

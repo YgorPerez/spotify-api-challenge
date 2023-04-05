@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
     }
   }
 
-  const ssg = await generateSSGHelper(context)
+  const ssg = generateSSGHelper(context)
   await ssg.spotify.getArtistAlbums.prefetch({ artistId })
 
   return {

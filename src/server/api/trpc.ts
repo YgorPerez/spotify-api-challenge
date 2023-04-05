@@ -12,19 +12,21 @@
  * This section defines the "contexts" that are available in the backend API.
  *
  * These allow you to access things when processing a request, like the
- * database, the session, etc.
+ * database, the auth, etc.
  */
+import type {
+  SignedInAuthObject,
+  SignedOutAuthObject,
+} from '@clerk/nextjs/dist/api'
+import { getAuth } from '@clerk/nextjs/server'
 import { initTRPC, type inferAsyncReturnType } from '@trpc/server'
 import { type CreateNextContextOptions } from '@trpc/server/adapters/next'
-import { type Session } from 'next-auth'
 import { type TRPCPanelMeta } from 'trpc-panel'
 import { ZodError } from 'zod'
 import { transformer } from '../../utils/transformer'
-import { getServerAuthSession } from '../lib/auth'
-import { prisma } from '../lib/db'
 
-type CreateContextOptions = {
-  session: Session | null
+interface AuthContext {
+  auth: SignedInAuthObject | SignedOutAuthObject
 }
 
 /**
@@ -37,10 +39,9 @@ type CreateContextOptions = {
  *
  * @see https://create.t3.gg/en/usage/trpc#-servertrpccontextts
  */
-export const createInnerTRPCContext = (opts: CreateContextOptions) => {
+export const createInnerTRPCContext = ({ auth }: AuthContext) => {
   return {
-    session: opts.session,
-    prisma,
+    auth,
   }
 }
 
@@ -50,15 +51,8 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-  const { req, res } = opts
-
-  // Get the session from the server using the getServerSession wrapper function
-  const session = await getServerAuthSession({ req, res })
-
-  return createInnerTRPCContext({
-    session,
-  })
+export const createTRPCContext = (opts: CreateNextContextOptions) => {
+  return createInnerTRPCContext({ auth: getAuth(opts.req) })
 }
 
 type TRPCContext = inferAsyncReturnType<typeof createTRPCContext>
@@ -107,7 +101,7 @@ export const createTRPCRouter = t.router
  *
  * This is the base piece you use to build new queries and mutations on your
  * tRPC API. It does not guarantee that a user querying is authorized, but you
- * can still access user session data if they are logged in.
+ * can still access user auth data if they are logged in.
  */
 export const publicProcedure = t.procedure
 
@@ -117,13 +111,14 @@ export const publicProcedure = t.procedure
  */
 
 import { TRPCError } from '@trpc/server'
-import { AccountFindFirstSchema } from '../../../prisma/generated/schema/schemas'
+import { env } from '../../env.mjs'
+import { UserTokenSchema } from '../../schema/clerkSchemas'
 import { ratelimit } from '../lib/redis-ratelimit'
 import {
-  globalForSpotifyApi,
-  refreshAccessToken,
-  spotifyWebApi,
-} from '../lib/spotify-web-api'
+  globalForSpotifyClient,
+  spotifyClientOauth,
+} from '../lib/spotify-api-js'
+import { type Client } from 'spotify-api.js'
 
 const ratelimiter = async (userId: string) => {
   if (ratelimit) {
@@ -145,66 +140,76 @@ const unauthorizedError = () => {
 }
 
 const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.user) {
+  if (!ctx.auth.userId) {
     throw unauthorizedError()
   }
 
-  const userId = ctx.session?.user?.id
+  const userId = ctx.auth.userId
   await ratelimiter(userId)
 
   return next({
     ctx: {
       ...ctx,
-      // infers the `session` as non-nullable
-      session: {
-        ...ctx.session,
-        user: ctx.session.user,
+      // infers the `auth` as non-nullable
+      auth: {
+        ...ctx.auth,
+        user: ctx.auth.user,
       },
     },
   })
 })
 
 const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.session || !ctx.session.user) {
+  if (!ctx.auth.userId) {
     throw unauthorizedError()
   }
-  const userId = ctx.session?.user?.id
+  const userId = ctx.auth.userId
   await ratelimiter(userId)
-
-  const nowInSeconds = Math.floor(Date.now() / 1000)
-  if (
-    !globalForSpotifyApi.expiresAt ||
-    globalForSpotifyApi.expiresAt <= nowInSeconds
-  ) {
-    const userAccount = await ctx.prisma.account.findFirst({
-      where: {
-        userId,
+  let spotifyApi = globalForSpotifyClient.spotifyClient
+  if (!globalForSpotifyClient.spotifyClient) {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    const userTokenResponse = await fetch(
+      `https://api.clerk.dev/v1/users/${userId}/oauth_access_tokens/oauth_spotify`,
+      {
+        method: 'get',
+        headers: new Headers({
+          Authorization: `Bearer ${env.CLERK_SECRET_KEY}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        }),
       },
-    })
-    AccountFindFirstSchema.parse(userAccount)
-
-    if (!userAccount) {
+    )
+    if (!userTokenResponse.ok) {
       throw new TRPCError({
-        message: `User account not found id: ${userId}`,
+        message: `Response error on fetch access token from user: ${userId}`,
         code: 'INTERNAL_SERVER_ERROR',
       })
     }
 
-    spotifyWebApi(userAccount)
-    refreshAccessToken(userAccount)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const userToken = await userTokenResponse.json()
+
+    const validatedUserToken = UserTokenSchema.safeParse(userToken)
+    if (!validatedUserToken.success || !validatedUserToken.data[0]?.token) {
+      throw new TRPCError({
+        message: `User token not found id: ${userId}`,
+        code: 'INTERNAL_SERVER_ERROR',
+      })
+    }
+
+    spotifyApi = spotifyClientOauth(validatedUserToken.data[0]?.token)
   }
 
   return next({
     ctx: {
       ...ctx,
-      // infers the `session` as non-nullable
-      session: {
-        ...ctx.session,
+      // infers the `auth` as non-nullable
+      auth: {
+        ...ctx.auth,
         user: {
-          ...ctx.session?.user,
+          ...ctx.auth?.user,
         },
-        spotifyApi: globalForSpotifyApi.spotifyApi,
       },
+      spotifyApi: spotifyApi as Client,
     },
   })
 })

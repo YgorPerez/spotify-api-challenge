@@ -5,14 +5,15 @@ import loadingImagePlaceholder from 'public/images/gray-square-placeholder.jpg'
 import React from 'react'
 import artistPlaceholder from '../../public/images/artist-placeholder.jpg'
 import type {
-  SimplifiedAlbum as AlbumType,
+  SimplifiedAlbum as SimplifiedAlbumType,
+  Album as AlbumType,
   Artist as ArtistType,
   Image as ImageType,
   Track as TrackType,
 } from '../schema/spotifyApiTypes'
 import formatFollowers from '../utils/formatFollowers'
 
-type CardData = AlbumType | TrackType | ArtistType | null
+type CardData = AlbumType | TrackType | SimplifiedAlbumType | ArtistType | null
 
 type CardMainData = {
   images: ImageType[] | null
@@ -69,7 +70,7 @@ const SpotifyCard: React.FC<{
   const { cardMainData, cardSubData } = (() => {
     if (cardData) {
       // Handle album data
-      if ('album_type' in cardData) {
+      if ('albumType' in cardData) {
         return {
           cardMainData: { images: cardData.images, slugUrl: 'album' },
           cardSubData: {
@@ -80,7 +81,7 @@ const SpotifyCard: React.FC<{
         }
       }
       // Handle track data
-      if ('track_number' in cardData) {
+      if ('trackNumber' in cardData) {
         return {
           cardMainData: {
             images: cardData.album?.images || null,
@@ -94,14 +95,14 @@ const SpotifyCard: React.FC<{
         }
       }
       // Handle artist data
-      if ('followers' in cardData) {
+      if ('totalFollowers' in cardData) {
         return {
           cardMainData: {
             images: cardData.images || null,
             slugUrl: 'albums',
           },
           cardSubData: {
-            name: `Followers: ${formatFollowers(cardData.followers.total)}`,
+            name: `Followers: ${formatFollowers(cardData.totalFollowers || 0)}`,
           },
         }
       }

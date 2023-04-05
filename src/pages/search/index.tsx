@@ -84,7 +84,7 @@ export const getServerSideProps: GetServerSideProps = async (
     return { props: {} }
   }
 
-  const ssg = await generateSSGHelper(context)
+  const ssg = generateSSGHelper(context)
   await ssg.spotify.getSearch.prefetch({
     searchTerm: searchTerm,
   })

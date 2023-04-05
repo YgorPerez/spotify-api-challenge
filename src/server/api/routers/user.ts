@@ -2,15 +2,6 @@ import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 
 export const userRouter = createTRPCRouter({
-  getUserAccessToken: protectedProcedure
-    .meta({ description: 'get user accessToken by id' })
-    .query(async ({ ctx }) => {
-      return await ctx.prisma.account.findFirst({
-        where: {
-          userId: ctx.session.user.id,
-        },
-      })
-    }),
   hello: publicProcedure
     .meta({ description: 'Returns hello + your text' })
     .input(
