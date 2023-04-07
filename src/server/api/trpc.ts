@@ -21,7 +21,6 @@ import type {
 import { type RequestLike } from '@clerk/nextjs/dist/server/types'
 import { getAuth } from '@clerk/nextjs/server'
 import { initTRPC, type inferAsyncReturnType } from '@trpc/server'
-import { type OutgoingHttpHeaders } from 'http2'
 import type { NextRequest, NextResponse } from 'next/server'
 import { type TRPCPanelMeta } from 'trpc-panel'
 import { ZodError } from 'zod'
@@ -127,7 +126,6 @@ export const publicProcedure = t.procedure
  */
 
 import { TRPCError } from '@trpc/server'
-import { type Client } from 'spotify-api.js'
 import { env } from '../../env.mjs'
 import { UserTokenSchema } from '../../schema/clerkSchemas'
 import { ratelimit } from '../lib/redis-ratelimit'
@@ -181,8 +179,8 @@ const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
   }
   const userId = ctx.auth.userId
   await ratelimiter(userId)
-  let spotifyApi = globalForSpotifyClient.spotifyClient
-  if (!globalForSpotifyClient.spotifyClient) {
+  let spotifyApi = globalForSpotifyClient.spotifyApi
+  if (!globalForSpotifyClient.spotifyApi) {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const userTokenResponse = await fetch(
       `https://api.clerk.dev/v1/users/${userId}/oauth_access_tokens/oauth_spotify`,
@@ -225,8 +223,8 @@ const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
           ...ctx.auth?.user,
         },
       },
-      spotifyApi: spotifyApi as Client,
-    },
+      spotifyApi: spotifyApi,
+    }
   })
 })
 

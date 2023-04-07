@@ -24,8 +24,8 @@ export const spotifyRouter = createTRPCRouter({
       z.object({ album: AlbumSchema, tracks: SimplifiedTrackSchema.array() }),
     )
     .query(async ({ ctx, input }) => {
-      const album = await ctx.spotifyApi.albums.get(input.albumId)
-      const tracks = await ctx.spotifyApi.albums.getTracks(input.albumId)
+      const album = await ctx.spotifyApi.albums.getAlbum(input.albumId)
+      const tracks = await ctx.spotifyApi.albums.getAlbumTracks(input.albumId)
       const validatedAlbum = AlbumSchema.safeParse(album)
       const validatedTracks = SimplifiedTrackSchema.array().safeParse(tracks)
       if (!validatedAlbum.success) {
@@ -61,8 +61,8 @@ export const spotifyRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const artist = await ctx.spotifyApi.artists.get(input.artistId)
-      const albums = await ctx.spotifyApi.artists.getAlbums(input.artistId)
+      const artist = await ctx.spotifyApi.artists.getArtist(input.artistId)
+      const albums = await ctx.spotifyApi.artists.getArtistAlbums(input.artistId)
       const validatedArtist = ArtistSchema.safeParse(artist)
       const validatedAlbums = z.array(SimplifiedAlbumSchema).safeParse(albums)
       if (!validatedArtist.success) {
@@ -91,7 +91,7 @@ export const spotifyRouter = createTRPCRouter({
     )
     .output(z.object({ track: TrackSchema }))
     .query(async ({ ctx, input }) => {
-      const track = await ctx.spotifyApi.tracks.get(input.trackId)
+      const track = await ctx.spotifyApi.tracks.getTrack(input.trackId)
       const validatedTrack = TrackSchema.safeParse(track)
       if (validatedTrack.success) {
         return { track: validatedTrack.data }
@@ -135,11 +135,13 @@ export const spotifyRouter = createTRPCRouter({
     )
     .output(SearchContentSchema)
     .query(async ({ ctx, input }) => {
-      const searchContent = await ctx.spotifyApi.search(input.searchTerm, {
-        types: input.mediaType || ['track', 'album', 'artist'],
-        includeExternalAudio: input.includeExternalAudio || false,
-        limit: input.amount || 20,
-      })
+      const searchContent = await ctx.spotifyApi.search.search(input.searchTerm,
+        input.mediaType || ['track', 'album', 'artist'],
+        {
+          include_external: input.includeExternalAudio ? "audio" : undefined,
+          limit: input.amount || 20,
+        }
+      )
       const validatedSearchContent =
         SearchContentSchema.safeParse(searchContent)
       if (validatedSearchContent.success) {

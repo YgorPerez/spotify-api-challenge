@@ -75,6 +75,8 @@ const SearchPage: NextPage = () => {
   )
 }
 
+export const runtime = 'experimental-edge'
+
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext,
 ) => {

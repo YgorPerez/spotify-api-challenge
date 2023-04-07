@@ -5,10 +5,10 @@ import loadingImagePlaceholder from 'public/images/gray-square-placeholder.jpg'
 import React from 'react'
 import artistPlaceholder from '../../public/images/artist-placeholder.jpg'
 import type {
-  SimplifiedAlbum as SimplifiedAlbumType,
   Album as AlbumType,
   Artist as ArtistType,
   Image as ImageType,
+  SimplifiedAlbum as SimplifiedAlbumType,
   Track as TrackType,
 } from '../schema/spotifyApiTypes'
 import formatFollowers from '../utils/formatFollowers'
@@ -27,7 +27,7 @@ const CardMain: React.FC<{
 }> = ({ cardMainData, cardData, big }) => {
   const imageSize = big ? 600 : 288
   const placeholderImage = () => {
-    if (cardData && 'followers' in cardData) {
+    if (cardData && 'totalFollowers' in cardData) {
       return artistPlaceholder
     } else {
       return loadingImagePlaceholder
