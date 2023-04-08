@@ -57,6 +57,8 @@ const SingleAlbumPage: NextPage<IProps> = ({
   )
 }
 
+export const runtime = 'experimental-edge'
+
 export const getServerSideProps: GetServerSideProps<IProps> = async (
   context: GetServerSidePropsContext,
 ) => {

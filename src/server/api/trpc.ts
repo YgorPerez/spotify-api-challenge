@@ -21,11 +21,11 @@ import type {
 import { type RequestLike } from '@clerk/nextjs/dist/server/types'
 import { getAuth } from '@clerk/nextjs/server'
 import { initTRPC, type inferAsyncReturnType } from '@trpc/server'
+import { type AxiomRequest } from 'next-axiom'
 import type { NextRequest, NextResponse } from 'next/server'
 import { type TRPCPanelMeta } from 'trpc-panel'
 import { ZodError } from 'zod'
 import { transformer } from '../../utils/transformer'
-import { type AxiomRequest } from 'next-axiom'
 
 interface AuthContext {
   auth: SignedInAuthObject | SignedOutAuthObject
@@ -129,23 +129,10 @@ export const publicProcedure = t.procedure
 import { TRPCError } from '@trpc/server'
 import { env } from '../../env.mjs'
 import { UserTokenSchema } from '../../schema/clerkSchemas'
-import { ratelimit } from '../lib/redis-ratelimit'
 import {
   globalForSpotifyClient,
   spotifyClientOauth,
 } from '../lib/spotify-api'
-
-const ratelimiter = async (userId: string) => {
-  if (ratelimit) {
-    const { success } = await ratelimit.limit(userId)
-    if (!success) {
-      throw new TRPCError({
-        message: 'Wait 10s and try again',
-        code: 'TOO_MANY_REQUESTS',
-      })
-    }
-  }
-}
 
 const unauthorizedError = () => {
   return new TRPCError({
@@ -158,10 +145,6 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
   if (!ctx.auth.userId) {
     throw unauthorizedError()
   }
-
-  const userId = ctx.auth.userId
-  await ratelimiter(userId)
-
   return next({
     ctx: {
       ...ctx,
@@ -179,7 +162,6 @@ const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
     throw unauthorizedError()
   }
   const userId = ctx.auth.userId
-  await ratelimiter(userId)
   let spotifyApi = globalForSpotifyClient.spotifyApi
   if (!globalForSpotifyClient.spotifyApi) {
     // eslint-disable-next-line @typescript-eslint/unbound-method

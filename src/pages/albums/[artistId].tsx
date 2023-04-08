@@ -54,6 +54,7 @@ const SingleArtistPage: NextPage<IProps> = ({
     </div>
   )
 }
+export const runtime = 'experimental-edge'
 
 export const getServerSideProps: GetServerSideProps<IProps> = async (
   context: GetServerSidePropsContext,

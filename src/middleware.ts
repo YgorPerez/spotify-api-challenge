@@ -1,6 +1,8 @@
 import { getAuth, withClerkMiddleware } from '@clerk/nextjs/server'
-import type { NextRequest } from 'next/server'
+import { TRPCError } from '@trpc/server'
+import type { NextFetchEvent, NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { ratelimit } from './server/lib/redis-ratelimit'
 
 // Set the paths that don't require the user to be signed in
 const publicPaths = ['/', '/auth*']
@@ -11,7 +13,7 @@ const isPublic = (path: string) => {
   )
 }
 
-export default withClerkMiddleware((request: NextRequest) => {
+export default withClerkMiddleware(async (request: NextRequest, event: NextFetchEvent) => {
   const response = NextResponse.next()
   const ONE_DAY_IN_SECONDS = 60 * 60 * 24
   const MAX_CACHE_TIME = ONE_DAY_IN_SECONDS * 31
@@ -30,7 +32,6 @@ export default withClerkMiddleware((request: NextRequest) => {
   }
   // if the user is not signed in redirect them to the sign in page.
   const { userId } = getAuth(request)
-
   if (!userId) {
     // redirect the users to /pages/sign-in/[[...index]].ts
 
@@ -38,6 +39,18 @@ export default withClerkMiddleware((request: NextRequest) => {
     signInUrl.searchParams.set('redirect_url', request.url)
     return NextResponse.redirect(signInUrl)
   }
+
+  if (ratelimit) {
+    const { success, pending } = await ratelimit.limit(userId)
+    event.waitUntil(pending)
+    if (!success) {
+      throw new TRPCError({
+        message: 'Wait 10s and try again',
+        code: 'TOO_MANY_REQUESTS',
+      })
+    }
+  }
+
   return NextResponse.next()
 })
 
