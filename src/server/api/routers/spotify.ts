@@ -3,10 +3,12 @@ import { z } from 'zod'
 import {
   AlbumSchema,
   ArtistSchema,
-  SearchContentSchema,
+  PagingSimplifiedAlbumsSchema,
+  PagingSimplifiedTracksSchema,
   SimplifiedAlbumSchema,
   SimplifiedTrackSchema,
   TrackSchema,
+  ValidSearchContentSchema,
 } from '../../../schema/spotifyApiSchemas'
 import { createTRPCRouter, protectedTokenProcedure } from '../trpc'
 
@@ -27,7 +29,7 @@ export const spotifyRouter = createTRPCRouter({
       const album = await ctx.spotifyApi.albums.getAlbum(input.albumId)
       const tracks = await ctx.spotifyApi.albums.getAlbumTracks(input.albumId)
       const validatedAlbum = AlbumSchema.safeParse(album)
-      const validatedTracks = SimplifiedTrackSchema.array().safeParse(tracks)
+      const validatedTracks = PagingSimplifiedTracksSchema.safeParse(tracks)
       if (!validatedAlbum.success) {
         throw new TRPCError({
           message: 'returned type from spotify-api.js get album not valid',
@@ -43,7 +45,7 @@ export const spotifyRouter = createTRPCRouter({
           cause: validatedTracks?.error,
         })
       }
-      return { album: validatedAlbum.data, tracks: validatedTracks.data }
+      return { album: validatedAlbum.data, tracks: validatedTracks.data?.items }
     }),
   getArtistAlbums: protectedTokenProcedure
     .meta({
@@ -64,7 +66,7 @@ export const spotifyRouter = createTRPCRouter({
       const artist = await ctx.spotifyApi.artists.getArtist(input.artistId)
       const albums = await ctx.spotifyApi.artists.getArtistAlbums(input.artistId)
       const validatedArtist = ArtistSchema.safeParse(artist)
-      const validatedAlbums = z.array(SimplifiedAlbumSchema).safeParse(albums)
+      const validatedAlbums = PagingSimplifiedAlbumsSchema.safeParse(albums)
       if (!validatedArtist.success) {
         throw new TRPCError({
           message: 'returned type from spotify-api.js get artist not valid',
@@ -80,7 +82,7 @@ export const spotifyRouter = createTRPCRouter({
           cause: validatedAlbums?.error,
         })
       }
-      return { artist: validatedArtist.data, albums: validatedAlbums.data }
+      return { artist: validatedArtist.data, albums: validatedAlbums.data?.items }
     }),
   getTrack: protectedTokenProcedure
     .meta({ description: 'Gets a track using an id' })
@@ -133,7 +135,7 @@ export const spotifyRouter = createTRPCRouter({
           .describe('Number of objects to retrieve from each type'),
       }),
     )
-    .output(SearchContentSchema)
+    .output(ValidSearchContentSchema)
     .query(async ({ ctx, input }) => {
       const searchContent = await ctx.spotifyApi.search.search(input.searchTerm,
         input.mediaType || ['track', 'album', 'artist'],
@@ -143,7 +145,7 @@ export const spotifyRouter = createTRPCRouter({
         }
       )
       const validatedSearchContent =
-        SearchContentSchema.safeParse(searchContent)
+        ValidSearchContentSchema.safeParse({albums: searchContent?.albums?.items, tracks: searchContent?.tracks?.items, artists: searchContent?.artists?.items})
       if (validatedSearchContent.success) {
         return validatedSearchContent.data
       } else {

@@ -25,10 +25,11 @@ import type { NextRequest, NextResponse } from 'next/server'
 import { type TRPCPanelMeta } from 'trpc-panel'
 import { ZodError } from 'zod'
 import { transformer } from '../../utils/transformer'
+import { type AxiomRequest } from 'next-axiom'
 
 interface AuthContext {
   auth: SignedInAuthObject | SignedOutAuthObject
-  req: RequestLike
+  req: RequestLike | AxiomRequest
   resHeaders?: NextResponse['headers']
 }
 
@@ -64,7 +65,7 @@ export function createTRPCContext({
   req,
   resHeaders,
 }: {
-  req: NextRequest
+  req: NextRequest | AxiomRequest
   resHeaders: NextResponse['headers']
 }) {
   return createInnerTRPCContext({ req, resHeaders, auth: getAuth(req) })
@@ -132,7 +133,7 @@ import { ratelimit } from '../lib/redis-ratelimit'
 import {
   globalForSpotifyClient,
   spotifyClientOauth,
-} from '../lib/spotify-api-js'
+} from '../lib/spotify-api'
 
 const ratelimiter = async (userId: string) => {
   if (ratelimit) {

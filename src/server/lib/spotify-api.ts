@@ -1,4 +1,4 @@
-import { SpotifyWebApi } from 'spotify-web-api-ts/src'
+import { SpotifyWebApi } from 'spotify-web-api-ts-edge'
 import { env } from '../../env.mjs'
 
 export const globalForSpotifyClient = globalThis as unknown as {

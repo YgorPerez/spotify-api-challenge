@@ -12,6 +12,19 @@ const isPublic = (path: string) => {
 }
 
 export default withClerkMiddleware((request: NextRequest) => {
+  const response = NextResponse.next()
+  const ONE_DAY_IN_SECONDS = 60 * 60 * 24
+  const MAX_CACHE_TIME = ONE_DAY_IN_SECONDS * 31
+
+  response.headers.set(
+    "x-modified-edge",
+    "true"
+  )
+  response.headers.set(
+    'cache-control',
+    `s-maxage=${MAX_CACHE_TIME}, stale-while-revalidate=${MAX_CACHE_TIME}`
+  )
+
   if (isPublic(request.nextUrl.pathname)) {
     return NextResponse.next()
   }

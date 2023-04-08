@@ -575,9 +575,39 @@ export const CurrentlyPlayingSchema = z.object({
   ])
 })
 
-export const PagingPlaylistItemSchema = z.object({
+export const PagingPlaylistItemsSchema = z.object({
   href: z.string(),
   items: z.array(PlaylistItemSchema),
+  limit: z.number(),
+  next: z.string().nullable(),
+  offset: z.number(),
+  previous: z.string().nullable(),
+  total: z.number()
+})
+
+export const PagingArtistsSchema = z.object({
+  href: z.string(),
+  items: z.array(ArtistSchema),
+  limit: z.number(),
+  next: z.string().nullable(),
+  offset: z.number(),
+  previous: z.string().nullable(),
+  total: z.number()
+})
+
+export const PagingTracksSchema = z.object({
+  href: z.string(),
+  items: z.array(TrackSchema),
+  limit: z.number(),
+  next: z.string().nullable(),
+  offset: z.number(),
+  previous: z.string().nullable(),
+  total: z.number()
+})
+
+export const PagingSimplifiedAlbumsSchema = z.object({
+  href: z.string(),
+  items: z.array(SimplifiedAlbumSchema),
   limit: z.number(),
   next: z.string().nullable(),
   offset: z.number(),
@@ -601,7 +631,7 @@ export const PlaylistSchema = z.object({
     .nullable(),
   public: z.boolean().nullable(),
   snapshot_id: z.string(),
-  tracks: PagingPlaylistItemSchema,
+  tracks: PagingPlaylistItemsSchema,
   type: z.literal("playlist"),
   uri: z.string()
 })
@@ -611,8 +641,14 @@ export const SavedAlbumSchema = z.object({
   album: AlbumSchema
 })
 
+export const ValidSearchContentSchema = z.object({
+  tracks: z.array(TrackSchema.optional()),
+  albums: z.array(SimplifiedAlbumSchema.optional()),
+  artists: z.array(ArtistSchema.optional())
+})
+
 export const SearchContentSchema = z.object({
-  tracks: TrackSchema.optional(),
-  albums: AlbumSchema.optional(),
-  artists: ArtistSchema.optional()
+  tracks: PagingTracksSchema.optional(),
+  albums: PagingSimplifiedAlbumsSchema.optional(),
+  artists: PagingArtistsSchema.optional()
 })
