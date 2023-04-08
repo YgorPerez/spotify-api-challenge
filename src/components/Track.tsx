@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import React from 'react'
-import { type SimplifiedTrack as TrackType } from '../schema/spotifyApiTypes'
+import { type SimplifiedTrack as SimplifiedTrackType, type Track as TrackType } from '../schema/spotifyApiTypes'
 import formatMilliseconds from '../utils/formatMilliseconds'
 
-const Track: React.FC<{ track: TrackType }> = ({ track }) => {
+const Track: React.FC<{ track: SimplifiedTrackType | TrackType }> = ({ track }) => {
   const trackDurationInReadableTime = formatMilliseconds({
     milliseconds: track.duration_ms,
   })

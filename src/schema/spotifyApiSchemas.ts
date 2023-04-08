@@ -642,9 +642,9 @@ export const SavedAlbumSchema = z.object({
 })
 
 export const ValidSearchContentSchema = z.object({
-  tracks: z.array(TrackSchema.optional()),
-  albums: z.array(SimplifiedAlbumSchema.optional()),
-  artists: z.array(ArtistSchema.optional())
+  tracks: z.array(TrackSchema).optional(),
+  albums: z.array(SimplifiedAlbumSchema).optional(),
+  artists: z.array(ArtistSchema).optional()
 })
 
 export const SearchContentSchema = z.object({

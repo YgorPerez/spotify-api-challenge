@@ -145,7 +145,11 @@ export const spotifyRouter = createTRPCRouter({
         }
       )
       const validatedSearchContent =
-        ValidSearchContentSchema.safeParse({albums: searchContent?.albums?.items, tracks: searchContent?.tracks?.items, artists: searchContent?.artists?.items})
+        ValidSearchContentSchema.safeParse({
+            albums: searchContent.albums?.items,
+          tracks: searchContent.tracks?.items,
+          artists: searchContent.artists?.items
+        })
       if (validatedSearchContent.success) {
         return validatedSearchContent.data
       } else {
