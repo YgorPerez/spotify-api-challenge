@@ -28,11 +28,11 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   // this way the react query devtools can be downloaded in production using window.toggleDevtools() on console
   // trpc already adds the query client provider
   return (
+    <>
     <ClerkProvider {...pageProps}>
       <ErrorBoundary>
         <Component {...pageProps} />
       </ErrorBoundary>
-      <Analytics />
       <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
       {showDevtools && (
         <Suspense fallback={null}>
@@ -40,6 +40,8 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
         </Suspense>
       )}
     </ClerkProvider>
+    <Analytics/>
+    </>
   )
 }
 

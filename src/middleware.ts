@@ -40,10 +40,16 @@ export default withClerkMiddleware(async (request: NextRequest, event: NextFetch
     return NextResponse.redirect(signInUrl)
   }
 
-  if (ratelimit) {
+
+    const xff = request.headers.get('x-forwarded-for')
+    const ip = xff?.split(',')[0]
+
+    if (ratelimit) {
     const { success, pending } = await ratelimit.limit(userId)
+    const {success: successIp, pending: pendingIp } = await ratelimit.limit(ip || '127.0.0.1')
     event.waitUntil(pending)
-    if (!success) {
+    event.waitUntil(pendingIp)
+    if (!success || !successIp) {
       throw new TRPCError({
         message: 'Wait 10s and try again',
         code: 'TOO_MANY_REQUESTS',
