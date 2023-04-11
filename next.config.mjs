@@ -1,4 +1,10 @@
+import NextBundleAnalyzer from '@next/bundle-analyzer'
 import { withAxiom } from 'next-axiom'
+
+const bundleAnalyzer = NextBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})
+
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
  * This is especially useful for Docker builds.
@@ -41,4 +47,4 @@ const config = withAxiom({
   },
 })
 
-export default config
+export default bundleAnalyzer(config)
