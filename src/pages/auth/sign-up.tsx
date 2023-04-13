@@ -2,7 +2,7 @@ import { SignUp } from '@clerk/nextjs'
 import { type NextPage } from 'next'
 
 const SignUpPage: NextPage = () => (
-  <div className='justify-center items-center'>
+  <div className='justify-center items-center flex'>
     <SignUp
       appearance={{
         elements: {

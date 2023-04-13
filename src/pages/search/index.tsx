@@ -48,22 +48,22 @@ const SearchPage: NextPage = () => {
               </div>
               <div className='m-auto flex w-5/6 flex-wrap justify-center gap-6 bg-dark-gray 2xl:w-11/12 2xl:gap-12 '>
                 {shouldDisplayData &&
-                  spotifySearchData?.albums?.map((album, index) => {
-                    return (
-                      <SpotifyCard key={album.id || index} cardData={album} />
-                    )
+                  spotifySearchData.pages.map((page) => {
+                    return page.albums?.map((album, index) => {
+                      return <SpotifyCard cardData={album} key={index} />
+                    })
                   })}
                 {shouldDisplayData &&
-                  spotifySearchData?.artists?.map((artist, index) => {
-                    return (
-                      <SpotifyCard key={artist.id || index} cardData={artist} />
-                    )
+                  spotifySearchData.pages.map((page) => {
+                    return page.tracks?.map((track, index) => {
+                      return <SpotifyCard cardData={track} key={index} />
+                    })
                   })}
                 {shouldDisplayData &&
-                  spotifySearchData?.tracks?.map((track, index) => {
-                    return (
-                      <SpotifyCard key={track.id || index} cardData={track} />
-                    )
+                  spotifySearchData.pages.map((page) => {
+                    return page.artists?.map((artist, index) => {
+                      return <SpotifyCard cardData={artist} key={index} />
+                    })
                   })}
               </div>
             </div>
@@ -87,8 +87,9 @@ export const getServerSideProps: GetServerSideProps = async (
   }
 
   const ssg = generateSSGHelper(context)
-  await ssg.spotify.getSearch.prefetch({
-    searchTerm: searchTerm,
+  await ssg.spotify.getSearch.prefetchInfinite({
+    searchTerm,
+    limit: 5
   })
 
   return {

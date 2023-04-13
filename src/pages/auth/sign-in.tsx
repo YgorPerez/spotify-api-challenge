@@ -2,7 +2,7 @@ import { SignIn } from '@clerk/nextjs'
 import { type NextPage } from 'next'
 
 const SignInPage: NextPage = () => (
-  <div className="justify-center items-center">
+  <div className="justify-center items-center flex">
     <SignIn
       appearance={{
         elements: {

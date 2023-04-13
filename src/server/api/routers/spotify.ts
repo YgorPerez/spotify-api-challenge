@@ -1,14 +1,16 @@
 import { TRPCError } from '@trpc/server'
+import type { Artist, Paging, SimplifiedAlbum, Track } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
 import { z } from 'zod'
 import {
   AlbumSchema,
   ArtistSchema,
   PagingSimplifiedAlbumsSchema,
   PagingSimplifiedTracksSchema,
+  SearchContentItemsSchema,
+  SearchContentSchema,
   SimplifiedAlbumSchema,
   SimplifiedTrackSchema,
-  TrackSchema,
-  ValidSearchContentSchema,
+  TrackSchema
 } from '../../../schema/spotifyApiSchemas'
 import { createTRPCRouter, protectedTokenProcedure } from '../trpc'
 
@@ -117,6 +119,11 @@ export const spotifyRouter = createTRPCRouter({
           .min(1)
           .max(30)
           .describe('The text to be searched.'),
+        cursor: z.object({
+          albums: z.number().optional(),
+          tracks: z.number().optional(),
+          artists: z.number().optional(),
+        }).optional(),
         mediaType: z
           .array(z.enum(['track', 'album', 'artist']))
           .min(1)
@@ -127,7 +134,7 @@ export const spotifyRouter = createTRPCRouter({
           .boolean()
           .optional()
           .describe('Includes the url with the audio if true'),
-        amount: z
+        limit: z
           .number()
           .min(5)
           .max(100)
@@ -135,29 +142,74 @@ export const spotifyRouter = createTRPCRouter({
           .describe('Number of objects to retrieve from each type'),
       }),
     )
-    .output(ValidSearchContentSchema)
+    .output(SearchContentItemsSchema.extend({
+      nextCursor: z.object({
+        albums: z.number().optional(),
+        tracks: z.number().optional(),
+        artists: z.number().optional(),
+      }).optional()
+    }))
     .query(async ({ ctx, input }) => {
-      const searchContent = await ctx.spotifyApi.search.search(input.searchTerm,
-        input.mediaType || ['track', 'album', 'artist'],
-        {
-          include_external: input.includeExternalAudio ? "audio" : undefined,
-          limit: input.amount || 20,
-        }
-      )
+      const { cursor, mediaType, limit, searchTerm, includeExternalAudio } = input
+      type Promises = [Promise<Paging<SimplifiedAlbum>> | undefined, | Promise<Paging<Track>> | undefined, Promise<Paging<Artist>> | undefined]
+      const promises: Promises = [undefined, undefined, undefined]
+      if (mediaType?.includes('album') || !mediaType) {
+        promises[0] = (ctx.spotifyApi.search.searchAlbums(searchTerm,
+          {
+            limit: limit || 20,
+            offset: cursor?.albums ?? 0
+          }
+        ))
+      }
+      if (mediaType?.includes('track') || !mediaType) {
+        promises[1] = (ctx.spotifyApi.search.searchTracks(searchTerm,
+          {
+            limit: limit || 20,
+            offset: cursor?.tracks ?? 0,
+            include_external: includeExternalAudio ? 'audio' : undefined
+          }
+        ))
+      }
+      if (mediaType?.includes('artist') || !mediaType) {
+        promises[2] = (ctx.spotifyApi.search.searchArtists(searchTerm,
+          {
+            limit: limit || 20,
+            offset: cursor?.artists ?? 0,
+          }
+        ))
+      }
+      const [albumsSearchContent, tracksSearchContent, artistsSearchContent] = await Promise.all(promises)
       const validatedSearchContent =
-        ValidSearchContentSchema.safeParse({
-            albums: searchContent.albums?.items,
-          tracks: searchContent.tracks?.items,
-          artists: searchContent.artists?.items
+        SearchContentSchema.safeParse({
+          albums: albumsSearchContent,
+          tracks: tracksSearchContent,
+          artists: artistsSearchContent
         })
-      if (validatedSearchContent.success) {
-        return validatedSearchContent.data
-      } else {
+      if (!validatedSearchContent.success) {
         throw new TRPCError({
           message: 'returned type from spotify-api.js not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedSearchContent.error,
         })
+      }
+      const data = validatedSearchContent.data
+
+      const albumOffset = Number((new URLSearchParams(data.albums?.next ?? undefined)).get('offset'));
+      const trackOffset = Number((new URLSearchParams(data.tracks?.next ?? undefined)).get('offset'));
+      const artistOffset = Number((new URLSearchParams(data.artists?.next ?? undefined)).get('offset'));
+
+      const nextCursor = (!albumOffset && !trackOffset && !artistOffset)
+        ? undefined
+        : {
+          albums: albumOffset ?? data.albums?.total,
+          tracks: trackOffset ?? data.albums?.total,
+          artists: artistOffset ?? data.albums?.total,
+        }
+      return {
+        albums: data.albums?.items,
+        tracks: data.tracks?.items,
+        artists: data.artists?.items,
+        nextCursor
       }
     }),
 })

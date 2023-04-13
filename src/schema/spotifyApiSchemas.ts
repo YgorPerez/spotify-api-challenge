@@ -641,7 +641,7 @@ export const SavedAlbumSchema = z.object({
   album: AlbumSchema
 })
 
-export const ValidSearchContentSchema = z.object({
+export const SearchContentItemsSchema = z.object({
   tracks: z.array(TrackSchema).optional(),
   albums: z.array(SimplifiedAlbumSchema).optional(),
   artists: z.array(ArtistSchema).optional()
