@@ -10,7 +10,7 @@ import type {
   SpotifyImage as ImageType,
   SimplifiedAlbum as SimplifiedAlbumType,
   Track as TrackType,
-} from '../schema/spotifyApiTypes'
+} from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
 import formatFollowers from '../utils/formatFollowers'
 
 type CardData = AlbumType | TrackType | SimplifiedAlbumType | ArtistType | null

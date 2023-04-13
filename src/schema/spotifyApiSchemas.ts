@@ -384,7 +384,7 @@ export const SimplifiedTrackSchema = z.object({
   linked_from: TrackLinkSchema.optional(),
   restrictions: RestrictionsSchema.optional(),
   name: z.string(),
-  preview_url: z.string(),
+  preview_url: z.string().nullable(),
   track_number: z.number(),
   type: z.literal("track"),
   uri: z.string(),

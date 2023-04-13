@@ -5,33 +5,40 @@ import GoBack from '../../components/GoBack'
 import Header from '../../components/Header'
 import SpotifyCard from '../../components/SpotifyCard'
 import Track from '../../components/Track'
+import useGetAlbumTracks from '../../hooks/useGetAlbumTracks'
 import { api } from '../../utils/api'
 import { generateSSGHelper } from '../../utils/ssgHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
 
-interface IProps {
+interface Props {
   albumId: string
 }
 
-const SingleAlbumPage: NextPage<IProps> = ({
+const SingleAlbumPage: NextPage<Props> = ({
   albumId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data: getAlbumTracksData } = api.spotify.getAlbumTracks.useQuery(
+  const { data: getAlbumData } = api.spotify.getAlbum.useQuery(
     {
       albumId,
     },
     { staleTime: Infinity },
   )
 
+  const { data: getAlbumTracksData } = useGetAlbumTracks({
+    albumId,
+    limit: 15
+  })
+
   if (
-    !getAlbumTracksData ||
-    !getAlbumTracksData.album ||
-    !getAlbumTracksData.tracks
+    !getAlbumData ||
+    !getAlbumData.album ||
+    !getAlbumTracksData?.pages
   ) {
     return <Error statusCode={404} />
   }
 
-  const { album, tracks } = getAlbumTracksData
+  const { album } = getAlbumData
+  const tracks = getAlbumTracksData?.pages.flatMap((page) => page.tracks)
 
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
@@ -45,10 +52,10 @@ const SingleAlbumPage: NextPage<IProps> = ({
         <div className='ml-36'>
           <SpotifyCard cardData={album} big />
         </div>
-        <div className='ml-16'>
+        <div className='ml-16 mb-4'>
           <ol className='mx-2 list-decimal text-light-gray'>
-            {tracks.map(track => (
-              <Track key={track.id} track={track} />
+            {tracks.map((track, index) => (
+              <Track key={index} track={track} />
             ))}
           </ol>
         </div>
@@ -59,7 +66,7 @@ const SingleAlbumPage: NextPage<IProps> = ({
 
 export const runtime = 'experimental-edge'
 
-export const getServerSideProps: GetServerSideProps<IProps> = async (
+export const getServerSideProps: GetServerSideProps<Props> = async (
   context: GetServerSidePropsContext,
 ) => {
   const albumId = stringOrNull(context.query.albumId)
@@ -71,7 +78,8 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
   }
 
   const ssg = generateSSGHelper(context)
-  await ssg.spotify.getAlbumTracks.prefetch({ albumId })
+  await ssg.spotify.getAlbum.prefetch({ albumId })
+  await ssg.spotify.getAlbumTracks.prefetchInfinite({ albumId, limit: 15 })
 
   return {
     props: {

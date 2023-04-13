@@ -15,7 +15,7 @@ import {
 import { createTRPCRouter, protectedTokenProcedure } from '../trpc'
 
 export const spotifyRouter = createTRPCRouter({
-  getAlbumTracks: protectedTokenProcedure
+  getAlbum: protectedTokenProcedure
     .meta({
       description: "Gets the album and it's tracks using the id of an album",
     })
@@ -25,13 +25,11 @@ export const spotifyRouter = createTRPCRouter({
       }),
     )
     .output(
-      z.object({ album: AlbumSchema, tracks: SimplifiedTrackSchema.array() }),
+      z.object({ album: z.union([AlbumSchema, SimplifiedAlbumSchema]).describe("the album data retrieved from the id") }),
     )
     .query(async ({ ctx, input }) => {
       const album = await ctx.spotifyApi.albums.getAlbum(input.albumId)
-      const tracks = await ctx.spotifyApi.albums.getAlbumTracks(input.albumId)
       const validatedAlbum = AlbumSchema.safeParse(album)
-      const validatedTracks = PagingSimplifiedTracksSchema.safeParse(tracks)
       if (!validatedAlbum.success) {
         throw new TRPCError({
           message: 'returned type from spotify-api.js get album not valid',
@@ -39,6 +37,32 @@ export const spotifyRouter = createTRPCRouter({
           cause: validatedAlbum?.error,
         })
       }
+      return { album: validatedAlbum.data }
+    }),
+  getAlbumTracks: protectedTokenProcedure
+    .meta({
+      description: "Gets the album's tracks using the id of an album",
+    })
+    .input(
+      z.object({
+        albumId: z.string().describe("The id to get the album's tracks."),
+        limit: z.number().optional().describe('The amount of tracks to get'),
+        cursor: z.number().optional().describe('The offset to get the tracks')
+      }),
+    )
+    .output(
+      z.object({
+        tracks: SimplifiedTrackSchema.array().describe("The tracks data retrieved from the album id"),
+        nextCursor: z.number().optional().describe("The next offset that should be used for fetching again if using infite query"),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { cursor, albumId, limit } = input
+      const tracks = await ctx.spotifyApi.albums.getAlbumTracks(albumId, {
+        offset: cursor ?? 0,
+        limit: limit || 20
+      })
+      const validatedTracks = PagingSimplifiedTracksSchema.safeParse(tracks)
       if (!validatedTracks.success) {
         throw new TRPCError({
           message:
@@ -47,11 +71,13 @@ export const spotifyRouter = createTRPCRouter({
           cause: validatedTracks?.error,
         })
       }
-      return { album: validatedAlbum.data, tracks: validatedTracks.data?.items }
+      const { data } = validatedTracks
+      const tracksOffset = Number((new URLSearchParams(data?.next ?? undefined)).get('offset'));
+      return { tracks: validatedTracks.data?.items, nextCursor: tracksOffset || undefined }
     }),
-  getArtistAlbums: protectedTokenProcedure
+  getArtist: protectedTokenProcedure
     .meta({
-      description: "Gets the artist and it's albums using the id of an album",
+      description: "Gets the artist with the artistId",
     })
     .input(
       z.object({
@@ -60,15 +86,13 @@ export const spotifyRouter = createTRPCRouter({
     )
     .output(
       z.object({
-        artist: ArtistSchema,
-        albums: z.array(SimplifiedAlbumSchema),
+        artist: ArtistSchema.describe("The artist data retrieved from the artistId"),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const artist = await ctx.spotifyApi.artists.getArtist(input.artistId)
-      const albums = await ctx.spotifyApi.artists.getArtistAlbums(input.artistId)
+      const { artistId } = input
+      const artist = await ctx.spotifyApi.artists.getArtist(artistId)
       const validatedArtist = ArtistSchema.safeParse(artist)
-      const validatedAlbums = PagingSimplifiedAlbumsSchema.safeParse(albums)
       if (!validatedArtist.success) {
         throw new TRPCError({
           message: 'returned type from spotify-api.js get artist not valid',
@@ -76,6 +100,32 @@ export const spotifyRouter = createTRPCRouter({
           cause: validatedArtist?.error,
         })
       }
+      return { artist: validatedArtist.data }
+    }),
+  getArtistAlbums: protectedTokenProcedure
+    .meta({
+      description: "Gets the artist albums using the artist id",
+    })
+    .input(
+      z.object({
+        artistId: z.string().describe("The artist id to get the artist's albums from"),
+        limit: z.number().optional().describe('The amount of albums to get'),
+        cursor: z.number().optional().describe('The offset to get the albums')
+      }),
+    )
+    .output(
+      z.object({
+        albums: z.array(SimplifiedAlbumSchema).describe("The artist's albums data retrieved from the artistId"),
+        nextCursor: z.number().optional().describe("The next offset that should be used for fetching again if using infite query"),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { cursor, artistId, limit } = input
+      const albums = await ctx.spotifyApi.artists.getArtistAlbums(artistId, {
+        offset: cursor ?? 0,
+        limit: limit || 20
+      })
+      const validatedAlbums = PagingSimplifiedAlbumsSchema.safeParse(albums)
       if (!validatedAlbums.success) {
         throw new TRPCError({
           message:
@@ -84,7 +134,9 @@ export const spotifyRouter = createTRPCRouter({
           cause: validatedAlbums?.error,
         })
       }
-      return { artist: validatedArtist.data, albums: validatedAlbums.data?.items }
+      const { data } = validatedAlbums
+      const albumOffset = Number((new URLSearchParams(data?.next ?? undefined)).get('offset'));
+      return { albums: data?.items, NextCursor: albumOffset || undefined }
     }),
   getTrack: protectedTokenProcedure
     .meta({ description: 'Gets a track using an id' })
@@ -147,7 +199,7 @@ export const spotifyRouter = createTRPCRouter({
         albums: z.number().optional(),
         tracks: z.number().optional(),
         artists: z.number().optional(),
-      }).optional()
+      }).optional().describe("The next offset that should be used for fetching again if using infite query")
     }))
     .query(async ({ ctx, input }) => {
       const { cursor, mediaType, limit, searchTerm, includeExternalAudio } = input

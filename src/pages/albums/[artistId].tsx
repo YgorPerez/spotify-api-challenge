@@ -8,15 +8,16 @@ import SpotifyCard from '../../components/SpotifyCard'
 import { api } from '../../utils/api'
 import { generateSSGHelper } from '../../utils/ssgHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
+import useGetArtistsAlbums from '../../hooks/useGetArtistAlbums'
 
-interface IProps {
+interface Props {
   artistId: string
 }
 
-const SingleArtistPage: NextPage<IProps> = ({
+const SingleArtistPage: NextPage<Props> = ({
   artistId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data: getAritstsAlbumsData } = api.spotify.getArtistAlbums.useQuery(
+  const { data: getAritstData } = api.spotify.getArtist.useQuery(
     {
       artistId,
     },
@@ -25,11 +26,17 @@ const SingleArtistPage: NextPage<IProps> = ({
     },
   )
 
-  if (!getAritstsAlbumsData || !getAritstsAlbumsData.artist) {
+  const { data: getArtistAlbumsData } = useGetArtistsAlbums({
+    artistId,
+    limit: 15
+  })
+
+  if (!getAritstData || !getAritstData.artist || !getArtistAlbumsData?.pages) {
     return <Error statusCode={404} />
   }
 
-  const { artist, albums } = getAritstsAlbumsData
+  const { artist } = getAritstData
+  const albums = getArtistAlbumsData?.pages.flatMap((page) => page.albums)
 
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
@@ -45,8 +52,8 @@ const SingleArtistPage: NextPage<IProps> = ({
         </div>
         <div className='ml-16'>
           <ol className='mx-2 list-decimal text-light-gray'>
-            {albums.map(album => (
-              <Album key={album.id} album={album} />
+            {albums.map((album, index) => (
+              <Album key={index} album={album} />
             ))}
           </ol>
         </div>
@@ -56,7 +63,7 @@ const SingleArtistPage: NextPage<IProps> = ({
 }
 export const runtime = 'experimental-edge'
 
-export const getServerSideProps: GetServerSideProps<IProps> = async (
+export const getServerSideProps: GetServerSideProps<Props> = async (
   context: GetServerSidePropsContext,
 ) => {
   const artistId = stringOrNull(context.query.artistId)
@@ -68,7 +75,8 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
   }
 
   const ssg = generateSSGHelper(context)
-  await ssg.spotify.getArtistAlbums.prefetch({ artistId })
+  await ssg.spotify.getArtist.prefetch({ artistId })
+  await ssg.spotify.getArtistAlbums.prefetchInfinite({ artistId, limit: 15 })
 
   return {
     props: {

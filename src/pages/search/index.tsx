@@ -28,6 +28,12 @@ const SearchPage: NextPage = () => {
   })
   const shouldDisplayData = spotifySearchData && searchTerm && !isError
 
+  const [albums, tracks, artists] = spotifySearchData?.pages.flatMap(page => [
+    page.albums,
+    page.tracks,
+    page.artists,
+  ]) ?? [undefined, undefined, undefined]
+
   return (
     <>
       <Head>
@@ -47,24 +53,15 @@ const SearchPage: NextPage = () => {
                 </h2>
               </div>
               <div className='m-auto flex w-5/6 flex-wrap justify-center gap-6 bg-dark-gray 2xl:w-11/12 2xl:gap-12 '>
-                {shouldDisplayData &&
-                  spotifySearchData.pages.map((page) => {
-                    return page.albums?.map((album, index) => {
-                      return <SpotifyCard cardData={album} key={index} />
-                    })
-                  })}
-                {shouldDisplayData &&
-                  spotifySearchData.pages.map((page) => {
-                    return page.tracks?.map((track, index) => {
-                      return <SpotifyCard cardData={track} key={index} />
-                    })
-                  })}
-                {shouldDisplayData &&
-                  spotifySearchData.pages.map((page) => {
-                    return page.artists?.map((artist, index) => {
-                      return <SpotifyCard cardData={artist} key={index} />
-                    })
-                  })}
+                {shouldDisplayData && albums?.map((album, index) => {
+                  return <SpotifyCard cardData={album} key={index} />
+                })}
+                {shouldDisplayData && tracks?.map((track, index) => {
+                  return <SpotifyCard cardData={track} key={index} />
+                })}
+                {shouldDisplayData && artists?.map((artist, index) => {
+                  return <SpotifyCard cardData={artist} key={index} />
+                })}
               </div>
             </div>
           </main>
