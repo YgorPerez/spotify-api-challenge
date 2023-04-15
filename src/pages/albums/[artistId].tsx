@@ -1,17 +1,28 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
+import { useMemo } from 'react'
 import Album from '../../components/Album'
 import GoBack from '../../components/GoBack'
 import Header from '../../components/Header'
 import SpotifyCard from '../../components/SpotifyCard'
+import useGetArtistsAlbums from '../../hooks/useGetArtistAlbums'
 import { api } from '../../utils/api'
 import { generateSSGHelper } from '../../utils/ssgHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
-import useGetArtistsAlbums from '../../hooks/useGetArtistAlbums'
 
 interface Props {
   artistId: string
+}
+
+const albumsLimit = 15
+
+function generateFakeAlbumsData(amount: number) {
+  const fakeAlbums = { albums: [null] }
+  for (let i = 1; i < amount; i++) {
+    fakeAlbums.albums.push(null)
+  }
+  return fakeAlbums
 }
 
 const SingleArtistPage: NextPage<Props> = ({
@@ -26,17 +37,19 @@ const SingleArtistPage: NextPage<Props> = ({
     },
   )
 
-  const { data: getArtistAlbumsData } = useGetArtistsAlbums({
+  const { data: getArtistAlbumsData, isFetchingNextPage } = useGetArtistsAlbums({
     artistId,
-    limit: 15
+    limit: albumsLimit
   })
+
+  const placeholderAlbumsData = useMemo(() => generateFakeAlbumsData(albumsLimit), [])
+  const albums = useMemo(() => getArtistAlbumsData?.pages.flatMap((page) => page.albums), [getArtistAlbumsData?.pages])
 
   if (!getAritstData || !getAritstData.artist || !getArtistAlbumsData?.pages) {
     return <Error statusCode={404} />
   }
 
   const { artist } = getAritstData
-  const albums = getArtistAlbumsData?.pages.flatMap((page) => page.albums)
 
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
@@ -52,7 +65,10 @@ const SingleArtistPage: NextPage<Props> = ({
         </div>
         <div className='ml-16'>
           <ol className='mx-2 list-decimal text-light-gray'>
-            {albums.map((album, index) => (
+            {albums?.map((album, index) => (
+              <Album key={index} album={album} />
+            ))}
+            {isFetchingNextPage && placeholderAlbumsData.albums.map((album, index) => (
               <Album key={index} album={album} />
             ))}
           </ol>
@@ -76,7 +92,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 
   const ssg = generateSSGHelper(context)
   await ssg.spotify.getArtist.prefetch({ artistId })
-  await ssg.spotify.getArtistAlbums.prefetchInfinite({ artistId, limit: 15 })
+  await ssg.spotify.getArtistAlbums.prefetchInfinite({ artistId, limit: albumsLimit })
 
   return {
     props: {

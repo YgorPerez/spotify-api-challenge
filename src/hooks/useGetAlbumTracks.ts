@@ -2,12 +2,12 @@
 import { useMemo } from 'react'
 import { api } from '../utils/api'
 
-function generateFakeTracks(amount: number) {
-  const fakeCards = { tracks: [null], nextCursor: undefined }
+function generateFakeTracksData(amount: number) {
+  const fakeTracks = { tracks: [null], nextCursor: undefined }
   for (let i = 1; i < amount; i++) {
-    fakeCards.tracks.push(null)
+    fakeTracks.tracks.push(null)
   }
-  return { pageParams: [undefined], pages: [fakeCards] }
+  return { pageParams: [undefined], pages: [fakeTracks] }
 }
 
 export default function useGetAlbumTracks({
@@ -22,7 +22,7 @@ export default function useGetAlbumTracks({
   limit?: number
 }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const placeholderData = useMemo(() => generateFakeTracks(placeholderAmount), [])
+  const placeholderData = useMemo(() => generateFakeTracksData(placeholderAmount), [])
   return api.spotify.getAlbumTracks.useInfiniteQuery(
     {
       albumId,

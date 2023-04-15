@@ -14,6 +14,8 @@ interface Props {
   albumId: string
 }
 
+const tracksLimit = 15
+
 const SingleAlbumPage: NextPage<Props> = ({
   albumId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -26,7 +28,7 @@ const SingleAlbumPage: NextPage<Props> = ({
 
   const { data: getAlbumTracksData } = useGetAlbumTracks({
     albumId,
-    limit: 15
+    limit: tracksLimit
   })
 
   if (
@@ -79,7 +81,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 
   const ssg = generateSSGHelper(context)
   await ssg.spotify.getAlbum.prefetch({ albumId })
-  await ssg.spotify.getAlbumTracks.prefetchInfinite({ albumId, limit: 15 })
+  await ssg.spotify.getAlbumTracks.prefetchInfinite({ albumId, limit: tracksLimit })
 
   return {
     props: {

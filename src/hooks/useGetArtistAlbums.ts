@@ -11,7 +11,6 @@ export default function useGetArtistsAlbums({
 }) {
   const utils = api.useContext()
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   return api.spotify.getArtistAlbums.useInfiniteQuery(
     {
       artistId,

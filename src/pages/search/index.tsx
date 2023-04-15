@@ -5,6 +5,7 @@ import type {
 } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import SearchForm from '../../components/SearchForm'
@@ -15,6 +16,16 @@ import { useScrollRestoration } from '../../hooks/useScrollRestoration'
 import { generateSSGHelper } from '../../utils/ssgHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
 
+const searchLimit = 5
+
+const generateFakeSpotifyCardsData = (amount: number) => {
+  const fakeCardsData = { albums: [null], nextCursor: undefined }
+  for (let i = 1; i < amount; i++) {
+    fakeCardsData.albums.push(null)
+  }
+  return fakeCardsData
+}
+
 const SearchPage: NextPage = () => {
   useScrollRestoration()
   const router = useRouter()
@@ -22,17 +33,20 @@ const SearchPage: NextPage = () => {
   const searchTerm = stringOrNull(router.query?.search)
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
 
-  const { data: spotifySearchData, isError } = useGetSearch({
+  const { data: spotifySearchData, isError, isFetching } = useGetSearch({
     searchTerm: debouncedSearchTerm as string,
     enabled: Boolean(debouncedSearchTerm),
+    limit: searchLimit
   })
   const shouldDisplayData = spotifySearchData && searchTerm && !isError
 
-  const [albums, tracks, artists] = spotifySearchData?.pages.flatMap(page => [
+  const [albums, tracks, artists] = useMemo(() => spotifySearchData?.pages.flatMap(page => [
     page.albums,
     page.tracks,
     page.artists,
-  ]) ?? [undefined, undefined, undefined]
+  ]) ?? [undefined, undefined, undefined], [spotifySearchData?.pages])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const placeholderData = useMemo(() => generateFakeSpotifyCardsData(15), [])
 
   return (
     <>
@@ -62,6 +76,9 @@ const SearchPage: NextPage = () => {
                 {shouldDisplayData && artists?.map((artist, index) => {
                   return <SpotifyCard cardData={artist} key={index} />
                 })}
+                {isFetching && placeholderData.albums.map((album, index) => {
+                  return <SpotifyCard cardData={album} key={index} />
+                })}
               </div>
             </div>
           </main>
@@ -86,7 +103,7 @@ export const getServerSideProps: GetServerSideProps = async (
   const ssg = generateSSGHelper(context)
   await ssg.spotify.getSearch.prefetchInfinite({
     searchTerm,
-    limit: 5
+    limit: searchLimit
   })
 
   return {
