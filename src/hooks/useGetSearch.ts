@@ -21,6 +21,11 @@ export default function useGetSearch({
       staleTime: Infinity,
       enabled,
       async onSuccess(data) {
+        await utils.spotify.getSearch.prefetchInfinite({
+          searchTerm,
+          limit,
+          cursor: data.pages[data.pages.length - 1]?.nextCursor
+        })
         const promises: Promise<void>[] = []
         data.pages.flatMap(page => {
           page.albums?.map(album => {

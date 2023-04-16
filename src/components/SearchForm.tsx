@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useId } from 'react'
 
 const SearchForm: React.FC<{ search: string | null }> = ({ search }) => {
   const router = useRouter()
+  const formId = useId()
   const setSearchQueryParam = (value: string) => {
     void router.push(
       {
@@ -25,16 +26,17 @@ const SearchForm: React.FC<{ search: string | null }> = ({ search }) => {
           submitHandler(e)
         }}
       >
-        <label className='ml-2 text-left text-xl  text-white-gray'>
+        <label className='ml-2 text-left text-xl  text-white-gray' htmlFor={`search-${formId}`}>
           Busque por artistas, álbuns ou músicas
         </label>
         <input
-          type='text'
+          type='search'
+          id={`search-${formId}`}
           placeholder='Comece a escrever...'
           className='-m-px mt-4 h-16 w-full border-separate bg-dark-gray p-2 pb-8 text-left text-5xl font-bold text-white-gray outline-none placeholder:text-light-gray placeholder:opacity-100 focus:border-b-2 focus:border-light-gray 2xl:focus:border-b-4'
           defaultValue={search || ''}
-          onChange={e => {
-            setSearchQueryParam(e.target.value)
+          onInput={e => {
+            setSearchQueryParam(e.currentTarget.value)
           }}
           ref={input => input && input.focus()}
           // set cursor to the end

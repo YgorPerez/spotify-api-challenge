@@ -25,6 +25,8 @@ function generateFakeAlbumsData(amount: number) {
   return fakeAlbums
 }
 
+const placeholderAlbumsData = generateFakeAlbumsData(albumsLimit)
+
 const SingleArtistPage: NextPage<Props> = ({
   artistId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -42,7 +44,6 @@ const SingleArtistPage: NextPage<Props> = ({
     limit: albumsLimit
   })
 
-  const placeholderAlbumsData = useMemo(() => generateFakeAlbumsData(albumsLimit), [])
   const albums = useMemo(() => getArtistAlbumsData?.pages.flatMap((page) => page.albums), [getArtistAlbumsData?.pages])
 
   if (!getAritstData || !getAritstData.artist || !getArtistAlbumsData?.pages) {

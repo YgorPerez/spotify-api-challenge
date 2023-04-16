@@ -5,7 +5,8 @@ import type {
 } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import React, { useEffect } from 'react'
+import { useInView } from 'react-intersection-observer'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import SearchForm from '../../components/SearchForm'
@@ -18,35 +19,48 @@ import { stringOrNull } from '../../utils/stringOrNull'
 
 const searchLimit = 5
 
-const generateFakeSpotifyCardsData = (amount: number) => {
-  const fakeCardsData = { albums: [null], nextCursor: undefined }
+const generateLoadingData = (amount: number) => {
+  const loadingData = []
   for (let i = 1; i < amount; i++) {
-    fakeCardsData.albums.push(null)
+    loadingData.push(<SpotifyCard cardData={null} key={i} />)
   }
-  return fakeCardsData
+  return loadingData
 }
 
+const loadingData = generateLoadingData(searchLimit * 3)
+
 const SearchPage: NextPage = () => {
+
   useScrollRestoration()
   const router = useRouter()
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
 
   const searchTerm = stringOrNull(router.query?.search)
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const isTyping = searchTerm !== debouncedSearchTerm
 
-  const { data: spotifySearchData, isError, isFetching } = useGetSearch({
+  const searchOptions = {
     searchTerm: debouncedSearchTerm as string,
     enabled: Boolean(debouncedSearchTerm),
-    limit: searchLimit
-  })
-  const shouldDisplayData = spotifySearchData && searchTerm && !isError
+    limit: searchLimit,
+  }
 
-  const [albums, tracks, artists] = useMemo(() => spotifySearchData?.pages.flatMap(page => [
-    page.albums,
-    page.tracks,
-    page.artists,
-  ]) ?? [undefined, undefined, undefined], [spotifySearchData?.pages])
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const placeholderData = useMemo(() => generateFakeSpotifyCardsData(15), [])
+  const { data: useSearchData, isError, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = useGetSearch(searchOptions)
+
+  const isLoadingFirstPage = (isFetching && !isFetchingNextPage) || isTyping
+  const shouldDisplayLoadingData = (isFetching || isTyping) && searchTerm
+  const shouldDisplayData = useSearchData && searchTerm && !isError && !isLoadingFirstPage
+
+  const searchData = useSearchData?.pages
+
+  useEffect(() => {
+    if (inView && !isFetchingNextPage && hasNextPage) {
+      void fetchNextPage()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView])
 
   return (
     <>
@@ -66,24 +80,28 @@ const SearchPage: NextPage = () => {
                   Álbuns buscados recentemente
                 </h2>
               </div>
-              <div className='m-auto flex w-5/6 flex-wrap justify-center gap-6 bg-dark-gray 2xl:w-11/12 2xl:gap-12 '>
-                {shouldDisplayData && albums?.map((album, index) => {
-                  return <SpotifyCard cardData={album} key={index} />
-                })}
-                {shouldDisplayData && tracks?.map((track, index) => {
-                  return <SpotifyCard cardData={track} key={index} />
-                })}
-                {shouldDisplayData && artists?.map((artist, index) => {
-                  return <SpotifyCard cardData={artist} key={index} />
-                })}
-                {isFetching && placeholderData.albums.map((album, index) => {
-                  return <SpotifyCard cardData={album} key={index} />
-                })}
+              <div className='m-auto flex w-5/6 flex-wrap justify-center gap-6 bg-dark-gray 2xl:w-11/12 2xl:gap-12'>
+                {shouldDisplayData && searchData?.flatMap((searchResults, index) => (
+                  <React.Fragment key={index}>
+                    {searchResults.albums?.map(album => (
+                      <SpotifyCard cardData={album} key={album.id} />
+                    ))}
+                    {searchResults.tracks?.map(track => (
+                      <SpotifyCard cardData={track} key={track.id} />
+                    ))}
+                    {searchResults.artists?.map(artist => (
+                      <SpotifyCard cardData={artist} key={artist.id} />
+                    ))}
+                  </React.Fragment>
+                ))}
+                {shouldDisplayLoadingData && loadingData}
               </div>
             </div>
           </main>
         </div>
-        <Footer />
+        <div ref={ref}>
+          <Footer />
+        </div>
       </div>
     </>
   )

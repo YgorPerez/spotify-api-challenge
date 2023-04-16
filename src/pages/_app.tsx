@@ -6,6 +6,7 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import ErrorBoundary from '../components/ErrorBoundary'
 import '../styles/globals.css'
 import { api } from '../utils/api'
+import SearchContextProvider from '../context/SearchContext'
 
 if (process.env.NODE_ENV === 'development') {
   void import('@impulse.dev/runtime').then(impulse => impulse.run())
@@ -29,18 +30,20 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   // trpc already adds the query client provider
   return (
     <>
-    <ClerkProvider {...pageProps}>
-      <ErrorBoundary>
-        <Component {...pageProps} />
-      </ErrorBoundary>
-      <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
-      {showDevtools && (
-        <Suspense fallback={null}>
-          <ReactQueryDevtoolsProduction />
-        </Suspense>
-      )}
-    </ClerkProvider>
-    <Analytics/>
+      <ClerkProvider {...pageProps}>
+        <ErrorBoundary>
+          <SearchContextProvider>
+            <Component {...pageProps} />
+          </SearchContextProvider>
+        </ErrorBoundary>
+        <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
+        {showDevtools && (
+          <Suspense fallback={null}>
+            <ReactQueryDevtoolsProduction />
+          </Suspense>
+        )}
+      </ClerkProvider>
+      <Analytics />
     </>
   )
 }

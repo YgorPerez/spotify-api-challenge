@@ -8,21 +8,21 @@ import { useEffect } from 'react'
 
 type ScrollPos =
   | {
-      x: number
-      y: number
-    }
+    x: number
+    y: number
+  }
   | null
   | undefined
 
 function saveScrollPos(asPath: string) {
   sessionStorage.setItem(
-    `scrollPos:${asPath}`,
+    `scrollPosition:${asPath}`,
     JSON.stringify({ x: window.scrollX, y: window.scrollY }),
   )
 }
 
 function restoreScrollPos(asPath: string) {
-  const json = sessionStorage.getItem(`scrollPos:${asPath}`)
+  const json = sessionStorage.getItem(`scrollPosition:${asPath}`)
   const scrollPos = json ? (JSON.parse(json) as ScrollPos) : undefined
   if (scrollPos) {
     window.scrollTo(scrollPos.x, scrollPos.y)

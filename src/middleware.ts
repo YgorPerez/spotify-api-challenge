@@ -33,20 +33,17 @@ export default withClerkMiddleware(async (request: NextRequest, event: NextFetch
   // if the user is not signed in redirect them to the sign in page.
   const { userId } = getAuth(request)
   if (!userId) {
-    // redirect the users to /pages/sign-in/[[...index]].ts
-
     const signInUrl = new URL('/auth/sign-in', request.url)
     signInUrl.searchParams.set('redirect_url', request.url)
     return NextResponse.redirect(signInUrl)
   }
 
+  const xff = request.headers.get('x-forwarded-for')
+  const ip = xff?.split(',')[0]
 
-    const xff = request.headers.get('x-forwarded-for')
-    const ip = xff?.split(',')[0]
-
-    if (ratelimit) {
+  if (ratelimit) {
     const { success, pending } = await ratelimit.limit(userId)
-    const {success: successIp, pending: pendingIp } = await ratelimit.limit(ip || '127.0.0.1')
+    const { success: successIp, pending: pendingIp } = await ratelimit.limit(ip || '127.0.0.1')
     event.waitUntil(pending)
     event.waitUntil(pendingIp)
     if (!success || !successIp) {
