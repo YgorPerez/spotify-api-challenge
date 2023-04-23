@@ -38,8 +38,9 @@ yarn-error.log*
 # vercel
 .vercel
 
-# bundle analyzer
+# build
 /analyze
+/static
 
 # typescript
 *.tsbuildinfo

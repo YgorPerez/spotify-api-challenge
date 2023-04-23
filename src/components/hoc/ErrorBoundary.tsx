@@ -1,5 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react'
-import Header from './Header'
+import Header from '../ui/Header'
 
 interface Props {
   children?: ReactNode

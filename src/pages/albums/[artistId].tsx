@@ -1,14 +1,16 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
+import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import Album from '../../components/Album'
-import GoBack from '../../components/GoBack'
-import Header from '../../components/Header'
-import SpotifyCard from '../../components/SpotifyCard'
+import Album from '../../components/app/Album'
+import SpotifyCard from '../../components/app/SpotifyCard'
+import GoBack from '../../components/app/GoBack'
+import Header from '../../components/ui/Header'
 import useGetArtistsAlbums from '../../hooks/useGetArtistAlbums'
+import { useScrollRestoration } from '../../hooks/useScrollRestoration'
 import { api } from '../../utils/api'
-import { generateSSGHelper } from '../../utils/ssgHelper'
+import { ssrHelper } from '../../utils/ssrHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
 
 interface Props {
@@ -17,40 +19,70 @@ interface Props {
 
 const albumsLimit = 15
 
-function generateFakeAlbumsData(amount: number) {
-  const fakeAlbums = { albums: [null] }
-  for (let i = 1; i < amount; i++) {
-    fakeAlbums.albums.push(null)
+function generateLoadingData(amount: number) {
+  const loadingData = []
+  for (let i = 1; i <= amount; i++) {
+    loadingData.push(<Album key={i} album={null} />)
   }
-  return fakeAlbums
+  return loadingData
 }
 
-const placeholderAlbumsData = generateFakeAlbumsData(albumsLimit)
+const loadingData = generateLoadingData(albumsLimit)
 
-const SingleArtistPage: NextPage<Props> = ({
-  artistId,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data: getAritstData } = api.spotify.getArtist.useQuery(
+const SingleArtistPage: NextPage<Props> = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) => {
+  useScrollRestoration()
+  const router = useRouter()
+
+  const artistId = stringOrNull(
+    props.artistId ? props.artistId : router.query.artistId,
+  )
+
+  const {
+    data: getAritstData,
+    isFetching: isFetchingArtist,
+    isError: isErrorArtist,
+  } = api.spotify.getArtist.useQuery(
     {
-      artistId,
+      artistId: artistId as string,
     },
     {
       staleTime: Infinity,
+      enabled: Boolean(artistId),
     },
   )
 
-  const { data: getArtistAlbumsData, isFetchingNextPage } = useGetArtistsAlbums({
-    artistId,
-    limit: albumsLimit
+  const {
+    data: getArtistAlbumsData,
+    isFetching: isFetchingAlbums,
+    isError: isErrorAlbums,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetArtistsAlbums({
+    artistId: artistId as string,
+    enabled: Boolean(artistId),
+    limit: albumsLimit,
   })
 
-  const albums = useMemo(() => getArtistAlbumsData?.pages.flatMap((page) => page.albums), [getArtistAlbumsData?.pages])
+  const albums = useMemo(
+    () => getArtistAlbumsData?.pages.flatMap(page => page.albums),
+    [getArtistAlbumsData?.pages],
+  )
 
-  if (!getAritstData || !getAritstData.artist || !getArtistAlbumsData?.pages) {
+  if (
+    (!getAritstData ||
+      !getAritstData.artist ||
+      !getArtistAlbumsData?.pages ||
+      isErrorAlbums ||
+      isErrorArtist) &&
+    !isFetchingAlbums &&
+    !isFetchingArtist
+  ) {
     return <Error statusCode={404} />
   }
 
-  const { artist } = getAritstData
+  const artist = getAritstData?.artist ?? null
 
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
@@ -69,15 +101,16 @@ const SingleArtistPage: NextPage<Props> = ({
             {albums?.map((album, index) => (
               <Album key={index} album={album} />
             ))}
-            {isFetchingNextPage && placeholderAlbumsData.albums.map((album, index) => (
-              <Album key={index} album={album} />
-            ))}
+            {isFetchingAlbums
+              ? loadingData
+              : !hasNextPage && 'Nothing more to load'}
           </ol>
         </div>
       </main>
     </div>
   )
 }
+
 export const runtime = 'experimental-edge'
 
 export const getServerSideProps: GetServerSideProps<Props> = async (
@@ -91,13 +124,16 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     }
   }
 
-  const ssg = generateSSGHelper(context)
-  await ssg.spotify.getArtist.prefetch({ artistId })
-  await ssg.spotify.getArtistAlbums.prefetchInfinite({ artistId, limit: albumsLimit })
+  const trpc = ssrHelper(context)
+  await trpc.spotify.getArtist.prefetch({ artistId })
+  await trpc.spotify.getArtistAlbums.prefetchInfinite({
+    artistId,
+    limit: albumsLimit,
+  })
 
   return {
     props: {
-      trpcState: ssg.dehydrate(),
+      trpcState: trpc.dehydrate(),
       artistId: artistId,
     },
   }

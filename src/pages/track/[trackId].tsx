@@ -1,33 +1,48 @@
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
-import GoBack from '../../components/GoBack'
-import Header from '../../components/Header'
-import SpotifyCard from '../../components/SpotifyCard'
-import Track from '../../components/Track'
+import { useRouter } from 'next/router'
+import SpotifyCard from '../../components/app/SpotifyCard'
+import Track from '../../components/app/Track'
+import GoBack from '../../components/app/GoBack'
+import Header from '../../components/ui/Header'
 import { api } from '../../utils/api'
-import { generateSSGHelper } from '../../utils/ssgHelper'
+import { ssrHelper } from '../../utils/ssrHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
 
-interface IProps {
+interface Props {
   trackId: string
 }
 
-const SingleTrackPage: NextPage<IProps> = ({
-  trackId,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { data: getTrackData } = api.spotify.getTrack.useQuery(
+const SingleTrackPage: NextPage<Props> = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) => {
+  const router = useRouter()
+
+  const trackId = stringOrNull(
+    props.trackId ? props.trackId : router.query.trackId,
+  )
+
+  if (!trackId || trackId.length < 1) {
+    return <Error statusCode={404} />
+  }
+
+  const {
+    data: getTrackData,
+    isFetching,
+    isError,
+  } = api.spotify.getTrack.useQuery(
     { trackId },
     {
       staleTime: Infinity,
     },
   )
 
-  if (!getTrackData || !getTrackData.track) {
+  if ((!getTrackData || !getTrackData.track || isError) && !isFetching) {
     return <Error statusCode={404} />
   }
 
-  const { track } = getTrackData
+  const track = getTrackData?.track ?? null
 
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
@@ -43,7 +58,7 @@ const SingleTrackPage: NextPage<IProps> = ({
         </div>
         <div className='ml-16'>
           <ol className='mx-2 list-decimal text-light-gray'>
-            <Track key={track.id} track={track} />
+            <Track track={track} />
           </ol>
         </div>
       </main>
@@ -53,7 +68,7 @@ const SingleTrackPage: NextPage<IProps> = ({
 
 export const runtime = 'experimental-edge'
 
-export const getServerSideProps: GetServerSideProps<IProps> = async (
+export const getServerSideProps: GetServerSideProps<Props> = async (
   context: GetServerSidePropsContext,
 ) => {
   const trackId = stringOrNull(context.query.trackId)
@@ -64,12 +79,12 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (
     }
   }
 
-  const ssg = generateSSGHelper(context)
-  await ssg.spotify.getTrack.prefetch({ trackId })
+  const trpc = ssrHelper(context)
+  await trpc.spotify.getTrack.prefetch({ trackId })
 
   return {
     props: {
-      trpcState: ssg.dehydrate(),
+      trpcState: trpc.dehydrate(),
       trackId,
     },
   }

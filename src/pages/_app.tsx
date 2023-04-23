@@ -3,10 +3,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Analytics } from '@vercel/analytics/react'
 import { type AppType } from 'next/app'
 import { lazy, Suspense, useEffect, useState } from 'react'
-import ErrorBoundary from '../components/ErrorBoundary'
+import ErrorBoundary from '@components/hoc/ErrorBoundary'
+import { useSSRIntercept } from '../hooks/useSSRIntercept'
 import '../styles/globals.css'
 import { api } from '../utils/api'
-import SearchContextProvider from '../context/SearchContext'
 
 if (process.env.NODE_ENV === 'development') {
   void import('@impulse.dev/runtime').then(impulse => impulse.run())
@@ -19,8 +19,8 @@ const ReactQueryDevtoolsProduction = lazy(() =>
 )
 
 const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
+  useSSRIntercept() // makes all gssp run only once
   const [showDevtools, setShowDevtools] = useState(false)
-
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -32,9 +32,7 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
     <>
       <ClerkProvider {...pageProps}>
         <ErrorBoundary>
-          <SearchContextProvider>
-            <Component {...pageProps} />
-          </SearchContextProvider>
+          <Component {...pageProps} />
         </ErrorBoundary>
         <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
         {showDevtools && (

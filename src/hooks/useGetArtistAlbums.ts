@@ -3,7 +3,7 @@ import { api } from '../utils/api'
 export default function useGetArtistsAlbums({
   artistId,
   enabled = true,
-  limit = 20
+  limit = 20,
 }: {
   artistId: string
   enabled?: boolean
@@ -14,21 +14,29 @@ export default function useGetArtistsAlbums({
   return api.spotify.getArtistAlbums.useInfiniteQuery(
     {
       artistId,
-      limit
+      limit,
     },
     {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      getNextPageParam: lastPage => lastPage.nextCursor,
       staleTime: Infinity,
       enabled,
-      async onSuccess(data) {
-        const promises: Promise<void>[] = []
+      keepPreviousData: true,
+      onSuccess(data) {
         data.pages.flatMap(page => {
           page.albums?.map(album => {
-            promises.push(utils.spotify.getAlbumTracks.prefetchInfinite({ albumId: album.id, limit: 15 }))
-            utils.spotify.getAlbum.setData({ albumId: album.id }, { album: album })
+            utils.spotify.getAlbum.setData(
+              { albumId: album.id },
+              { album: album },
+            )
           })
         })
-        await Promise.all(promises)
+        const nextCursor = data.pages[data.pages.length - 1]?.nextCursor
+        nextCursor &&
+          void utils.spotify.getArtistAlbums.prefetchInfinite({
+            artistId,
+            limit,
+            cursor: nextCursor,
+          })
       },
     },
   )
