@@ -8,10 +8,6 @@ import { useSSRIntercept } from '../hooks/useSSRIntercept'
 import '../styles/globals.css'
 import { api } from '../utils/api'
 
-if (process.env.NODE_ENV === 'development') {
-  void import('@impulse.dev/runtime').then(impulse => impulse.run())
-}
-
 const ReactQueryDevtoolsProduction = lazy(() =>
   import('@tanstack/react-query-devtools/build/lib/index.prod.js').then(d => ({
     default: d.ReactQueryDevtools,
