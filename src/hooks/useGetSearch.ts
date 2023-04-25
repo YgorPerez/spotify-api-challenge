@@ -42,12 +42,12 @@ export default function useGetSearch({
             )
           })
         })
-        const nextCursor = data.pages?.[data.pages?.length - 1]?.nextCursor
-        if (nextCursor?.albums || nextCursor?.tracks || nextCursor?.artists) {
+        const cursor = data.pages?.[data.pages?.length - 1]?.nextCursor
+        if (cursor?.albums || cursor?.tracks || cursor?.artists) {
           void utils.spotify.getSearch.prefetchInfinite({
             searchTerm,
             limit,
-            cursor: nextCursor,
+            cursor: cursor,
           })
         }
       },

@@ -30,12 +30,12 @@ export default function useGetArtistsAlbums({
             )
           })
         })
-        const nextCursor = data.pages[data.pages.length - 1]?.nextCursor
-        nextCursor &&
+        const cursor = data.pages[data.pages.length - 1]?.nextCursor
+        cursor &&
           void utils.spotify.getArtistAlbums.prefetchInfinite({
             artistId,
             limit,
-            cursor: nextCursor,
+            cursor,
           })
       },
     },

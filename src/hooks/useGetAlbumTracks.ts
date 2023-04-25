@@ -22,12 +22,12 @@ export default function useGetAlbumTracks({
       enabled,
       keepPreviousData: true,
       onSuccess(data) {
-        const nextCursor = data.pages[data.pages.length - 1]?.nextCursor
-        nextCursor &&
+        const cursor = data.pages[data.pages.length - 1]?.nextCursor
+        cursor &&
           void utils.spotify.getAlbumTracks.prefetchInfinite({
             albumId,
             limit,
-            cursor: nextCursor,
+            cursor,
           })
       },
     },

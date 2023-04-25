@@ -1,9 +1,9 @@
-import { Skeleton } from '@components/ui/skeleton'
+import Skeleton from '@components/ui/Skeleton'
 import formatFollowers from '@utils/formatFollowers'
 import { log } from 'next-axiom'
 import Image from 'next/image'
 import Link from 'next/link'
-import artistFallBackImg from 'public/images/artist-placeholder.jpg'
+import artistFallBackImg from '/public/images/artist-placeholder.jpg'
 import React from 'react'
 import type {
   Album as AlbumType,
@@ -12,6 +12,7 @@ import type {
   SimplifiedAlbum as SimplifiedAlbumType,
   Track as TrackType,
 } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
+import formatText from '@utils/formatText'
 
 type CardData = AlbumType | TrackType | SimplifiedAlbumType | ArtistType | null
 
@@ -19,6 +20,9 @@ type CardMainData = {
   images: ImageType[] | null
   slugUrl: string
 } | null
+
+const titleLength = 40
+const subtitleLength = 30
 
 const CardMain: React.FC<{
   cardMainData: CardMainData
@@ -42,15 +46,15 @@ const CardMain: React.FC<{
         <div className='flex flex-col items-center justify-center'>
           <Skeleton className='h-full min-h-[240px] w-full min-w-[240px] rounded-none sm:min-h-[320px] sm:min-w-[320px] 2xl:min-h-[448px] 2xl:min-w-[448px]' />
           <div className='mb-2 mt-7 flex flex-col items-center'>
-            <Skeleton className='h-9 w-[200px] sm:w-[250px]' />
-            <Skeleton className='mt-5 h-7 w-[150px] sm:w-[200px]' />
+            <Skeleton className='h-7 w-[200px] sm:w-[250px]' />
+            <Skeleton className='mt-5 h-5 w-[150px] sm:w-[200px]' />
           </div>
         </div>
       )}
     </>
   ) : (
     <>
-      {cardMainData ? (
+      {cardMainData && cardData ? (
         <>
           <Image
             className='aspect-square'
@@ -60,14 +64,16 @@ const CardMain: React.FC<{
             height={imageSize}
             width={imageSize}
           />
-          <p className='mb-1 mt-4 text-2xl text-white-gray'>{cardData?.name}</p>
+          <p className='mb-1 mt-4 text-2xl text-white-gray'>
+            {formatText(cardData.name, titleLength)}
+          </p>
         </>
       ) : (
         <>
           <Skeleton className='min-h-[240px] min-w-[240px] rounded-none' />
           <div className='mb-1 mt-7 flex flex-col items-center'>
             <Skeleton className='h-4 w-[200px]' />
-            <Skeleton className='mt-3 h-4 w-[150px]' />
+            <Skeleton className='mt-4 h-4 w-[150px]' />
           </div>
         </>
       )}
@@ -87,7 +93,10 @@ const SpotifyCard: React.FC<{
         return {
           cardMainData: { images: cardData.images, slugUrl: 'album' },
           cardSubData: {
-            name: cardData.artists?.[0]?.name as string,
+            name: formatText(
+              cardData.artists?.[0]?.name as string,
+              subtitleLength,
+            ),
             id: cardData.artists?.[0]?.id as string,
             slugUrl: 'albums',
           },
@@ -101,7 +110,10 @@ const SpotifyCard: React.FC<{
             slugUrl: 'track',
           },
           cardSubData: {
-            name: cardData.artists?.[0]?.name as string,
+            name: formatText(
+              cardData.artists?.[0]?.name as string,
+              subtitleLength,
+            ),
             id: cardData.artists?.[0]?.id as string,
             slugUrl: 'albums',
           },
@@ -136,20 +148,18 @@ const SpotifyCard: React.FC<{
       <div className='my-2 items-center justify-center text-center md:max-w-[10rem] lg:max-w-xs 2xl:max-w-md'>
         <CardMain cardMainData={cardMainData} cardData={cardData} big />
         <div className='mt-4'>
-          <h1 className=' text-3xl text-white-gray 2xl:text-4xl'>
-            {cardData.name}
+          <h1 className=' text-3xl mb-1 text-white-gray 2xl:text-4xl'>
+            {formatText(cardData.name, titleLength)}
           </h1>
           {cardSubData.slugUrl ? (
             <Link
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
-              className='mt-2 text-xl text-light-gray'
+              className='text-2xl text-light-gray'
             >
               {cardSubData.name}
             </Link>
           ) : (
-            <span className='mt-2 text-xl text-light-gray'>
-              {cardSubData.name}
-            </span>
+            <span className='text-2xl text-light-gray'>{cardSubData.name}</span>
           )}
         </div>
       </div>

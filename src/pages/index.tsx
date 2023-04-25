@@ -27,7 +27,7 @@ const searchLimit = 5
 
 const generateLoadingData = (amount: number) => {
   const loadingData = []
-  for (let i = 1; i < amount; i++) {
+  for (let i = 1; i <= amount; i++) {
     loadingData.push(<SpotifyCard cardData={null} key={i} />)
   }
   return loadingData
@@ -67,11 +67,10 @@ const SearchPage: NextPage<Props> = (
   } = useGetSearch(searchOptions)
 
   useEffect(() => {
-    if (inView && hasNextPage) {
+    if (inView && hasNextPage && !isFetching) {
       void fetchNextPage()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inView])
+  }, [inView, fetchNextPage, hasNextPage, isFetching])
 
   if (isError) {
     throw new Error(error.message)
@@ -139,9 +138,8 @@ const SearchPage: NextPage<Props> = (
                       ))}
                     </React.Fragment>
                   ))}
-                {shouldDisplayLoadingData
-                  ? loadingData
-                  : !hasNextPage && 'Nothing more to load'}
+                {shouldDisplayLoadingData && loadingData}
+                {!hasNextPage && !isFetching && 'Nothing more to load'}
               </div>
             </div>
           </main>

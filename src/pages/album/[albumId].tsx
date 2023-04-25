@@ -1,12 +1,14 @@
+import ScrollArea from '@/components/ui/ScrollArea'
+import LoadMore from '@components/app/LoadMore'
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
+import GoBack from '../../components/app/GoBack'
 import SpotifyCard from '../../components/app/SpotifyCard'
 import Track from '../../components/app/Track'
-import GoBack from '../../components/app/GoBack'
 import Header from '../../components/ui/Header'
 import useGetAlbumTracks from '../../hooks/useGetAlbumTracks'
 import { useScrollRestoration } from '../../hooks/useScrollRestoration'
@@ -81,6 +83,7 @@ const SingleAlbumPage: NextPage<Props> = (
 
   const album = getAlbumData?.album ?? null
   const utils = api.useContext()
+  console.debug(hasNextPage)
 
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
@@ -94,25 +97,33 @@ const SingleAlbumPage: NextPage<Props> = (
         <div className='ml-36'>
           <SpotifyCard cardData={album} big />
         </div>
-        <div className='mb-4 ml-16'>
-          <ol className='mx-2 list-decimal text-light-gray'>
-            {tracks?.map((track, index) => (
-              <div
-                key={index}
-                onMouseEnter={() => {
-                  void utils.spotify.getTrack.prefetch({
-                    trackId: track.id,
-                  })
-                }}
-              >
-                <Track track={track as SimplifiedTrack} />
-              </div>
-            ))}
-            {isFetchingTracks
-              ? loadingData
-              : !hasNextPage && 'Nothing more to load'}
-          </ol>
-        </div>
+        <ScrollArea>
+          <div className='mb-4 ml-16'>
+            <ol className='mx-2 list-decimal text-light-gray'>
+              {tracks?.map((track, index) => (
+                <div
+                  key={index}
+                  onMouseEnter={() => {
+                    void utils.spotify.getTrack.prefetch({
+                      trackId: track.id,
+                    })
+                  }}
+                >
+                  <Track track={track as SimplifiedTrack} />
+                </div>
+              ))}
+              {isFetchingTracks && loadingData}
+            </ol>
+            {hasNextPage ? (
+              <LoadMore
+                loadMore={() => fetchNextPage}
+                isLoading={isFetchingTracks}
+              />
+            ) : (
+              'Nothing more to load'
+            )}
+          </div>
+        </ScrollArea>
       </main>
     </div>
   )

@@ -5,6 +5,9 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import Album from '../../components/app/Album'
 import SpotifyCard from '../../components/app/SpotifyCard'
+import ScrollArea from '@components/ui/ScrollArea'
+import Separator from '@components/ui/Separator'
+import LoadMore from '@components/app/LoadMore'
 import GoBack from '../../components/app/GoBack'
 import Header from '../../components/ui/Header'
 import useGetArtistsAlbums from '../../hooks/useGetArtistAlbums'
@@ -97,14 +100,25 @@ const SingleArtistPage: NextPage<Props> = (
           <SpotifyCard cardData={artist} big />
         </div>
         <div className='ml-16'>
-          <ol className='mx-2 list-decimal text-light-gray'>
-            {albums?.map((album, index) => (
-              <Album key={index} album={album} />
-            ))}
-            {isFetchingAlbums
-              ? loadingData
-              : !hasNextPage && 'Nothing more to load'}
-          </ol>
+          <ScrollArea>
+            <ol className='mx-2 list-decimal text-light-gray'>
+              {albums?.map((album, index) => (
+                <Album key={index} album={album} />
+              ))}
+              {isFetchingAlbums && loadingData}
+            </ol>
+            {hasNextPage ? (
+              <>
+              <Separator className="my-2"/>
+              <LoadMore
+                loadMore={() => fetchNextPage}
+                isLoading={isFetchingAlbums}
+              />
+              </>
+            ) : (
+              'Nothing more to load'
+            )}
+          </ScrollArea>
         </div>
       </main>
     </div>

@@ -94,12 +94,12 @@ export const spotifyRouter = createTRPCRouter({
         })
       }
       const { data } = validatedTracks
-      const tracksOffset = Number(
-        new URLSearchParams(data?.next ?? undefined).get('offset'),
-      )
+      const trackOffset =
+        Number(new URLSearchParams(data?.next ?? undefined).get('offset')) ||
+        undefined
       return {
         tracks: validatedTracks.data?.items,
-        nextCursor: tracksOffset || undefined,
+        nextCursor: trackOffset,
       }
     }),
   getArtist: protectedTokenProcedure
@@ -173,10 +173,10 @@ export const spotifyRouter = createTRPCRouter({
         })
       }
       const { data } = validatedAlbums
-      const albumOffset = Number(
-        new URLSearchParams(data?.next ?? undefined).get('offset'),
-      )
-      return { albums: data?.items, NextCursor: albumOffset || undefined }
+      const albumOffset =
+        Number(new URLSearchParams(data?.next ?? undefined).get('offset')) ||
+        undefined
+      return { albums: data?.items, NextCursor: albumOffset }
     }),
   getTrack: protectedTokenProcedure
     .meta({ description: 'Gets a track using an id' })

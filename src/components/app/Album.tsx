@@ -1,3 +1,5 @@
+import Skeleton from '@components/ui/Skeleton'
+import formatText from '@utils/formatText'
 import Link from 'next/link'
 import React from 'react'
 import { type SimplifiedAlbum as AlbumType } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
@@ -5,24 +7,22 @@ import { type SimplifiedAlbum as AlbumType } from 'spotify-web-api-ts-edge/types
 const Album: React.FC<{ album: AlbumType | null }> = ({ album }) => {
   if (!album) {
     return (
-      <li className='py-1 text-center text-lg 2xl:mb-1 2xl:text-2xl'>
-        <div
-          className='ml-4 flex w-screen justify-between md:max-w-xs xl:max-w-xl 2xl:max-w-5xl'
-        >
-          <h2 className='text-white-gray'>Loading...</h2>
-        </div>
-      </li>
+      <div className='ml-8 flex w-screen justify-between md:max-w-xs xl:max-w-xl 2xl:max-w-5xl'>
+        <li className='marker:content-[counter(list-item) "."] py-1 text-center text-lg 2xl:mb-1 2xl:text-2xl'>
+          <Skeleton className='ml-4 mb-1 2xl:mb-[0.575rem] h-4 w-[70ch] 2xl:h-6' />
+        </li>
+      </div>
     )
   }
   return (
-    <li className='py-1 text-center text-lg 2xl:mb-1 2xl:text-2xl'>
-      <Link
-        href={`/album/${album.id}`}
-        className='ml-4 flex w-screen justify-between md:max-w-xs xl:max-w-xl 2xl:max-w-5xl'
-      >
-        <h2 className='text-white-gray'>{album.name}</h2>
-      </Link>
-    </li>
+    <Link
+      href={`/album/${album.id}`}
+      className='ml-8 flex w-screen justify-between md:max-w-xs xl:max-w-xl 2xl:max-w-5xl'
+    >
+      <li className='marker:content-[counter(list-item) "."] py-1 text-center text-lg 2xl:mb-1 2xl:text-2xl'>
+        <h2 className='ml-4 text-white-gray'>{formatText(album.name, 70)}</h2>
+      </li>
+    </Link>
   )
 }
 

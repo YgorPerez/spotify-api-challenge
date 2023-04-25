@@ -11,13 +11,9 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.16.3",
-    "@fortawesome/fontawesome-svg-core": "^6.4.0",
-    "@fortawesome/free-brands-svg-icons": "^6.4.0",
-    "@fortawesome/free-regular-svg-icons": "^6.4.0",
-    "@fortawesome/free-solid-svg-icons": "^6.4.0",
-    "@fortawesome/react-fontawesome": "^0.2.0",
     "@next/bundle-analyzer": "^13.3.0",
     "@radix-ui/react-scroll-area": "^1.0.3",
+    "@radix-ui/react-separator": "^1.0.2",
     "@tanstack/react-query": "^4.29.3",
     "@tanstack/react-query-devtools": "^4.29.3",
     "@trpc/client": "^10.20.0",
@@ -48,7 +44,6 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@impulse.dev/runtime": "^0.4.5",
     "@next/eslint-plugin-next": "^13.3.0",
     "@tanstack/eslint-plugin-query": "^4.29.0",
     "@total-typescript/ts-reset": "^0.4.2",
