@@ -14,7 +14,6 @@ import SearchForm from '../components/app/SearchForm'
 import SpotifyCard from '../components/app/SpotifyCard'
 import useDebounce from '../hooks/useDebounce'
 import useGetSearch from '../hooks/useGetSearch'
-import { useScrollRestoration } from '../hooks/useScrollRestoration'
 import { api } from '../utils/api'
 import { ssrHelper } from '../utils/ssrHelper'
 import { stringOrNull } from '../utils/stringOrNull'
@@ -38,7 +37,6 @@ const loadingData = generateLoadingData(searchLimit * 3)
 const SearchPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
-  useScrollRestoration()
   const router = useRouter()
   const { ref, inView } = useInView({
     threshold: 0,

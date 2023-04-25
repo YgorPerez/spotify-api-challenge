@@ -1,9 +1,10 @@
 import Skeleton from '@components/ui/Skeleton'
+import { api } from '@utils/api'
 import formatFollowers from '@utils/formatFollowers'
+import formatText from '@utils/formatText'
 import { log } from 'next-axiom'
 import Image from 'next/image'
 import Link from 'next/link'
-import artistFallBackImg from '/public/images/artist-placeholder.jpg'
 import React from 'react'
 import type {
   Album as AlbumType,
@@ -12,8 +13,7 @@ import type {
   SimplifiedAlbum as SimplifiedAlbumType,
   Track as TrackType,
 } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
-import formatText from '@utils/formatText'
-
+import artistFallBackImg from '/public/images/artist-placeholder.jpg'
 type CardData = AlbumType | TrackType | SimplifiedAlbumType | ArtistType | null
 
 type CardMainData = {
@@ -81,6 +81,12 @@ const CardMain: React.FC<{
   )
 }
 
+const prefetchArtist = (artistId: string) => {
+  const utils = api.useContext()
+  void utils.spotify.getArtist.prefetch({ artistId })
+  void utils.spotify.getArtistAlbums.prefetchInfinite({ artistId, limit: 15 })
+}
+
 const SpotifyCard: React.FC<{
   cardData: CardData
   big?: boolean
@@ -142,18 +148,18 @@ const SpotifyCard: React.FC<{
     console.error(message)
     log.error(message)
   }
-
   if (big && cardMainData && cardSubData && cardData) {
     return (
       <div className='my-2 items-center justify-center text-center md:max-w-[10rem] lg:max-w-xs 2xl:max-w-md'>
         <CardMain cardMainData={cardMainData} cardData={cardData} big />
         <div className='mt-4'>
-          <h1 className=' text-3xl mb-1 text-white-gray 2xl:text-4xl'>
+          <h1 className=' mb-2 text-3xl text-white-gray 2xl:text-4xl'>
             {formatText(cardData.name, titleLength)}
           </h1>
           {cardSubData.slugUrl ? (
             <Link
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
+              onMouseEnter={() => prefetchArtist(cardSubData.id)}
               className='text-2xl text-light-gray'
             >
               {cardSubData.name}
@@ -175,6 +181,7 @@ const SpotifyCard: React.FC<{
           {cardSubData?.slugUrl ? (
             <Link
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
+              onMouseEnter={() => prefetchArtist(cardSubData.id)}
               className='mt-2 text-xl text-light-gray'
             >
               {cardSubData.name}

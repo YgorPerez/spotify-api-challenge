@@ -1,17 +1,16 @@
+import LoadMore from '@components/app/LoadMore'
+import ScrollArea from '@components/ui/ScrollArea'
+import Separator from '@components/ui/Separator'
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import Album from '../../components/app/Album'
-import SpotifyCard from '../../components/app/SpotifyCard'
-import ScrollArea from '@components/ui/ScrollArea'
-import Separator from '@components/ui/Separator'
-import LoadMore from '@components/app/LoadMore'
 import GoBack from '../../components/app/GoBack'
+import SpotifyCard from '../../components/app/SpotifyCard'
 import Header from '../../components/ui/Header'
 import useGetArtistsAlbums from '../../hooks/useGetArtistAlbums'
-import { useScrollRestoration } from '../../hooks/useScrollRestoration'
 import { api } from '../../utils/api'
 import { ssrHelper } from '../../utils/ssrHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
@@ -35,7 +34,6 @@ const loadingData = generateLoadingData(albumsLimit)
 const SingleArtistPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
-  useScrollRestoration()
   const router = useRouter()
 
   const artistId = stringOrNull(
@@ -87,6 +85,8 @@ const SingleArtistPage: NextPage<Props> = (
 
   const artist = getAritstData?.artist ?? null
 
+  const utils = api.useContext()
+
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
       <header className='flex'>
@@ -103,17 +103,30 @@ const SingleArtistPage: NextPage<Props> = (
           <ScrollArea>
             <ol className='mx-2 list-decimal text-light-gray'>
               {albums?.map((album, index) => (
-                <Album key={index} album={album} />
+                <div
+                  key={index}
+                  onMouseEnter={() => {
+                    void utils.spotify.getAlbum.prefetch({
+                      albumId: album.id,
+                    })
+                    void utils.spotify.getAlbumTracks.prefetchInfinite({
+                      albumId: album.id,
+                      limit: 15,
+                    })
+                  }}
+                >
+                  <Album album={album} />
+                </div>
               ))}
               {isFetchingAlbums && loadingData}
             </ol>
             {hasNextPage ? (
               <>
-              <Separator className="my-2"/>
-              <LoadMore
-                loadMore={() => fetchNextPage}
-                isLoading={isFetchingAlbums}
-              />
+                <Separator className='my-2' />
+                <LoadMore
+                  loadMore={() => fetchNextPage}
+                  isLoading={isFetchingAlbums}
+                />
               </>
             ) : (
               'Nothing more to load'

@@ -11,7 +11,6 @@ import SpotifyCard from '../../components/app/SpotifyCard'
 import Track from '../../components/app/Track'
 import Header from '../../components/ui/Header'
 import useGetAlbumTracks from '../../hooks/useGetAlbumTracks'
-import { useScrollRestoration } from '../../hooks/useScrollRestoration'
 import { api } from '../../utils/api'
 import { ssrHelper } from '../../utils/ssrHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
@@ -35,7 +34,6 @@ const loadingData = generateLoadingData(tracksLimit)
 const SingleAlbumPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
-  useScrollRestoration()
   const router = useRouter()
 
   const albumId = stringOrNull(
@@ -83,7 +81,6 @@ const SingleAlbumPage: NextPage<Props> = (
 
   const album = getAlbumData?.album ?? null
   const utils = api.useContext()
-  console.debug(hasNextPage)
 
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
