@@ -3,7 +3,7 @@ import { api } from '../utils/api'
 export default function useGetArtistsAlbums({
   artistId,
   enabled = true,
-  limit = 20,
+  limit = 15,
 }: {
   artistId: string
   enabled?: boolean

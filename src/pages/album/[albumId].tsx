@@ -1,4 +1,5 @@
 import ScrollArea from '@/components/ui/ScrollArea'
+import Separator from '@/components/ui/Separator'
 import LoadMore from '@components/app/LoadMore'
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
@@ -94,12 +95,16 @@ const SingleAlbumPage: NextPage<Props> = (
         <div className='ml-36'>
           <SpotifyCard cardData={album} big />
         </div>
-        <ScrollArea>
-          <div className='mb-4 ml-16'>
-            <ol className='mx-2 list-decimal text-light-gray'>
+        <ScrollArea className='ml-16 max-h-[75vh]'>
+            <ol className='mx-2 mb-4 list-decimal text-light-gray'>
               {tracks?.map((track, index) => (
                 <div
                   key={index}
+                  onFocus={() => {
+                    void utils.spotify.getTrack.prefetch({
+                      trackId: track.id,
+                    })
+                  }}
                   onMouseEnter={() => {
                     void utils.spotify.getTrack.prefetch({
                       trackId: track.id,
@@ -111,15 +116,12 @@ const SingleAlbumPage: NextPage<Props> = (
               ))}
               {isFetchingTracks && loadingData}
             </ol>
-            {hasNextPage ? (
-              <LoadMore
-                loadMore={() => fetchNextPage}
-                isLoading={isFetchingTracks}
-              />
-            ) : (
-              'Nothing more to load'
-            )}
-          </div>
+            <Separator className='my-2' />
+            <LoadMore
+              fetchNextPage={() => void fetchNextPage()}
+              isLoading={isFetchingTracks}
+              hasNextPage={hasNextPage}
+            />
         </ScrollArea>
       </main>
     </div>

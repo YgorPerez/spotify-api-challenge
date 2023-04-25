@@ -16,7 +16,7 @@
     "jsx": "preserve",
     "incremental": true,
     "noUncheckedIndexedAccess": true,
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "paths": {
       "@components/*": ["components/*"],
       "@utils/*": ["utils/*"],

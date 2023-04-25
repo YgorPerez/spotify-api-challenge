@@ -8,10 +8,10 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
-import Footer from '../components/ui/Footer'
-import Header from '../components/ui/Header'
 import SearchForm from '../components/app/SearchForm'
 import SpotifyCard from '../components/app/SpotifyCard'
+import Footer from '../components/ui/Footer'
+import Header from '../components/ui/Header'
 import useDebounce from '../hooks/useDebounce'
 import useGetSearch from '../hooks/useGetSearch'
 import { api } from '../utils/api'
@@ -76,9 +76,8 @@ const SearchPage: NextPage<Props> = (
 
   const isLoadingFirstPage = (isFetching && !isFetchingNextPage) || isTyping
   const shouldDisplayLoadingData = (isFetching || isTyping) && searchTerm
-  const shouldDisplayData = useSearchData && searchTerm && !isLoadingFirstPage
-
   const searchData = useSearchData?.pages
+  const shouldDisplayData = searchData && searchTerm && !isLoadingFirstPage
 
   const utils = api.useContext()
 
@@ -96,13 +95,23 @@ const SearchPage: NextPage<Props> = (
             <div>
               <div className='mx-32 mb-8'>
                 <SearchForm search={searchTerm} />
-                <h2 className='my-4 mt-14 text-3xl text-white-gray'>
-                  Álbuns buscados recentemente
-                </h2>
+                {shouldDisplayData || shouldDisplayLoadingData ? (
+                  <h1 className='my-4 mt-14 text-3xl text-white-gray'>
+                    Results find for &quot;{searchTerm}&quot;
+                  </h1>
+                ) : searchTerm ? (
+                  <h1 className='my-4 mt-14 text-3xl text-white-gray'>
+                    No results find for &quot;{searchTerm}&quot;
+                  </h1>
+                ): (
+                  <h1 className='my-4 mt-14 text-3xl text-white-gray'>
+                    Recently searched albums
+                  </h1>
+                )}
               </div>
               <div className='m-auto flex w-5/6 flex-wrap justify-center gap-6 bg-dark-gray 2xl:w-11/12 2xl:gap-12'>
                 {shouldDisplayData &&
-                  searchData?.flatMap((searchResults, index) => (
+                  searchData.flatMap((searchResults, index) => (
                     <React.Fragment key={index}>
                       {searchResults.albums?.map(album => (
                         <div

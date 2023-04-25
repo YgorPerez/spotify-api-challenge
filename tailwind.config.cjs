@@ -2,10 +2,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
-  content: [
-    './src/pages/**/*.{ts,tsx}',
-    './src/components/**/*.{ts,tsx}',
-  ],
+  content: ['./src/pages/**/*.{ts,tsx}', './src/components/**/*.{ts,tsx}'],
   theme: {
     container: {
       center: true,
@@ -76,6 +73,9 @@ module.exports = {
     },
   },
   plugins: [
+    require('tailwindcss/plugin')(({ addVariant }) => {
+      addVariant('search-cancel', '&::-webkit-search-cancel-button')
+    }),
     // @ts-ignore
     require('tailwindcss-animate'),
     // eslint-disable-next-line @typescript-eslint/no-var-requires

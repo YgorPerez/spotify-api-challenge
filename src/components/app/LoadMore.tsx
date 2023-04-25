@@ -2,20 +2,31 @@ import Button from '@components/ui/Button'
 import { Loader2 } from 'lucide-react'
 
 interface Props {
-  loadMore: () => void
+  fetchNextPage: () => void
   isLoading: boolean
+  hasNextPage: boolean | undefined
 }
 
-const LoadMore: React.FC<Props> = ({ loadMore, isLoading }) => {
+const LoadMore: React.FC<Props> = ({
+  fetchNextPage,
+  isLoading,
+  hasNextPage,
+}) => {
   return (
-    <Button disabled={isLoading} onClick={() => loadMore()}>
+    <Button
+      variant='secondary'
+      disabled={isLoading || !hasNextPage}
+      onClick={() => fetchNextPage()}
+    >
       {isLoading ? (
         <>
           <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-          Carregando...
+          Loading...
         </>
+      ) : hasNextPage ? (
+        <>Load more</>
       ) : (
-        <>Carregar mais</>
+        <>Nothing more to load</>
       )}
     </Button>
   )

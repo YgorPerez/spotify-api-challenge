@@ -21,7 +21,7 @@ type CardMainData = {
   slugUrl: string
 } | null
 
-const titleLength = 40
+const titleLength = 37
 const subtitleLength = 30
 
 const CardMain: React.FC<{
@@ -64,7 +64,7 @@ const CardMain: React.FC<{
             height={imageSize}
             width={imageSize}
           />
-          <p className='mb-1 mt-4 text-2xl text-white-gray'>
+          <p className='mb-1 mt-4 w-4/5 text-2xl text-white-gray'>
             {formatText(cardData.name, titleLength)}
           </p>
         </>
@@ -79,12 +79,6 @@ const CardMain: React.FC<{
       )}
     </>
   )
-}
-
-const prefetchArtist = (artistId: string) => {
-  const utils = api.useContext()
-  void utils.spotify.getArtist.prefetch({ artistId })
-  void utils.spotify.getArtistAlbums.prefetchInfinite({ artistId, limit: 15 })
 }
 
 const SpotifyCard: React.FC<{
@@ -148,17 +142,25 @@ const SpotifyCard: React.FC<{
     console.error(message)
     log.error(message)
   }
+
+  const utils = api.useContext()
+  const prefetchArtist = (artistId: string) => {
+    void utils.spotify.getArtist.prefetch({ artistId })
+    void utils.spotify.getArtistAlbums.prefetchInfinite({ artistId, limit: 15 })
+  }
+
   if (big && cardMainData && cardSubData && cardData) {
     return (
       <div className='my-2 items-center justify-center text-center md:max-w-[10rem] lg:max-w-xs 2xl:max-w-md'>
         <CardMain cardMainData={cardMainData} cardData={cardData} big />
-        <div className='mt-4'>
-          <h1 className=' mb-2 text-3xl text-white-gray 2xl:text-4xl'>
+        <div className='mt-4 flex flex-col items-center'>
+          <h1 className=' mb-2 w-4/5 text-3xl text-white-gray'>
             {formatText(cardData.name, titleLength)}
           </h1>
           {cardSubData.slugUrl ? (
             <Link
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
+              onFocus={() => prefetchArtist(cardSubData.id)}
               onMouseEnter={() => prefetchArtist(cardSubData.id)}
               className='text-2xl text-light-gray'
             >
@@ -175,19 +177,23 @@ const SpotifyCard: React.FC<{
     <>
       {cardData && cardMainData ? (
         <div className='my-2 w-60 items-center justify-center text-center 2xl:w-72'>
-          <Link href={`/${cardMainData.slugUrl}/${cardData.id}`}>
+          <Link
+            href={`/${cardMainData.slugUrl}/${cardData.id}`}
+            className='flex flex-col items-center'
+          >
             <CardMain cardMainData={cardMainData} cardData={cardData} />
           </Link>
           {cardSubData?.slugUrl ? (
             <Link
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
+              onFocus={() => prefetchArtist(cardSubData.id)}
               onMouseEnter={() => prefetchArtist(cardSubData.id)}
-              className='mt-2 text-xl text-light-gray'
+              className='mt-2 w-3/4 text-xl text-light-gray'
             >
               {cardSubData.name}
             </Link>
           ) : (
-            <span className='mt-2 text-xl text-light-gray'>
+            <span className='mt-2 w-3/4 text-xl text-light-gray'>
               {cardSubData?.name}
             </span>
           )}

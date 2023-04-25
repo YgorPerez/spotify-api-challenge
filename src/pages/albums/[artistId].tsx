@@ -86,6 +86,15 @@ const SingleArtistPage: NextPage<Props> = (
   const artist = getAritstData?.artist ?? null
 
   const utils = api.useContext()
+  const prefetchAlbum = (albumId: string) => {
+    void utils.spotify.getAlbum.prefetch({
+      albumId,
+    })
+    void utils.spotify.getAlbumTracks.prefetchInfinite({
+      albumId,
+      limit: albumsLimit,
+    })
+  }
 
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
@@ -99,40 +108,26 @@ const SingleArtistPage: NextPage<Props> = (
         <div className='ml-36'>
           <SpotifyCard cardData={artist} big />
         </div>
-        <div className='ml-16'>
-          <ScrollArea>
+          <ScrollArea className="ml-16 max-h-[75vh]">
             <ol className='mx-2 list-decimal text-light-gray'>
               {albums?.map((album, index) => (
                 <div
                   key={index}
-                  onMouseEnter={() => {
-                    void utils.spotify.getAlbum.prefetch({
-                      albumId: album.id,
-                    })
-                    void utils.spotify.getAlbumTracks.prefetchInfinite({
-                      albumId: album.id,
-                      limit: 15,
-                    })
-                  }}
+                  onFocus={() => prefetchAlbum(album.id)}
+                  onMouseEnter={() => prefetchAlbum(album.id)}
                 >
                   <Album album={album} />
                 </div>
               ))}
               {isFetchingAlbums && loadingData}
             </ol>
-            {hasNextPage ? (
-              <>
-                <Separator className='my-2' />
-                <LoadMore
-                  loadMore={() => fetchNextPage}
-                  isLoading={isFetchingAlbums}
-                />
-              </>
-            ) : (
-              'Nothing more to load'
-            )}
+            <Separator className='my-2' />
+            <LoadMore
+              fetchNextPage={() => void fetchNextPage()}
+              isLoading={isFetchingAlbums}
+              hasNextPage={hasNextPage}
+            />
           </ScrollArea>
-        </div>
       </main>
     </div>
   )

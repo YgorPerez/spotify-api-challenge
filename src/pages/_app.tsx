@@ -16,14 +16,15 @@ const ReactQueryDevtoolsProduction = lazy(() =>
 
 const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   useSSRIntercept() // makes all gssp run only once
+
+  // this way the react query devtools can be downloaded in production using window.toggleDevtools() on console
   const [showDevtools, setShowDevtools] = useState(false)
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     window.toggleDevtools = () => setShowDevtools(old => !old)
   }, [])
-  // this way the react query devtools can be downloaded in production using window.toggleDevtools() on console
-  // trpc already adds the query client provider
+
   return (
     <>
       <ClerkProvider {...pageProps}>

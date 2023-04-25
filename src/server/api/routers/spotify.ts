@@ -94,9 +94,8 @@ export const spotifyRouter = createTRPCRouter({
         })
       }
       const { data } = validatedTracks
-      const trackOffset =
-        Number(new URLSearchParams(data?.next ?? undefined).get('offset')) ||
-        undefined
+      const nextUrl = data?.next && new URL(data.next)
+      const trackOffset = Number(new URLSearchParams(nextUrl?.search as string || undefined).get('offset')) || undefined
       return {
         tracks: validatedTracks.data?.items,
         nextCursor: trackOffset,
@@ -173,9 +172,11 @@ export const spotifyRouter = createTRPCRouter({
         })
       }
       const { data } = validatedAlbums
-      const albumOffset =
-        Number(new URLSearchParams(data?.next ?? undefined).get('offset')) ||
-        undefined
+      const nextUrl = data?.next && new URL(data.next)
+      const albumOffset = Number(new URLSearchParams(nextUrl?.search as string || undefined).get('offset')) || undefined
+      
+      console.log(albumOffset)
+
       return { albums: data?.items, NextCursor: albumOffset }
     }),
   getTrack: protectedTokenProcedure
@@ -301,7 +302,7 @@ export const spotifyRouter = createTRPCRouter({
           cause: validatedSearchContent.error,
         })
       }
-      const data = validatedSearchContent.data
+      const {data} = validatedSearchContent
 
       const albumOffset =
         Number(
