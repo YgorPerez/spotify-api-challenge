@@ -5,6 +5,7 @@
  */
 import Router, { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { useEffectOnce, useSessionStorage } from 'usehooks-ts'
 
 type ScrollPosition =
   | {
@@ -14,26 +15,18 @@ type ScrollPosition =
   | null
   | undefined
 
-function saveScrollPosition(asPath: string) {
-  sessionStorage.setItem(
-    `scrollPosition:${asPath}`,
-    JSON.stringify({ x: window.scrollX, y: window.scrollY }),
-  )
-}
-
-function restoreScrollPosition(asPath: string) {
-  const json = sessionStorage.getItem(`scrollPosition:${asPath}`)
-  const scrollPosition = json ? (JSON.parse(json) as ScrollPosition) : undefined
-   if (scrollPosition) {
-    window.scrollTo(scrollPosition.x, scrollPosition.y)
-  }
-}
-
 export const useScrollRestoration = (): void => {
   const router = useRouter()
+  const path = router.asPath
+  const [scrollPosition, setScrollPostion] = useSessionStorage<ScrollPosition>(
+    `scrollPosition:${path}`,
+    null,
+  )
 
-  useEffect(() => {
-    restoreScrollPosition(router.asPath)
+  useEffectOnce(() => {
+    if (scrollPosition) {
+      window.scrollTo(scrollPosition.x, scrollPosition.y)
+    }
   })
 
   useEffect(() => {
@@ -45,12 +38,12 @@ export const useScrollRestoration = (): void => {
     window.history.scrollRestoration = isMobileSafari ? 'auto' : 'manual'
 
     const onBeforeUnload = (event: BeforeUnloadEvent) => {
-      saveScrollPosition(router.asPath)
+      setScrollPostion({ x: window.scrollX, y: window.scrollY })
       delete event['returnValue']
     }
 
     const onRouteChangeStart = () => {
-      saveScrollPosition(router.asPath)
+      setScrollPostion({ x: window.scrollX, y: window.scrollY })
     }
 
     window.addEventListener('beforeunload', onBeforeUnload)
@@ -60,5 +53,5 @@ export const useScrollRestoration = (): void => {
       window.removeEventListener('beforeunload', onBeforeUnload)
       Router.events.off('routeChangeStart', onRouteChangeStart)
     }
-  }, [router])
+  }, [router, setScrollPostion])
 }

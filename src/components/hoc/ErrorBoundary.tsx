@@ -23,37 +23,40 @@ class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Uncaught error:', error, errorInfo)
-    log.error(`Uncaught error: ${error}, ${errorInfo}`)
+    log.error(`Uncaught error: ${String(error)}, ${String(errorInfo)}`)
   }
 
   public render() {
     if (this.state.hasError) {
       return (
         <div className='min-h-full bg-white px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8'>
-        <div className='mx-auto max-w-max'>
-          <main className='sm:flex'>
-            <div className='sm:ml-6'>
-              <div className='sm:border-l sm:border-gray-200 sm:pl-6'>
-                <h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
-                  An error ocurred
-                </h1>
-              </div>
-              <div className='mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6'>
-              <Button
-              className="inline-flex items-center rounded-md  border-transparent  bg-gradient-to-br from-pink-400 to-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 hover:bg-gradient-to-br hover:from-pink-600 hover:to-cyan-800"
-              onClick={() => this.setState({ hasError: false })}
-            >
-              Try again?
-            </Button>
-                <Link href='/' className='inline-flex items-center rounded-md  border-transparent  bg-gradient-to-br from-pink-400 to-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 hover:bg-gradient-to-br hover:from-pink-600 hover:to-cyan-800'>
+          <div className='mx-auto max-w-max'>
+            <main className='sm:flex'>
+              <div className='sm:ml-6'>
+                <div className='sm:border-l sm:border-gray-200 sm:pl-6'>
+                  <h1 className='text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl'>
+                    An error ocurred
+                  </h1>
+                </div>
+                <div className='mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6'>
+                  <Button
+                    className='inline-flex items-center rounded-md  border-transparent  bg-gradient-to-br from-pink-400 to-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 hover:bg-gradient-to-br hover:from-pink-600 hover:to-cyan-800'
+                    onClick={() => this.setState({ hasError: false })}
+                  >
+                    Try again?
+                  </Button>
+                  <Link
+                    href='/'
+                    className='inline-flex items-center rounded-md  border-transparent  bg-gradient-to-br from-pink-400 to-cyan-600 px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 hover:bg-gradient-to-br hover:from-pink-600 hover:to-cyan-800'
+                  >
                     Go back home
-                </Link>
+                  </Link>
+                </div>
               </div>
-            </div>
-          </main>
+            </main>
+          </div>
         </div>
-      </div>
-        )
+      )
     }
 
     return this.props.children

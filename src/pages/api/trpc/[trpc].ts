@@ -1,6 +1,6 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { withAxiom, type AxiomRequest } from 'next-axiom'
-import { type NextResponse, type NextFetchEvent } from 'next/server'
+import { type NextFetchEvent, type NextResponse } from 'next/server'
 import { env } from '../../../env.mjs'
 import { appRouter } from '../../../server/api/root'
 import { createTRPCContext } from '../../../server/api/trpc'

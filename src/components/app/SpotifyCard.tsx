@@ -58,7 +58,7 @@ const CardMain: React.FC<{
         <>
           <Image
             className='aspect-square'
-            src={cardMainData.images?.[0]?.url || artistFallBackImg}
+            src={cardMainData.images?.[1]?.url || artistFallBackImg}
             blurDataURL={'public/images/gray-square-placeholder.jpg'}
             alt='album cover'
             height={imageSize}

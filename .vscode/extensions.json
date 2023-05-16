@@ -1,8 +1,8 @@
 {
   "recommendations": [
-    "prisma.prisma",
     "bradlc.vscode-tailwindcss",
     "dbaeumer.vscode-eslint",
-    "rvest.vs-code-prettier-eslint"
+    "esbenp.prettier-vscode",
+    "lvjiaxuan.vscode-eslint-disable"
   ]
 }

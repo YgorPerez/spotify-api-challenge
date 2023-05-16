@@ -1,7 +1,7 @@
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-import React, { useId } from 'react'
 import Label from '@components/ui/Label'
+import { useRouter } from 'next/router'
+import React, { useId } from 'react'
+import { useEffectOnce } from 'usehooks-ts'
 
 const SearchForm: React.FC<{ search: string | null }> = ({ search }) => {
   const router = useRouter()
@@ -21,10 +21,10 @@ const SearchForm: React.FC<{ search: string | null }> = ({ search }) => {
 
   // performance optimization, it's much faster to change the serch query this
   // after it's already on the query params
-  useEffect(() => {
+  useEffectOnce(() => {
     !search && setSearchQueryParam('')
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  })
 
   function submitHandler(e: React.FormEvent) {
     e.preventDefault()

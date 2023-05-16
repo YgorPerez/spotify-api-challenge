@@ -10,7 +10,6 @@ export default function useGetSearch({
   limit?: number
 }) {
   const utils = api.useContext()
-
   return api.spotify.getSearch.useInfiniteQuery(
     {
       searchTerm,
@@ -42,14 +41,6 @@ export default function useGetSearch({
             )
           })
         })
-        const cursor = data.pages?.[data.pages?.length - 1]?.nextCursor
-        if (cursor?.albums || cursor?.tracks || cursor?.artists) {
-          void utils.spotify.getSearch.prefetchInfinite({
-            searchTerm,
-            limit,
-            cursor: cursor,
-          })
-        }
       },
     },
   )

@@ -4,10 +4,10 @@
 
 // makes gssp run only once
 import PageRouter from 'next/router'
-import { useEffect } from 'react'
+import { useEffectOnce } from 'usehooks-ts'
 
 export const useSSRIntercept = () => {
-  useEffect(() => {
+  useEffectOnce(() => {
     if (!PageRouter.router?.components) return
 
     const pageLoader = PageRouter.router.pageLoader
@@ -32,5 +32,5 @@ export const useSSRIntercept = () => {
     return () => {
       pageLoader.loadPage = originalLoadPage
     }
-  }, [])
+  })
 }

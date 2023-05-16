@@ -69,7 +69,7 @@ if (!!process.env.SKIP_ENV_VALIDATION == false) {
   }
 
   /** @type z.infer<merged>
-   *  @ts-ignore - can't type this properly in jsdoc */
+   *  @ts-ignore - can't type this properly in jsdoc */ //eslint-disable-next-line no-undef
   env = new Proxy(parsed.data, {
     get(target, prop) {
       if (typeof prop !== 'string') return undefined

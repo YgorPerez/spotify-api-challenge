@@ -9,8 +9,6 @@ export default function useGetAlbumTracks({
   enabled?: boolean
   limit?: number
 }) {
-  const utils = api.useContext()
-
   return api.spotify.getAlbumTracks.useInfiniteQuery(
     {
       albumId,
@@ -21,15 +19,6 @@ export default function useGetAlbumTracks({
       staleTime: Infinity,
       enabled,
       keepPreviousData: true,
-      onSuccess(data) {
-        const cursor = data.pages[data.pages.length - 1]?.nextCursor
-        cursor &&
-          void utils.spotify.getAlbumTracks.prefetchInfinite({
-            albumId,
-            limit,
-            cursor,
-          })
-      },
     },
   )
 }
