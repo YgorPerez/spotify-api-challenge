@@ -1,5 +1,8 @@
-import { uneval } from 'devalue';
-import superjson from 'superjson';
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { uneval } from 'devalue'
+import superjson from 'superjson'
 
 export const transformer = {
   input: superjson,
