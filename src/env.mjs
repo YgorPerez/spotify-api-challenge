@@ -8,10 +8,11 @@ export const env = createEnv({
     process.env.SKIP_ENV_VALIDATION !== '0',
   client: {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+    NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT: z.string().url().optional(),
   },
   server: {
     NODE_ENV: z.enum(['development', 'test', 'production']),
-    VERCEL_URL: z.string().url().optional(),
+    VERCEL_URL: z.string().optional(),
     SPOTIFY_CLIENT_ID: z.string(),
     SPOTIFY_CLIENT_SECRET: z.string(),
     SPOTIFY_REFRESH_TOKEN: z.string().optional(),
@@ -34,7 +35,9 @@ export const env = createEnv({
   },
   runtimeEnv: {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT:
+      process.env.NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT,
     SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
     SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
     SPOTIFY_REFRESH_TOKEN: process.env.SPOTIFY_REFRESH_TOKEN,
