@@ -633,13 +633,13 @@ export const SavedAlbumSchema = z.object({
 })
 
 export const SearchContentItemsSchema = z.object({
-  tracks: z.array(TrackSchema).optional(),
-  albums: z.array(SimplifiedAlbumSchema).optional(),
-  artists: z.array(ArtistSchema).optional(),
+  tracks: z.array(TrackSchema).optional().nullable(),
+  albums: z.array(SimplifiedAlbumSchema).optional().nullable(),
+  artists: z.array(ArtistSchema).optional().nullable(),
 })
 
 export const SearchContentSchema = z.object({
-  tracks: PagingTracksSchema.optional(),
-  albums: PagingSimplifiedAlbumsSchema.optional(),
-  artists: PagingArtistsSchema.optional(),
+  tracks: PagingTracksSchema.nullable(),
+  albums: PagingSimplifiedAlbumsSchema.nullable(),
+  artists: PagingArtistsSchema.nullable(),
 })

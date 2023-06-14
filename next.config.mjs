@@ -1,40 +1,20 @@
 import NextBundleAnalyzer from '@next/bundle-analyzer'
 import { withAxiom } from 'next-axiom'
+import { env } from './src/env.mjs'
 
 const bundleAnalyzer = NextBundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
+  enabled: env.ANALYZE == true,
 })
-
-/**
- * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
- * This is especially useful for Docker builds.
- */
-!process.env.SKIP_ENV_VALIDATION && (await import('./src/env.mjs'))
 
 /** @type {import("next").NextConfig} */
 const config = withAxiom({
   reactStrictMode: true,
-
-  /**
-   * If you have the "experimental: { appDir: true }" setting enabled, then you
-   * must comment the below `i18n` config out.
-   *
-   * @see https://github.com/vercel/next.js/issues/41980
-   */
   // i18n: {
   //   locales: ['pt-br'],
   //   defaultLocale: 'pt-br',
   // },
   swcMinify: true,
   optimizeFonts: true,
-  // swcPlugins: [
-  //   [
-  //     'next-superjson-plugin',
-  //     {
-  //       excluded: [],
-  //     },
-  //   ],
-  // ],
   images: {
     domains: ['i.scdn.co'],
     remotePatterns: [

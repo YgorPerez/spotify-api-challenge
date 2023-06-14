@@ -1,8 +1,10 @@
-import { SignInButton, SignOutButton, useUser } from '@clerk/nextjs'
+import { SignInButton, useClerk, useUser } from '@clerk/nextjs'
+import Button from '@components/ui/Button'
 import { api } from '../../utils/api'
 
 const SignInOut: React.FC = () => {
   const user = useUser()
+  const { signOut } = useClerk()
 
   const { data: secretMessage } = api.user.getSecretMessage.useQuery(
     undefined, // no input
@@ -16,11 +18,12 @@ const SignInOut: React.FC = () => {
         {secretMessage && <span> - {secretMessage}</span>}
       </p>
       {user.isSignedIn ? (
-        <SignOutButton>
-          <button className='rounded-full bg-white/10 px-10 py-3 font-semibold text-white-gray no-underline transition hover:bg-white/20'>
-            Sign out
-          </button>
-        </SignOutButton>
+        <Button
+          onClick={() => void signOut()}
+          className='rounded-full bg-white/10 px-10 py-3 font-semibold text-white-gray no-underline transition hover:bg-white/20'
+        >
+          Sign out
+        </Button>
       ) : (
         <SignInButton mode='modal'>
           <button className='rounded-full bg-white/10 px-10 py-3 font-semibold text-white-gray no-underline transition hover:bg-white/20'>

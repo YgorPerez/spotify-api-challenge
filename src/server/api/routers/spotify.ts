@@ -1,4 +1,8 @@
-import { TRPCError } from '@trpc/server'
+import {
+  TRPCError,
+  type inferRouterInputs,
+  type inferRouterOutputs,
+} from '@trpc/server'
 import type {
   Artist,
   Paging,
@@ -56,7 +60,11 @@ export const spotifyRouter = createTRPCRouter({
       z.object({
         albumId: z.string().describe("The id to get the album's tracks."),
         limit: z.number().optional().describe('The amount of tracks to get'),
-        cursor: z.number().optional().describe('The offset to get the tracks'),
+        cursor: z
+          .number()
+          .optional()
+          .nullable()
+          .describe('The offset to get the tracks'),
       }),
     )
     .output(
@@ -67,6 +75,7 @@ export const spotifyRouter = createTRPCRouter({
         nextCursor: z
           .number()
           .optional()
+          .nullable()
           .describe(
             'The next offset that should be used for fetching again if using infite query',
           ),
@@ -145,7 +154,11 @@ export const spotifyRouter = createTRPCRouter({
           .string()
           .describe("The artist id to get the artist's albums from"),
         limit: z.number().optional().describe('The amount of albums to get'),
-        cursor: z.number().optional().describe('The offset to get the albums'),
+        cursor: z
+          .number()
+          .optional()
+          .nullable()
+          .describe('The offset to get the albums'),
       }),
     )
     .output(
@@ -156,6 +169,7 @@ export const spotifyRouter = createTRPCRouter({
         nextCursor: z
           .number()
           .optional()
+          .nullable()
           .describe(
             'The next offset that should be used for fetching again if using infite query',
           ),
@@ -222,11 +236,12 @@ export const spotifyRouter = createTRPCRouter({
           .describe('The text to be searched.'),
         cursor: z
           .object({
-            albums: z.number().optional(),
-            tracks: z.number().optional(),
-            artists: z.number().optional(),
+            albums: z.number().optional().nullable(),
+            tracks: z.number().optional().nullable(),
+            artists: z.number().optional().nullable(),
           })
-          .optional(),
+          .optional()
+          .nullable(),
         mediaType: z
           .array(z.enum(['track', 'album', 'artist']))
           .min(1)
@@ -249,11 +264,11 @@ export const spotifyRouter = createTRPCRouter({
       SearchContentItemsSchema.extend({
         nextCursor: z
           .object({
-            albums: z.number().optional(),
-            tracks: z.number().optional(),
-            artists: z.number().optional(),
+            albums: z.number().nullable(),
+            tracks: z.number().nullable(),
+            artists: z.number().nullable(),
           })
-          .optional()
+          .nullable()
           .describe(
             'The next offset that should be used for fetching again if using infite query',
           ),
@@ -314,30 +329,33 @@ export const spotifyRouter = createTRPCRouter({
 
       const albumOffset =
         Number(
-          new URLSearchParams(data.albums?.next ?? undefined).get('offset'),
-        ) || undefined
+          new URLSearchParams(data?.albums?.next ?? undefined).get('offset'),
+        ) || null
       const trackOffset =
         Number(
-          new URLSearchParams(data.tracks?.next ?? undefined).get('offset'),
-        ) || undefined
+          new URLSearchParams(data?.tracks?.next ?? undefined).get('offset'),
+        ) || null
       const artistOffset =
         Number(
-          new URLSearchParams(data.artists?.next ?? undefined).get('offset'),
-        ) || undefined
+          new URLSearchParams(data?.artists?.next ?? undefined).get('offset'),
+        ) || null
 
       const nextCursor =
         !albumOffset && !trackOffset && !artistOffset
-          ? undefined
+          ? null
           : {
               albums: albumOffset,
               tracks: trackOffset,
               artists: artistOffset,
             }
       return {
-        albums: data.albums?.items,
-        tracks: data.tracks?.items,
-        artists: data.artists?.items,
+        albums: data?.albums?.items,
+        tracks: data?.tracks?.items,
+        artists: data?.artists?.items,
         nextCursor,
       }
     }),
 })
+
+export type SpotifyRouterInputs = inferRouterInputs<typeof spotifyRouter>
+export type SpotifyRouterOutputs = inferRouterOutputs<typeof spotifyRouter>

@@ -5,10 +5,10 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Analytics } from '@vercel/analytics/react'
 import { type AppType } from 'next/app'
 import { lazy, Suspense, useState } from 'react'
+import { useEffectOnce } from 'usehooks-ts'
 import { useSSRIntercept } from '../hooks/useSSRIntercept'
 import '../styles/globals.css'
 import { api } from '../utils/api'
-import { useEffectOnce } from 'usehooks-ts'
 
 const ReactQueryDevtoolsProduction = lazy(() =>
   import('@tanstack/react-query-devtools/build/lib/index.prod.js').then(d => ({

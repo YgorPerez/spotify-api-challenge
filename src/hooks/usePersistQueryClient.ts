@@ -1,4 +1,3 @@
-import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import { useQueryClient } from '@tanstack/react-query'
 import {
@@ -23,11 +22,6 @@ const usePersistQueryClient = () => {
       queryClient,
       persister: localStoragePersister,
       maxAge: Infinity,
-    })
-
-    // syncs the query client between browser tabs/windows with the same origin.
-    broadcastQueryClient({
-      queryClient,
     })
   })
 }

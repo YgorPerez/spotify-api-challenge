@@ -8,6 +8,11 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef } from 'react'
 import { type SimplifiedAlbum } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
+import {
+  useDebounce,
+  useIntersectionObserver,
+  useLocalStorage,
+} from 'usehooks-ts'
 import SearchForm from '../components/app/SearchForm'
 import SpotifyCard from '../components/app/SpotifyCard'
 import Footer from '../components/ui/Footer'
@@ -16,11 +21,6 @@ import useGetSearch from '../hooks/useGetSearch'
 import { api } from '../utils/api'
 import { ssrHelper } from '../utils/ssrHelper'
 import { stringOrNull } from '../utils/stringOrNull'
-import {
-  useDebounce,
-  useIntersectionObserver,
-  useLocalStorage,
-} from 'usehooks-ts'
 
 interface Props {
   searchTerm: string | null
@@ -79,7 +79,7 @@ const SearchPage: NextPage<Props> = (
     if (inView && hasNextPage && !isFetching) {
       void fetchNextPage()
     }
-  }, [inView, fetchNextPage, hasNextPage, isFetching])
+  }, [fetchNextPage, hasNextPage, inView, isFetching])
 
   if (isError) {
     throw new Error(error.message)
@@ -94,7 +94,8 @@ const SearchPage: NextPage<Props> = (
     if (shouldDisplayData) {
       setLastSearchTerm(searchTerm)
     }
-  }, [searchTerm, setLastSearchTerm, shouldDisplayData])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldDisplayData])
 
   const utils = api.useContext()
 

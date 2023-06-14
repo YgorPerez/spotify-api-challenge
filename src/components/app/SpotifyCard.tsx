@@ -14,6 +14,7 @@ import type {
   Track as TrackType,
 } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
 import artistFallBackImg from '/public/images/artist-placeholder.jpg'
+
 type CardData = AlbumType | TrackType | SimplifiedAlbumType | ArtistType | null
 
 type CardMainData = {
@@ -37,6 +38,8 @@ const CardMain: React.FC<{
           <Image
             src={cardMainData?.images?.[0]?.url || artistFallBackImg}
             alt='album cover'
+            placeholder='blur'
+            loading='lazy'
             width={imageSize}
             height={imageSize}
             className='h-full w-full'
@@ -60,6 +63,8 @@ const CardMain: React.FC<{
             className='aspect-square'
             src={cardMainData.images?.[1]?.url || artistFallBackImg}
             blurDataURL={'public/images/gray-square-placeholder.jpg'}
+            placeholder='blur'
+            loading='lazy'
             alt='album cover'
             height={imageSize}
             width={imageSize}
