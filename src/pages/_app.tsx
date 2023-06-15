@@ -1,11 +1,10 @@
 import { ClerkProvider } from '@clerk/nextjs'
 import ErrorBoundary from '@components/hoc/ErrorBoundary'
 import usePersistQueryClient from '@hooks/usePersistQueryClient'
-import { signal } from '@preact/signals'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Analytics } from '@vercel/analytics/react'
 import { type AppType } from 'next/app'
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { useEffectOnce } from 'usehooks-ts'
 import { useSSRIntercept } from '../hooks/useSSRIntercept'
 import '../styles/globals.css'
@@ -21,11 +20,11 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   useSSRIntercept() // makes all gssp run only once
   usePersistQueryClient()
   // this way the react query devtools can be downloaded in production using window.toggleDevtools() on console
-  const showDevtools = signal(false)
+  const [showDevtools, setShowDevtools] = useState(false)
   useEffectOnce(() => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    window.toggleDevtools = () => (showDevtools.value = !showDevtools.value)
+    window.toggleDevtools = () => setShowDevtools(old => !old)
   })
 
   return (

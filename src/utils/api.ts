@@ -5,7 +5,7 @@
  *
  * We also create a few inference helpers for input and output types
  */
-import { unstable_httpBatchStreamLink, loggerLink } from '@trpc/client'
+import { loggerLink, unstable_httpBatchStreamLink } from '@trpc/client'
 import { createTRPCNext } from '@trpc/next'
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server'
 import { devtoolsLink } from 'trpc-client-devtools-link'

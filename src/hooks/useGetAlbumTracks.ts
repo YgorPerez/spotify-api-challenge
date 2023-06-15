@@ -18,7 +18,6 @@ export default function useGetAlbumTracks({
       getNextPageParam: lastPage => lastPage.nextCursor,
       staleTime: Infinity,
       enabled,
-      keepPreviousData: true,
     },
   )
 }

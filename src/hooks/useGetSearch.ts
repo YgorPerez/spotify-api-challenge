@@ -19,7 +19,6 @@ export default function useGetSearch({
       enabled,
       getNextPageParam: lastPage => lastPage.nextCursor,
       staleTime: Infinity,
-      keepPreviousData: true,
       onSuccess(data) {
         data.pages.flatMap(page => {
           page.albums?.map(album => {

@@ -9,10 +9,10 @@ const bundleAnalyzer = NextBundleAnalyzer({
 /** @type {import("next").NextConfig} */
 const config = withAxiom({
   reactStrictMode: true,
-  // i18n: {
-  //   locales: ['pt-br'],
-  //   defaultLocale: 'pt-br',
-  // },
+  i18n: {
+    locales: ['en'],
+    defaultLocale: 'en',
+  },
   swcMinify: true,
   optimizeFonts: true,
   images: {

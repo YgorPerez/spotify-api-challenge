@@ -19,8 +19,8 @@ const SearchForm: React.FC<{ search: string | null }> = ({ search }) => {
     )
   }
 
-  // performance optimization, it's much faster to change the serch query this
-  // after it's already on the query params
+  // performance optimization, it's much faster to change
+  // the serch query after it's already on the query params
   useEffectOnce(() => {
     !search && setSearchQueryParam('')
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,15 +44,14 @@ const SearchForm: React.FC<{ search: string | null }> = ({ search }) => {
         </Label>
         <input
           type='search'
+          autoFocus
           id={`search-${formId}`}
           placeholder='Start typing...'
-          className='search-cancel:invert-100 -m-px mt-4 h-16 w-full border-separate bg-dark-gray p-2 pb-8 text-left text-5xl font-bold text-white-gray outline-none placeholder:text-light-gray placeholder:opacity-100 focus:border-b-2 focus:border-light-gray search-cancel:brightness-[1.08] search-cancel:contrast-[1.01] search-cancel:hue-rotate-[336deg] search-cancel:saturate-[0] search-cancel:sepia-[.04] 2xl:focus:border-b-4'
+          className='search-cancel:invert-100 -m-px mt-4 h-16 w-full border-separate bg-dark-gray p-2 pb-8 text-left text-5xl font-bold text-white-gray outline-none placeholder:text-light-gray placeholder:opacity-100 search-cancel:brightness-[1.08] search-cancel:contrast-[1.01] search-cancel:hue-rotate-[336deg] search-cancel:saturate-[0] search-cancel:sepia-[.04] focus:border-b-2 focus:border-light-gray 2xl:focus:border-b-4'
           defaultValue={search || ''}
           onInput={e => {
             setSearchQueryParam(e.currentTarget.value)
           }}
-          // autoFocus wasn't working
-          ref={input => input && input.focus()}
           // set cursor to the end
           onFocus={e =>
             e.currentTarget.setSelectionRange(

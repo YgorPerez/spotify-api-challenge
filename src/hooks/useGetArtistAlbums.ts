@@ -20,7 +20,6 @@ export default function useGetArtistsAlbums({
       getNextPageParam: lastPage => lastPage.nextCursor,
       staleTime: Infinity,
       enabled,
-      keepPreviousData: true,
       onSuccess(data) {
         data.pages.flatMap(page => {
           page.albums?.map(album => {

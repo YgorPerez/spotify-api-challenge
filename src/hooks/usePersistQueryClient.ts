@@ -5,7 +5,6 @@ import {
   removeOldestQuery,
   type PersistedClient,
 } from '@tanstack/react-query-persist-client'
-import { compress, decompress } from 'lz-string'
 import { useEffectOnce } from 'usehooks-ts'
 
 const usePersistQueryClient = () => {
@@ -13,9 +12,10 @@ const usePersistQueryClient = () => {
   useEffectOnce(() => {
     const localStoragePersister = createSyncStoragePersister({
       storage: window.localStorage,
+      throttleTime: 1000,
       retry: removeOldestQuery,
-      serialize: data => compress(JSON.stringify(data)),
-      deserialize: data => JSON.parse(decompress(data)) as PersistedClient,
+      serialize: data => JSON.stringify(data),
+      deserialize: data => JSON.parse(data) as PersistedClient,
     })
 
     persistQueryClient({

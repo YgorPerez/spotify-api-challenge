@@ -76,7 +76,7 @@ const SearchPage: NextPage<Props> = (
   } = useGetSearch(searchOptions)
 
   useEffect(() => {
-    if (inView && hasNextPage && !isFetching) {
+    if (inView?.isIntersecting && hasNextPage && !isFetching) {
       void fetchNextPage()
     }
   }, [fetchNextPage, hasNextPage, inView, isFetching])
@@ -94,8 +94,7 @@ const SearchPage: NextPage<Props> = (
     if (shouldDisplayData) {
       setLastSearchTerm(searchTerm)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldDisplayData])
+  }, [searchTerm, setLastSearchTerm, shouldDisplayData])
 
   const utils = api.useContext()
 

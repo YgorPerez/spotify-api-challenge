@@ -43,7 +43,7 @@ const CardMain: React.FC<{
             loading='lazy'
             width={imageSize}
             height={imageSize}
-            className='h-full w-full'
+            className='aspect-square h-full w-full'
           />
         </div>
       ) : (
@@ -64,7 +64,9 @@ const CardMain: React.FC<{
             className='aspect-square'
             src={cardMainData.images?.[1]?.url || artistFallBackImg}
             loading='lazy'
-            alt='album cover'
+            alt={
+              cardMainData?.images?.[1]?.url ? 'album cover' : 'artist picture'
+            }
             height={imageSize}
             width={imageSize}
           />

@@ -229,11 +229,7 @@ export const spotifyRouter = createTRPCRouter({
     })
     .input(
       z.object({
-        searchTerm: z
-          .string()
-          .min(1)
-          .max(30)
-          .describe('The text to be searched.'),
+        searchTerm: z.string().min(1).describe('The text to be searched.'),
         cursor: z
           .object({
             albums: z.number().optional().nullable(),
@@ -264,10 +260,11 @@ export const spotifyRouter = createTRPCRouter({
       SearchContentItemsSchema.extend({
         nextCursor: z
           .object({
-            albums: z.number().nullable(),
-            tracks: z.number().nullable(),
-            artists: z.number().nullable(),
+            albums: z.number().optional().nullable(),
+            tracks: z.number().optional().nullable(),
+            artists: z.number().optional().nullable(),
           })
+          .optional()
           .nullable()
           .describe(
             'The next offset that should be used for fetching again if using infite query',
