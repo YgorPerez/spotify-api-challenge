@@ -37,8 +37,9 @@ const CardMain: React.FC<{
         <div className='flex justify-center'>
           <Image
             src={cardMainData?.images?.[0]?.url || artistFallBackImg}
-            alt='album cover'
-            placeholder='blur'
+            alt={
+              cardMainData?.images?.[0]?.url ? 'album cover' : 'artist picture'
+            }
             loading='lazy'
             width={imageSize}
             height={imageSize}
@@ -62,8 +63,6 @@ const CardMain: React.FC<{
           <Image
             className='aspect-square'
             src={cardMainData.images?.[1]?.url || artistFallBackImg}
-            blurDataURL={'public/images/gray-square-placeholder.jpg'}
-            placeholder='blur'
             loading='lazy'
             alt='album cover'
             height={imageSize}

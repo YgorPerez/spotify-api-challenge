@@ -32,8 +32,8 @@ export const env = createEnv({
     ANALYZE: z
       .string()
       .optional()
-      // only allow "true" or "false"
-      .refine(s => s === 'true' || s === 'false')
+      // only allow "true" or "false" and "undefined"
+      .refine(s => s === 'true' || s === 'false' || typeof s === 'undefined')
       // transform to boolean
       .transform(s => s === 'true'),
   },
