@@ -28,6 +28,7 @@ const config = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@next/next/recommended',
+    "plugin:react-hooks/recommended"
   ],
   rules: {
     '@typescript-eslint/consistent-type-imports': [

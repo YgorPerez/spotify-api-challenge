@@ -21,7 +21,8 @@ import {
   SimplifiedTrackSchema,
   TrackSchema,
 } from '../../../schema/spotifyApiSchemas'
-import { createTRPCRouter, protectedTokenProcedure } from '../trpc'
+import { protectedTokenProcedure } from '../middleware'
+import { createTRPCRouter } from '../trpc'
 
 export const spotifyRouter = createTRPCRouter({
   getAlbum: protectedTokenProcedure
