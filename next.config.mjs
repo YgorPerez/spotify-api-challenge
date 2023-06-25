@@ -25,6 +25,9 @@ const config = withAxiom({
     ],
     minimumCacheTTL: 1500000,
   },
+  eslint: {
+    dirs: ['src'],
+  },
 })
 
 export default bundleAnalyzer(config)

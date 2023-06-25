@@ -27,12 +27,12 @@
     }
   },
   "include": [
+    ".eslintrc.cjs",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
-    "**/*.mjs",
-    "next.config.mjs"
+    "**/*.mjs"
   ],
   "exclude": ["node_modules"]
 }

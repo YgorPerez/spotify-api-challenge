@@ -15,21 +15,11 @@ const config = {
     },
   ],
   parser: '@typescript-eslint/parser',
-  plugins: [
-    '@typescript-eslint',
-    'react-hooks',
-    'jsx-a11y',
-    'react',
-    '@next/next',
-  ],
-  root: true,
-  extends: [
-    'next/core-web-vitals',
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@next/next/recommended',
-    "plugin:react-hooks/recommended"
-  ],
+  parserOptions: {
+    project: path.join(__dirname, 'tsconfig.json'),
+  },
+  plugins: ['@typescript-eslint'],
+  extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended'],
   rules: {
     '@typescript-eslint/consistent-type-imports': [
       'warn',

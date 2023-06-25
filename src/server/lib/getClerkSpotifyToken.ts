@@ -20,7 +20,6 @@ export const getSpotifyToken = async (userId: string) => {
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const userToken = await userTokenResponse.json()
 
   const validatedUserToken = UserTokenSchema.safeParse(userToken)
