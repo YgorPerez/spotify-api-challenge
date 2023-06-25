@@ -2,10 +2,11 @@ import { SignUp } from '@clerk/nextjs'
 import { type NextPage } from 'next'
 
 const SignUpPage: NextPage = () => (
-  <div className='justify-center items-center flex'>
+  <div className='fixed translate-x-1/2 translate-y-2/3'>
     <SignUp
       appearance={{
         elements: {
+          logoBox: 'justify-center',
           formButtonPrimary:
             'bg-slate-500 hover:bg-slate-400 text-sm normal-case',
         },
