@@ -1,7 +1,7 @@
 import Skeleton from '@components/ui/Skeleton'
 import formatText from '@utils/formatText'
 import Link from 'next/link'
-import { FC } from 'react'
+import { type FC } from 'react'
 import { type SimplifiedAlbum as AlbumType } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
 
 const Album: FC<{ album: AlbumType | null }> = ({ album }) => {
