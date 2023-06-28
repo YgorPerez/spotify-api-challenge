@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { type FC } from 'react'
 import spotifyLogo from '/public/images/spotify-app-logo.webp'
 
-const Header: React.FC = () => {
+const Header: FC = () => {
   return (
     <header className='h-16 w-16 pt-8'>
       <div className='ml-6 block'>

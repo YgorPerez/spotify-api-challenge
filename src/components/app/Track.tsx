@@ -1,14 +1,14 @@
 import Skeleton from '@components/ui/Skeleton'
 import formatText from '@utils/formatText'
 import Link from 'next/link'
-import React from 'react'
+import { type FC } from 'react'
 import {
   type SimplifiedTrack as SimplifiedTrackType,
   type Track as TrackType,
 } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
 import formatMilliseconds from '../../utils/formatMilliseconds'
 
-const Track: React.FC<{ track: SimplifiedTrackType | TrackType | null }> = ({
+const Track: FC<{ track: SimplifiedTrackType | TrackType | null }> = ({
   track,
 }) => {
   if (!track) {

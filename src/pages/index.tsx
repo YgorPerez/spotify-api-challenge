@@ -6,7 +6,7 @@ import type {
 } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { useEffect, useRef } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import { type SimplifiedAlbum } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
 import {
   useDebounce,
@@ -150,7 +150,7 @@ const SearchPage: NextPage<Props> = (
               <div className='m-auto flex w-5/6 flex-wrap justify-center gap-6 bg-dark-gray 2xl:w-11/12 2xl:gap-12'>
                 {shouldDisplayData &&
                   searchData.flatMap((searchResults, index) => (
-                    <React.Fragment key={index}>
+                    <Fragment key={index}>
                       {searchResults.albums?.map(album => (
                         <div
                           key={album.id}
@@ -181,7 +181,7 @@ const SearchPage: NextPage<Props> = (
                           <SpotifyCard cardData={artist} />
                         </div>
                       ))}
-                    </React.Fragment>
+                    </Fragment>
                   ))}
                 {shouldDisplayLoadingData && loadingData}
                 {!shouldDisplayData &&

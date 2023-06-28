@@ -1,9 +1,9 @@
 import Label from '@components/ui/Label'
 import { useRouter } from 'next/router'
-import React, { useId } from 'react'
+import { useId, type FC } from 'react'
 import { useEffectOnce } from 'usehooks-ts'
 
-const SearchForm: React.FC<{ search: string | null }> = ({ search }) => {
+const SearchForm: FC<{ search: string | null }> = ({ search }) => {
   const router = useRouter()
   const formId = useId()
   const setSearchQueryParam = (value: string) => {

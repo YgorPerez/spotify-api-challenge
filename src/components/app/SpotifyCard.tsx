@@ -5,7 +5,7 @@ import formatText from '@utils/formatText'
 import { log } from 'next-axiom'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { type FC } from 'react'
 import type {
   Album as AlbumType,
   Artist as ArtistType,
@@ -25,7 +25,7 @@ type CardMainData = {
 const titleLength = 37
 const subtitleLength = 30
 
-const CardMain: React.FC<{
+const CardMain: FC<{
   cardMainData: CardMainData
   cardData: CardData
   big?: boolean
