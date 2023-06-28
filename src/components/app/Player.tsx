@@ -9,38 +9,45 @@ import {
 const Player: FC<{ songList: Track[] | SimplifiedTrack[] }> = ({
   songList,
 }) => {
-  const [currentTrackIndex, setTrackIndex] = useState(0)
+  const [currentSongIndex, setSongIndex] = useState(0)
 
   const goToNextSong = () => {
-    setTrackIndex(currentTrackIndex =>
-      currentTrackIndex < songList.length - 1 ? currentTrackIndex + 1 : 0,
+    setSongIndex(currentSongIndex =>
+      currentSongIndex < songList.length - 1 ? currentSongIndex + 1 : 0,
     )
   }
 
   const goToPreviousSong = () => {
-    setTrackIndex(currentTrackIndex =>
-      currentTrackIndex > 0 ? currentTrackIndex - 1 : 0,
+    setSongIndex(currentSongIndex =>
+      currentSongIndex > 0 ? currentSongIndex - 1 : 0,
     )
   }
 
-  const songSource = songList[currentTrackIndex]?.preview_url
+  const currentSong = songList[currentSongIndex]
+  const songSource = currentSong?.preview_url
 
   return (
     <div>
       {songSource ? (
-        <AudioPlayer
-          preload='metadata'
-          className='fixed bottom-0'
-          src={songSource}
-          showSkipControls
-          volume={0.3}
-          onClickNext={goToNextSong}
-          onClickPrevious={goToPreviousSong}
-          onEnded={goToNextSong}
-          footer
-        />
+        <div>
+          <p className='fixed bottom-24 w-full text-center text-2xl text-white'>
+            <span className='text-gray-400'>{currentSongIndex + 1}.</span>{' '}
+            {currentSong.name}
+          </p>
+          <AudioPlayer
+            preload='metadata'
+            className='fixed bottom-0'
+            src={songSource}
+            showSkipControls
+            volume={0.3}
+            onClickNext={goToNextSong}
+            onClickPrevious={goToPreviousSong}
+            onEnded={goToNextSong}
+            footer
+          />
+        </div>
       ) : (
-        <p className='fixed bottom-12 w-full text-center text-2xl text-white'>
+        <p className='fixed bottom-24 w-full text-center text-2xl text-white'>
           This song doesn&apos;t have a preview available
         </p>
       )}
