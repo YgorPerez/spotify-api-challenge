@@ -1,4 +1,3 @@
-import { nullsToUndefined } from '@utils/NullsToUndefined'
 import { useState, type FC } from 'react'
 import AudioPlayer from 'react-h5-audio-player'
 import 'react-h5-audio-player/lib/styles.css'
@@ -24,20 +23,28 @@ const Player: FC<{ songList: Track[] | SimplifiedTrack[] }> = ({
     )
   }
 
-  const songSource = nullsToUndefined(songList[currentTrackIndex]?.preview_url)
+  const songSource = songList[currentTrackIndex]?.preview_url
 
   return (
-    <AudioPlayer
-      className='fixed bottom-0 bg-black'
-      preload='metadata'
-      src={songSource}
-      showSkipControls
-      volume={0.3}
-      onClickNext={goToNextSong}
-      onClickPrevious={goToPreviousSong}
-      onEnded={goToNextSong}
-      footer
-    />
+    <div>
+      {songSource ? (
+        <AudioPlayer
+          preload='metadata'
+          className='fixed bottom-0'
+          src={songSource}
+          showSkipControls
+          volume={0.3}
+          onClickNext={goToNextSong}
+          onClickPrevious={goToPreviousSong}
+          onEnded={goToNextSong}
+          footer
+        />
+      ) : (
+        <p className='fixed bottom-12 w-full text-center text-2xl text-white'>
+          This song doesn&apos;t have a preview available
+        </p>
+      )}
+    </div>
   )
 }
 
