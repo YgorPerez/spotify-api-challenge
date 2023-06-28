@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  react-h5-audio-player@3.8.6:
+    hash: ywf7b5ngjm4drgimkhradbasaq
+    path: patches/react-h5-audio-player@3.8.6.patch
+
 dependencies:
   '@clerk/nextjs':
     specifier: ^4.21.1
@@ -82,7 +87,7 @@ dependencies:
     version: 18.2.0(react@18.2.0)
   react-h5-audio-player:
     specifier: ^3.8.6
-    version: 3.8.6(react-dom@18.2.0)(react@18.2.0)
+    version: 3.8.6(patch_hash=ywf7b5ngjm4drgimkhradbasaq)(react-dom@18.2.0)(react@18.2.0)
   sharp:
     specifier: ^0.32.1
     version: 0.32.1
@@ -3724,7 +3729,7 @@ packages:
       scheduler: 0.23.0
     dev: false
 
-  /react-h5-audio-player@3.8.6(react-dom@18.2.0)(react@18.2.0):
+  /react-h5-audio-player@3.8.6(patch_hash=ywf7b5ngjm4drgimkhradbasaq)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-eyViI47jRRybCcCkGdoAMd6yfhg3UMyXp39mqOWCbNQfAYI8U6zC0+0DLZjhrB7//DJtHhZx8h1q99HMxYkMWQ==}
     peerDependencies:
       react: ^16.3.0 || ^17.0.0 || ^18.0.0
@@ -3736,6 +3741,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
+    patched: true
 
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
