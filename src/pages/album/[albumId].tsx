@@ -15,6 +15,7 @@ import useGetAlbumTracks from '../../hooks/useGetAlbumTracks'
 import { api } from '../../utils/api'
 import { ssrHelper } from '../../utils/ssrHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
+import Player from '@components/app/Player'
 
 interface Props {
   albumId: string
@@ -96,34 +97,35 @@ const SingleAlbumPage: NextPage<Props> = (
           <SpotifyCard cardData={album} big />
         </div>
         <ScrollArea className='ml-16 max-h-[75vh]'>
-            <ol className='mx-2 mb-4 list-decimal text-light-gray'>
-              {tracks?.map((track, index) => (
-                <div
-                  key={index}
-                  onFocus={() => {
-                    void utils.spotify.getTrack.prefetch({
-                      trackId: track.id,
-                    })
-                  }}
-                  onMouseEnter={() => {
-                    void utils.spotify.getTrack.prefetch({
-                      trackId: track.id,
-                    })
-                  }}
-                >
-                  <Track track={track as SimplifiedTrack} />
-                </div>
-              ))}
-              {isFetchingTracks && loadingData}
-            </ol>
-            <Separator className='my-2' />
-            <LoadMore
-              fetchNextPage={() => void fetchNextPage()}
-              isLoading={isFetchingTracks}
-              hasNextPage={hasNextPage}
-            />
+          <ol className='mx-2 mb-4 list-decimal text-light-gray'>
+            {tracks?.map((track, index) => (
+              <div
+                key={index}
+                onFocus={() => {
+                  void utils.spotify.getTrack.prefetch({
+                    trackId: track.id,
+                  })
+                }}
+                onMouseEnter={() => {
+                  void utils.spotify.getTrack.prefetch({
+                    trackId: track.id,
+                  })
+                }}
+              >
+                <Track track={track as SimplifiedTrack} />
+              </div>
+            ))}
+            {isFetchingTracks && loadingData}
+          </ol>
+          <Separator className='my-2' />
+          <LoadMore
+            fetchNextPage={() => void fetchNextPage()}
+            isLoading={isFetchingTracks}
+            hasNextPage={hasNextPage}
+          />
         </ScrollArea>
       </main>
+      <Player songList={tracks as SimplifiedTrack[]} />
     </div>
   )
 }

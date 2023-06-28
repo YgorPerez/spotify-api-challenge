@@ -1,3 +1,4 @@
+import { getSpotifyToken } from '@lib/getClerkSpotifyToken'
 import {
   TRPCError,
   type inferRouterInputs,
@@ -21,7 +22,7 @@ import {
   SimplifiedTrackSchema,
   TrackSchema,
 } from '../../../schema/spotifyApiSchemas'
-import { protectedTokenProcedure } from '../middleware'
+import { protectedProcedure, protectedTokenProcedure } from '../middleware'
 import { createTRPCRouter } from '../trpc'
 
 export const spotifyRouter = createTRPCRouter({
@@ -352,6 +353,15 @@ export const spotifyRouter = createTRPCRouter({
         artists: data?.artists?.items,
         nextCursor,
       }
+    }),
+  getAccessToken: protectedProcedure
+    .meta({
+      description: 'Gets the spotify access token from the clerk database',
+    })
+    .output(z.string().describe('The accessToken from the user'))
+    .query(async ({ ctx }) => {
+      const accessToken = await getSpotifyToken(ctx.auth.userId)
+      return accessToken
     }),
 })
 

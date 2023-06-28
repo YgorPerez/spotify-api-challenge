@@ -1,10 +1,12 @@
+import Player from '@components/app/Player'
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
 import { useRouter } from 'next/router'
+import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
+import GoBack from '../../components/app/GoBack'
 import SpotifyCard from '../../components/app/SpotifyCard'
 import Track from '../../components/app/Track'
-import GoBack from '../../components/app/GoBack'
 import Header from '../../components/ui/Header'
 import { api } from '../../utils/api'
 import { ssrHelper } from '../../utils/ssrHelper'
@@ -62,6 +64,7 @@ const SingleTrackPage: NextPage<Props> = (
           </ol>
         </div>
       </main>
+      <Player songList={[track as SimplifiedTrack]} />
     </div>
   )
 }
