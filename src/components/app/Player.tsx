@@ -1,5 +1,6 @@
+import { useSignal } from '@preact/signals'
 import { nullsToUndefined } from '@utils/NullsToUndefined'
-import { useState, type FC } from 'react'
+import { type FC } from 'react'
 import AudioPlayer from 'react-h5-audio-player'
 import 'react-h5-audio-player/lib/styles.css'
 import {
@@ -10,27 +11,23 @@ import {
 const Player: FC<{ songList: Track[] | SimplifiedTrack[] }> = ({
   songList,
 }) => {
-  const [currentTrackIndex, setTrackIndex] = useState(0)
+  const currentTrackIndex = useSignal(0)
 
-  const handleClickNext = () => {
-    setTrackIndex(currentTrackIndex =>
-      currentTrackIndex < songList.length - 1 ? currentTrackIndex + 1 : 0,
-    )
+  const goToNextSong = () => {
+    if (currentTrackIndex.value < songList.length - 1) {
+      currentTrackIndex.value++
+    }
   }
 
-  const handleClickPrevious = () => {
-    setTrackIndex(currentTrackIndex =>
-      currentTrackIndex > 0 ? currentTrackIndex - 1 : 0,
-    )
+  const goToPreviousSong = () => {
+    if (currentTrackIndex.value > 0) {
+      currentTrackIndex.value--
+    }
   }
 
-  const handleEnd = () => {
-    setTrackIndex(currentTrackIndex =>
-      currentTrackIndex < songList.length - 1 ? currentTrackIndex + 1 : 0,
-    )
-  }
-
-  const songSource = nullsToUndefined(songList[currentTrackIndex]?.preview_url)
+  const songSource = nullsToUndefined(
+    songList[currentTrackIndex.value]?.preview_url,
+  )
 
   return (
     <AudioPlayer
@@ -39,9 +36,9 @@ const Player: FC<{ songList: Track[] | SimplifiedTrack[] }> = ({
       src={songSource}
       showSkipControls
       volume={0.3}
-      onClickNext={handleClickNext}
-      onClickPrevious={handleClickPrevious}
-      onEnded={handleEnd}
+      onClickNext={goToNextSong}
+      onClickPrevious={goToPreviousSong}
+      onEnded={goToNextSong}
       footer
     />
   )
