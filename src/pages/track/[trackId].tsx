@@ -1,5 +1,5 @@
+import Lyrics from '@components/app/Lyrics'
 import Player from '@components/app/Player'
-import ScrollArea from '@components/ui/ScrollArea'
 import useGetLyrics from '@hooks/useGetLyrics'
 import useGetTrack from '@hooks/useGetTrack'
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
@@ -63,13 +63,11 @@ const SingleTrackPage: NextPage<Props> = (
         <div className='ml-36'>
           <SpotifyCard cardData={track} big />
         </div>
-        {lyrics ? (
-          <ScrollArea className='max-h-[70vh] translate-x-1/4 p-4 text-xl'>
-            <p className='whitespace-pre text-white'>{lyrics}</p>
-          </ScrollArea>
-        ) : (
-          <p>No lyrics found</p>
-        )}
+        <Lyrics
+          lyrics={lyrics}
+          isFetching={isFetchingLyrics}
+          isError={isErrorLyrics}
+        />
       </main>
       <Player songList={[track as SimplifiedTrack]} />
     </div>

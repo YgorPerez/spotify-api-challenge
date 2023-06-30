@@ -375,7 +375,7 @@ export const spotifyRouter = createTRPCRouter({
         artistName: z.string().describe('The artist name.'),
       }),
     )
-    .output(z.string().describe('The lyrics of the song'))
+    .output(z.string().nullable().describe('The lyrics of the song'))
     .query(async ({ input }) => {
       const { artistName, songTitle } = input
 
@@ -388,9 +388,9 @@ export const spotifyRouter = createTRPCRouter({
       const lyrics = await getLyrics(options)
 
       const validatedLyrics = z.string().nullable().safeParse(lyrics)
-      if (!validatedLyrics.success || !validatedLyrics.data) {
+      if (!validatedLyrics.success) {
         throw new TRPCError({
-          message: `Lyrics not found: ${songTitle} from ${artistName}`,
+          message: `Lyrics error on: ${songTitle} from ${artistName}`,
           code: 'INTERNAL_SERVER_ERROR',
         })
       }
