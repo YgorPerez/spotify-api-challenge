@@ -152,15 +152,7 @@ const SearchPage: NextPage<Props> = (
                   searchData.flatMap((searchResults, index) => (
                     <Fragment key={index}>
                       {searchResults.albums?.map(album => (
-                        <div
-                          key={album.id}
-                          onMouseEnter={() => {
-                            void utils.spotify.getAlbumTracks.prefetchInfinite({
-                              albumId: album.id,
-                              limit: 15,
-                            })
-                          }}
-                        >
+                        <div key={album.id}>
                           <SpotifyCard cardData={album} key={album.id} />
                         </div>
                       ))}
@@ -170,14 +162,7 @@ const SearchPage: NextPage<Props> = (
                         </div>
                       ))}
                       {searchResults.artists?.map(artist => (
-                        <div
-                          key={artist.id}
-                          onMouseEnter={() => {
-                            void utils.spotify.getArtistAlbums.prefetchInfinite(
-                              { artistId: artist.id, limit: 15 },
-                            )
-                          }}
-                        >
+                        <div key={artist.id}>
                           <SpotifyCard cardData={artist} />
                         </div>
                       ))}
@@ -187,15 +172,7 @@ const SearchPage: NextPage<Props> = (
                 {!shouldDisplayData &&
                   !shouldDisplayLoadingData &&
                   lastSearchedAlbums?.map(album => (
-                    <div
-                      key={album.id}
-                      onMouseEnter={() => {
-                        void utils.spotify.getAlbumTracks.prefetchInfinite({
-                          albumId: album.id,
-                          limit: 15,
-                        })
-                      }}
-                    >
+                    <div key={album.id}>
                       <SpotifyCard cardData={album} key={album.id} />
                     </div>
                   ))}

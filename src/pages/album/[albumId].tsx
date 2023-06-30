@@ -82,7 +82,6 @@ const SingleAlbumPage: NextPage<Props> = (
   }
 
   const album = getAlbumData?.album ?? null
-  const utils = api.useContext()
 
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
@@ -101,24 +100,6 @@ const SingleAlbumPage: NextPage<Props> = (
             {tracks?.map((track, index) => (
               <div
                 key={index}
-                onFocus={() => {
-                  void utils.spotify.getTrack.prefetch({
-                    trackId: track.id,
-                  })
-                  void utils.spotify.getSongLyrics.prefetch({
-                    artistName: track.artists[0]?.name as string,
-                    songTitle: track.name,
-                  })
-                }}
-                onMouseEnter={() => {
-                  void utils.spotify.getTrack.prefetch({
-                    trackId: track.id,
-                  })
-                  void utils.spotify.getSongLyrics.prefetch({
-                    artistName: track.artists[0]?.name as string,
-                    songTitle: track.name,
-                  })
-                }}
               >
                 <Track track={track as SimplifiedTrack} />
               </div>

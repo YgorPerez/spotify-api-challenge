@@ -97,7 +97,10 @@ const SpotifyCard: React.FC<{
       // Handle album data
       if ('album_type' in cardData) {
         return {
-          cardMainData: { images: cardData.images, slugUrl: 'album' },
+          cardMainData: {
+            images: cardData.images,
+            slugUrl: 'album',
+          },
           cardSubData: {
             name: formatText(
               cardData.artists?.[0]?.name as string,
@@ -155,6 +158,25 @@ const SpotifyCard: React.FC<{
     void utils.spotify.getArtistAlbums.prefetchInfinite({ artistId, limit: 15 })
   }
 
+  const prefetchAlbum = (albumId: string) => {
+    void utils.spotify.getAlbum.prefetchInfinite({
+      albumId,
+    })
+    void utils.spotify.getAlbumTracks.prefetchInfinite({
+      albumId,
+    })
+  }
+
+  const prefetchTrack = (track: TrackType) => {
+    void utils.spotify.getTrack.prefetch({
+      trackId: track.id,
+    })
+    void utils.spotify.getSongLyrics.prefetch({
+      artistName: track.artists[0]?.name as string,
+      songTitle: track.name,
+    })
+  }
+
   if (big && cardMainData && cardSubData && cardData) {
     return (
       <div className='my-2 items-center justify-center text-center md:max-w-[10rem] lg:max-w-xs 2xl:max-w-md'>
@@ -185,6 +207,18 @@ const SpotifyCard: React.FC<{
         <div className='my-2 w-60 items-center justify-center text-center 2xl:w-72'>
           <Link
             href={`/${cardMainData.slugUrl}/${cardData.id}`}
+            onFocus={() => {
+              cardMainData.slugUrl === 'album' && prefetchAlbum(cardData.id)
+              cardMainData.slugUrl === 'albums' && prefetchArtist(cardData.id)
+              cardMainData.slugUrl === 'track' &&
+                prefetchTrack(cardData as TrackType)
+            }}
+            onMouseEnter={() => {
+              cardMainData.slugUrl === 'album' && prefetchAlbum(cardData.id)
+              cardMainData.slugUrl === 'albums' && prefetchArtist(cardData.id)
+              cardMainData.slugUrl === 'track' &&
+                prefetchTrack(cardData as TrackType)
+            }}
             className='flex flex-col items-center'
           >
             <CardMain cardMainData={cardMainData} cardData={cardData} />
