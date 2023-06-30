@@ -21,6 +21,8 @@ export const env = createEnv({
     SPOTIFY_CLIENT_SECRET: z.string(),
     SPOTIFY_REFRESH_TOKEN: z.string().optional(),
     CLERK_SECRET_KEY: z.string(),
+    GENIUS_CLIENT_SECRET: z.string(),
+    GENIUS_ACCESS_TOKEN: z.string(),
     CLERK_REDIRECT_URI: z.string().url(),
     PORT: z
       .string()
@@ -52,6 +54,8 @@ export const env = createEnv({
     SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
     SPOTIFY_REFRESH_TOKEN: process.env.SPOTIFY_REFRESH_TOKEN,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    GENIUS_ACCESS_TOKEN: process.env.GENIUS_ACCESS_TOKEN,
+    GENIUS_CLIENT_SECRET: process.env.GENIUS_CLIENT_SECRET,
     CLERK_REDIRECT_URI: process.env.CLERK_REDIRECT_URI,
     PORT: process.env.PORT,
     ANALYZE: process.env.ANALYZE,

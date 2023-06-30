@@ -1,4 +1,7 @@
 import Player from '@components/app/Player'
+import ScrollArea from '@components/ui/ScrollArea'
+import useGetLyrics from '@hooks/useGetLyrics'
+import useGetTrack from '@hooks/useGetTrack'
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
@@ -6,9 +9,7 @@ import { useRouter } from 'next/router'
 import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
 import GoBack from '../../components/app/GoBack'
 import SpotifyCard from '../../components/app/SpotifyCard'
-import Track from '../../components/app/Track'
 import Header from '../../components/ui/Header'
-import { api } from '../../utils/api'
 import { ssrHelper } from '../../utils/ssrHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
 
@@ -25,26 +26,30 @@ const SingleTrackPage: NextPage<Props> = (
     props.trackId ? props.trackId : router.query.trackId,
   )
 
+  const {
+    data: trackData,
+    isFetching: isFetchingTrack,
+    isError: isErrorTrack,
+  } = useGetTrack(trackId as string)
+
+  const {
+    data: lyrics,
+    isFetching: isFetchingLyrics,
+    isError: isErrorLyrics,
+  } = useGetLyrics({
+    artistName: trackData?.track.artists?.[0]?.name as string,
+    songTitle: trackData?.track?.name as string,
+  })
+
   if (!trackId || trackId.length < 1) {
     return <Error statusCode={404} />
   }
 
-  const {
-    data: getTrackData,
-    isFetching,
-    isError,
-  } = api.spotify.getTrack.useQuery(
-    { trackId },
-    {
-      staleTime: Infinity,
-    },
-  )
-
-  if ((!getTrackData || !getTrackData.track || isError) && !isFetching) {
+  if ((!trackData || !trackData.track || isErrorTrack) && !isFetchingTrack) {
     return <Error statusCode={404} />
   }
 
-  const track = getTrackData?.track ?? null
+  const track = trackData?.track ?? null
 
   return (
     <div className='min-h-screen min-w-max bg-dark-gray'>
@@ -58,11 +63,13 @@ const SingleTrackPage: NextPage<Props> = (
         <div className='ml-36'>
           <SpotifyCard cardData={track} big />
         </div>
-        <div className='ml-16'>
-          <ol className='mx-2 list-decimal text-light-gray'>
-            <Track track={track} />
-          </ol>
-        </div>
+        {lyrics ? (
+          <ScrollArea className='max-h-[70vh] translate-x-1/4 p-4 text-xl'>
+            <p className='whitespace-pre text-white'>{lyrics}</p>
+          </ScrollArea>
+        ) : (
+          <p>No lyrics found</p>
+        )}
       </main>
       <Player songList={[track as SimplifiedTrack]} />
     </div>
@@ -83,7 +90,11 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   }
 
   const trpc = ssrHelper(context)
-  await trpc.spotify.getTrack.prefetch({ trackId })
+  const track = await trpc.spotify.getTrack.fetch({ trackId })
+  await trpc.spotify.getSongLyrics.prefetch({
+    artistName: track.track.artists[0]?.name as string,
+    songTitle: track.track.name,
+  })
 
   return {
     props: {

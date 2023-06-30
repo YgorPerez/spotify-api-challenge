@@ -1,9 +1,11 @@
+import { env } from '@/env.mjs'
 import { getSpotifyToken } from '@lib/getClerkSpotifyToken'
 import {
   TRPCError,
   type inferRouterInputs,
   type inferRouterOutputs,
 } from '@trpc/server'
+import getLyrics from 'genius-lyrics-ts'
 import type {
   Artist,
   Paging,
@@ -362,6 +364,38 @@ export const spotifyRouter = createTRPCRouter({
     .query(async ({ ctx }) => {
       const accessToken = await getSpotifyToken(ctx.auth.userId)
       return accessToken
+    }),
+  getSongLyrics: protectedTokenProcedure
+    .meta({
+      description: 'Gets the song lyrics based on the title and artist',
+    })
+    .input(
+      z.object({
+        songTitle: z.string().describe('The song title.'),
+        artistName: z.string().describe('The artist name.'),
+      }),
+    )
+    .output(z.string().describe('The lyrics of the song'))
+    .query(async ({ input }) => {
+      const { artistName, songTitle } = input
+
+      const options = {
+        apiKey: env.GENIUS_ACCESS_TOKEN,
+        title: songTitle,
+        artist: artistName,
+      }
+
+      const lyrics = await getLyrics(options)
+
+      const validatedLyrics = z.string().nullable().safeParse(lyrics)
+      if (!validatedLyrics.success || !validatedLyrics.data) {
+        throw new TRPCError({
+          message: `Lyrics not found: ${songTitle} from ${artistName}`,
+          code: 'INTERNAL_SERVER_ERROR',
+        })
+      }
+
+      return validatedLyrics.data
     }),
 })
 

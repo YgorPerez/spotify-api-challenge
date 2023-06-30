@@ -1,14 +1,12 @@
 import { useState, type FC } from 'react'
 import AudioPlayer from 'react-h5-audio-player'
 import 'react-h5-audio-player/lib/styles.css'
-import {
-  type SimplifiedTrack,
-  type Track,
-} from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
+import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
 
-const Player: FC<{ songList: Track[] | SimplifiedTrack[] }> = ({
-  songList,
-}) => {
+const Player: FC<{
+  songList: SimplifiedTrack[]
+  showSkipControls?: boolean
+}> = ({ songList, showSkipControls = false }) => {
   const [currentSongIndex, setSongIndex] = useState(0)
 
   const goToNextSong = () => {
@@ -31,14 +29,16 @@ const Player: FC<{ songList: Track[] | SimplifiedTrack[] }> = ({
       {songSource ? (
         <div>
           <p className='fixed bottom-24 w-full text-center text-2xl text-white'>
-            <span className='text-gray-400'>{currentSongIndex + 1}.</span>{' '}
+            {songList.length > 1 && (
+              <span className='text-gray-400'>{currentSongIndex + 1}. </span>
+            )}
             {currentSong.name}
           </p>
           <AudioPlayer
             preload='metadata'
             className='fixed bottom-0'
             src={songSource}
-            showSkipControls
+            showSkipControls={showSkipControls}
             volume={0.3}
             onClickNext={goToNextSong}
             onClickPrevious={goToPreviousSong}

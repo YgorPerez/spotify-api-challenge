@@ -1,6 +1,7 @@
 import ScrollArea from '@/components/ui/ScrollArea'
 import Separator from '@/components/ui/Separator'
 import LoadMore from '@components/app/LoadMore'
+import Player from '@components/app/Player'
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
@@ -15,7 +16,6 @@ import useGetAlbumTracks from '../../hooks/useGetAlbumTracks'
 import { api } from '../../utils/api'
 import { ssrHelper } from '../../utils/ssrHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
-import Player from '@components/app/Player'
 
 interface Props {
   albumId: string
@@ -105,10 +105,18 @@ const SingleAlbumPage: NextPage<Props> = (
                   void utils.spotify.getTrack.prefetch({
                     trackId: track.id,
                   })
+                  void utils.spotify.getSongLyrics.prefetch({
+                    artistName: track.artists[0]?.name as string,
+                    songTitle: track.name,
+                  })
                 }}
                 onMouseEnter={() => {
                   void utils.spotify.getTrack.prefetch({
                     trackId: track.id,
+                  })
+                  void utils.spotify.getSongLyrics.prefetch({
+                    artistName: track.artists[0]?.name as string,
+                    songTitle: track.name,
                   })
                 }}
               >
@@ -125,7 +133,7 @@ const SingleAlbumPage: NextPage<Props> = (
           />
         </ScrollArea>
       </main>
-      <Player songList={tracks as SimplifiedTrack[]} />
+      <Player songList={tracks as SimplifiedTrack[]} showSkipControls />
     </div>
   )
 }
