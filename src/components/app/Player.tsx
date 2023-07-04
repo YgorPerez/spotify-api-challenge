@@ -5,8 +5,7 @@ import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/Spotif
 
 const Player: FC<{
   songList: SimplifiedTrack[]
-  showSkipControls?: boolean
-}> = ({ songList, showSkipControls = false }) => {
+}> = ({ songList }) => {
   const [currentSongIndex, setSongIndex] = useState(0)
 
   const goToNextSong = () => {
@@ -23,13 +22,13 @@ const Player: FC<{
 
   const currentSong = songList[currentSongIndex]
   const songSource = currentSong?.preview_url
-
+  const isPlaylist = songList.length > 1
   return (
     <div>
       {songSource ? (
         <div>
           <p className='fixed bottom-24 w-full text-center text-2xl text-white'>
-            {songList.length > 1 && (
+            {isPlaylist && (
               <span className='text-gray-400'>{currentSongIndex + 1}. </span>
             )}
             {currentSong.name}
@@ -38,7 +37,7 @@ const Player: FC<{
             preload='metadata'
             className='fixed bottom-0'
             src={songSource}
-            showSkipControls={showSkipControls}
+            showSkipControls={isPlaylist}
             volume={0.3}
             onClickNext={goToNextSong}
             onClickPrevious={goToPreviousSong}
@@ -48,7 +47,8 @@ const Player: FC<{
         </div>
       ) : (
         <p className='fixed bottom-24 w-full text-center text-2xl text-white'>
-          This song doesn&apos;t have a preview available
+          This {isPlaylist ? 'album' : 'song'} doesn&apos;t have a preview
+          available
         </p>
       )}
     </div>

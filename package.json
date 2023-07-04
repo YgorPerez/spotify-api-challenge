@@ -29,7 +29,7 @@
     "@vercel/analytics": "^1.0.1",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
-    "genius-lyrics-ts": "^0.0.6",
+    "genius-lyrics-ts": "^0.1",
     "lucide-react": "^0.244.0",
     "next": "13.4.4",
     "next-axiom": "^0.17.0",

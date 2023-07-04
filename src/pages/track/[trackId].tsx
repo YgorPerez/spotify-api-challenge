@@ -89,6 +89,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 
   const trpc = ssrHelper(context)
   const track = await trpc.spotify.getTrack.fetch({ trackId })
+
   await trpc.spotify.getSongLyrics.prefetch({
     artistName: track.track.artists[0]?.name as string,
     songTitle: track.track.name,

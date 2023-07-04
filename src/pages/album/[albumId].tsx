@@ -98,9 +98,7 @@ const SingleAlbumPage: NextPage<Props> = (
         <ScrollArea className='ml-16 max-h-[75vh]'>
           <ol className='mx-2 mb-4 list-decimal text-light-gray'>
             {tracks?.map((track, index) => (
-              <div
-                key={index}
-              >
+              <div key={index}>
                 <Track track={track as SimplifiedTrack} />
               </div>
             ))}
@@ -114,7 +112,7 @@ const SingleAlbumPage: NextPage<Props> = (
           />
         </ScrollArea>
       </main>
-      <Player songList={tracks as SimplifiedTrack[]} showSkipControls />
+      <Player songList={tracks as SimplifiedTrack[]} />
     </div>
   )
 }
