@@ -6,7 +6,7 @@ export default function useGetLastSearchedAlbum(lastSearchTerm: string) {
 
   const lastSearchedPages = utils.spotify.getSearch.getInfiniteData({
     searchTerm: lastSearchTerm,
-    limit: 15,
+    limit: 5,
   })?.pages
 
   const lastSearchedAlbums: SimplifiedAlbum[] = []
