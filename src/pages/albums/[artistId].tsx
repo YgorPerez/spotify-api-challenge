@@ -110,8 +110,6 @@ const SingleArtistPage: NextPage<Props> = (
   )
 }
 
-export const runtime = 'experimental-edge'
-
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context: GetServerSidePropsContext,
 ) => {
