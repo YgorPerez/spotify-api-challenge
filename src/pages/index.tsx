@@ -1,3 +1,4 @@
+import useGetLastSearchedAlbum from '@hooks/useGetLastSearchedAlbums'
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -7,7 +8,6 @@ import type {
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect, useRef } from 'react'
-import { type SimplifiedAlbum } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
 import {
   useDebounce,
   useIntersectionObserver,
@@ -18,7 +18,6 @@ import SpotifyCard from '../components/app/SpotifyCard'
 import Footer from '../components/ui/Footer'
 import Header from '../components/ui/Header'
 import useGetSearch from '../hooks/useGetSearch'
-import { api } from '../utils/api'
 import { ssrHelper } from '../utils/ssrHelper'
 import { stringOrNull } from '../utils/stringOrNull'
 
@@ -96,25 +95,7 @@ const SearchPage: NextPage<Props> = (
     }
   }, [searchTerm, setLastSearchTerm, shouldDisplayData])
 
-  const utils = api.useContext()
-
-  const lastSearchedPages = utils.spotify.getSearch.getInfiniteData({
-    searchTerm: lastSearchTerm,
-    limit: searchLimit,
-  })?.pages
-
-  const lastSearchedAlbums: SimplifiedAlbum[] = []
-  if (lastSearchedPages) {
-    for (let i = lastSearchedPages.length - 1; i >= 0; i--) {
-      if (lastSearchedPages[i]?.albums) {
-        lastSearchedPages[i]?.albums?.map(album => {
-          if (album) {
-            lastSearchedAlbums.push(album)
-          }
-        })
-      }
-    }
-  }
+  const lastSearchedAlbums = useGetLastSearchedAlbum(lastSearchTerm)
 
   return (
     <>
@@ -153,12 +134,12 @@ const SearchPage: NextPage<Props> = (
                     <Fragment key={index}>
                       {searchResults.albums?.map(album => (
                         <div key={album.id}>
-                          <SpotifyCard cardData={album} key={album.id} />
+                          <SpotifyCard cardData={album} />
                         </div>
                       ))}
                       {searchResults.tracks?.map(track => (
                         <div key={track.id}>
-                          <SpotifyCard cardData={track} key={track.id} />
+                          <SpotifyCard cardData={track} />
                         </div>
                       ))}
                       {searchResults.artists?.map(artist => (
@@ -173,7 +154,7 @@ const SearchPage: NextPage<Props> = (
                   !shouldDisplayLoadingData &&
                   lastSearchedAlbums?.map(album => (
                     <div key={album.id}>
-                      <SpotifyCard cardData={album} key={album.id} />
+                      <SpotifyCard cardData={album} />
                     </div>
                   ))}
 

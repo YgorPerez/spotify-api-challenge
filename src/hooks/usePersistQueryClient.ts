@@ -21,7 +21,7 @@ const usePersistQueryClient = () => {
     persistQueryClient({
       queryClient,
       persister: localStoragePersister,
-      maxAge: Infinity,
+      maxAge: 60 * 60 * 24,
     })
   })
 }

@@ -1,6 +1,7 @@
 import LoadMore from '@components/app/LoadMore'
 import ScrollArea from '@components/ui/ScrollArea'
 import Separator from '@components/ui/Separator'
+import useGetArtist from '@hooks/useGetArtist'
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
@@ -11,7 +12,6 @@ import GoBack from '../../components/app/GoBack'
 import SpotifyCard from '../../components/app/SpotifyCard'
 import Header from '../../components/ui/Header'
 import useGetArtistsAlbums from '../../hooks/useGetArtistAlbums'
-import { api } from '../../utils/api'
 import { ssrHelper } from '../../utils/ssrHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
 
@@ -44,15 +44,7 @@ const SingleArtistPage: NextPage<Props> = (
     data: getAritstData,
     isFetching: isFetchingArtist,
     isError: isErrorArtist,
-  } = api.spotify.getArtist.useQuery(
-    {
-      artistId: artistId as string,
-    },
-    {
-      staleTime: Infinity,
-      enabled: Boolean(artistId),
-    },
-  )
+  } = useGetArtist(artistId as string)
 
   const {
     data: getArtistAlbumsData,

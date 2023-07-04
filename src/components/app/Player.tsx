@@ -46,7 +46,7 @@ const Player: FC<{
           />
         </div>
       ) : (
-        <p className='fixed bottom-24 w-full text-center text-2xl text-white'>
+        <p className='fixed bottom-16 w-full text-center text-2xl text-white'>
           This {isPlaylist ? 'album' : 'song'} doesn&apos;t have a preview
           available
         </p>

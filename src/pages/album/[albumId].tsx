@@ -2,6 +2,7 @@ import ScrollArea from '@/components/ui/ScrollArea'
 import Separator from '@/components/ui/Separator'
 import LoadMore from '@components/app/LoadMore'
 import Player from '@components/app/Player'
+import useGetAlbum from '@hooks/useGetAlbum'
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { type InferGetServerSidePropsType, type NextPage } from 'next'
 import Error from 'next/error'
@@ -13,7 +14,6 @@ import SpotifyCard from '../../components/app/SpotifyCard'
 import Track from '../../components/app/Track'
 import Header from '../../components/ui/Header'
 import useGetAlbumTracks from '../../hooks/useGetAlbumTracks'
-import { api } from '../../utils/api'
 import { ssrHelper } from '../../utils/ssrHelper'
 import { stringOrNull } from '../../utils/stringOrNull'
 
@@ -46,12 +46,7 @@ const SingleAlbumPage: NextPage<Props> = (
     data: getAlbumData,
     isFetching: isFetchingAlbum,
     isError: isErrorAlbum,
-  } = api.spotify.getAlbum.useQuery(
-    {
-      albumId: albumId as string,
-    },
-    { staleTime: Infinity },
-  )
+  } = useGetAlbum(albumId as string)
 
   const {
     data: getAlbumTracksData,
@@ -112,7 +107,7 @@ const SingleAlbumPage: NextPage<Props> = (
           />
         </ScrollArea>
       </main>
-      <Player songList={tracks as SimplifiedTrack[]} />
+      {tracks && <Player songList={tracks as SimplifiedTrack[]} />}
     </div>
   )
 }

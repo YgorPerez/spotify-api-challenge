@@ -89,7 +89,7 @@ export const spotifyRouter = createTRPCRouter({
       const { cursor, albumId, limit } = input
       const tracks = await ctx.spotifyApi.albums.getAlbumTracks(albumId, {
         offset: cursor ?? 0,
-        limit: limit || 20,
+        limit: limit || 15,
       })
       if (!tracks) {
         throw new TRPCError({
@@ -183,7 +183,7 @@ export const spotifyRouter = createTRPCRouter({
       const { cursor, artistId, limit } = input
       const albums = await ctx.spotifyApi.artists.getArtistAlbums(artistId, {
         offset: cursor ?? 0,
-        limit: limit || 20,
+        limit: limit || 15,
       })
       const validatedAlbums = PagingSimplifiedAlbumsSchema.safeParse(albums)
       if (!validatedAlbums.success) {
@@ -203,7 +203,7 @@ export const spotifyRouter = createTRPCRouter({
           ),
         ) || undefined
 
-      return { albums: data?.items, NextCursor: albumOffset }
+      return { albums: data?.items, nextCursor: albumOffset }
     }),
   getTrack: protectedTokenProcedure
     .meta({ description: 'Gets a track using an id' })
@@ -289,7 +289,7 @@ export const spotifyRouter = createTRPCRouter({
         (!mediaType && (cursor ? Boolean(cursor.albums) : true))
       ) {
         promises[0] = ctx.spotifyApi.search.searchAlbums(searchTerm, {
-          limit: limit || 20,
+          limit: limit || 15,
           offset: cursor?.albums ?? 0,
         })
       }
@@ -298,7 +298,7 @@ export const spotifyRouter = createTRPCRouter({
         (!mediaType && (cursor ? Boolean(cursor.tracks) : true))
       ) {
         promises[1] = ctx.spotifyApi.search.searchTracks(searchTerm, {
-          limit: limit || 20,
+          limit: limit || 15,
           offset: cursor?.tracks ?? 0,
           include_external: includeExternalAudio ? 'audio' : undefined,
         })
@@ -308,7 +308,7 @@ export const spotifyRouter = createTRPCRouter({
         (!mediaType && (cursor ? Boolean(cursor.artists) : true))
       ) {
         promises[2] = ctx.spotifyApi.search.searchArtists(searchTerm, {
-          limit: limit || 20,
+          limit: limit || 15,
           offset: cursor?.artists ?? 0,
         })
       }
