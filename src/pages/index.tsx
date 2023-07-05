@@ -42,7 +42,7 @@ const SearchPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const router = useRouter()
-  const queryRouter = router.query.search as string
+  const queryRouter = router.query.search as string | undefined
 
   const { t } = useTranslation()
 
@@ -58,7 +58,7 @@ const SearchPage: NextPage<Props> = (
   )
 
   const searchTerm = stringOrNull(
-    props.searchTerm ? props.searchTerm.trim() : queryRouter.trim(),
+    props.searchTerm ? props.searchTerm.trim() : queryRouter?.trim(),
   )
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
 
