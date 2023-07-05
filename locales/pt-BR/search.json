@@ -1,0 +1,9 @@
+{
+  "title": "Página de busca",
+  "description": "Busque por artistas, músicas, albuns e escute pro previas das músicas enqunto vê suas letras.",
+  "search-for": "Busque por artistas, músicas ou albuns",
+  "input-placeholder": "Digite...",
+  "results-for": "Resultados encontrados para: ",
+  "no-results": "Nenhum resultado encontrado para: ",
+  "last-searched": "Buscado recentemente"
+}

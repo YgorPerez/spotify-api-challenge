@@ -3,6 +3,7 @@ import { api } from '@utils/api'
 import formatFollowers from '@utils/formatFollowers'
 import formatText from '@utils/formatText'
 import { log } from 'next-axiom'
+import useTranslation from 'next-translate/useTranslation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { type FC } from 'react'
@@ -91,6 +92,8 @@ const SpotifyCard: React.FC<{
   cardData: CardData
   big?: boolean
 }> = ({ cardData, big }) => {
+  const { t } = useTranslation()
+
   //iife
   const { cardMainData, cardSubData } = (() => {
     if (cardData) {
@@ -136,7 +139,7 @@ const SpotifyCard: React.FC<{
             slugUrl: 'albums',
           },
           cardSubData: {
-            name: `Followers: ${formatFollowers(
+            name: `${t('common:followers')}: ${formatFollowers(
               cardData.followers.total || 0,
             )}`,
           },

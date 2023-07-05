@@ -1,0 +1,19 @@
+{
+  "nothing-load": "Nada mais para carregar",
+  "loading": "Carregando...",
+  "load-more": "Carregar mais",
+  "this": "Esse",
+  "song": "música",
+  "no-song-preview": "não tem uma prévia disponível",
+  "server-error": "Erro interno do servidor",
+  "lyrics-not-found": "Nenhuma letra encontrada",
+  "server-error-extended": "O servidor se deparou com um erro interno. Por favor tente novamente",
+  "page-not-found": "Página não encotrada",
+  "not-found-suggestion": "Por favor cheque o endereço (URL) e tente novamente.",
+  "go-home": "Voltar para o ínicio",
+  "go-back": "Voltar",
+  "try-again": "Tentar novamente",
+  "followers": "Seguidores",
+  "home-try-again": "Por favor volte para o ínicio e tente novamente.",
+  "generic-error": "Ops ocorreu um erro..."
+}

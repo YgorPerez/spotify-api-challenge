@@ -1,5 +1,6 @@
 import ScrollArea from '@components/ui/ScrollArea'
 import Skeleton from '@components/ui/Skeleton'
+import useTranslation from 'next-translate/useTranslation'
 import { type FC } from 'react'
 
 const Lyrics: FC<{
@@ -7,6 +8,8 @@ const Lyrics: FC<{
   isFetching: boolean
   isError: boolean
 }> = ({ lyrics, isFetching, isError }) => {
+  const { t } = useTranslation()
+
   if (!lyrics && !isError && isFetching) {
     return (
       <div className='grid w-1/2 place-items-center'>
@@ -26,7 +29,7 @@ const Lyrics: FC<{
     return (
       <div className='grid w-1/2 place-items-center'>
         <p className='text-center text-2xl text-white 2xl:text-4xl'>
-          No lyrics found
+          {t('common:loading')}
         </p>
       </div>
     )

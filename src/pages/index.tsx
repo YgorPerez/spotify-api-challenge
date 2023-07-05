@@ -5,6 +5,7 @@ import type {
   InferGetServerSidePropsType,
   NextPage,
 } from 'next'
+import useTranslation from 'next-translate/useTranslation'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect, useRef } from 'react'
@@ -41,6 +42,9 @@ const SearchPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const router = useRouter()
+
+  const { t } = useTranslation()
+
   const ref = useRef<HTMLDivElement | null>(null)
   const inView = useIntersectionObserver(ref, {
     threshold: 0,
@@ -56,7 +60,6 @@ const SearchPage: NextPage<Props> = (
     props.searchTerm ? props.searchTerm : router.query.search,
   )
   const debouncedSearchTerm = useDebounce(searchTerm, 500)
-  const isUserTyping = searchTerm !== debouncedSearchTerm
 
   const searchOptions = {
     searchTerm: debouncedSearchTerm as string,
@@ -84,10 +87,16 @@ const SearchPage: NextPage<Props> = (
     throw new Error(error.message)
   }
 
+  const isUserTyping = searchTerm !== debouncedSearchTerm
   const isLoadingFirstPage = (isFetching && !isFetchingNextPage) || isUserTyping
   const shouldDisplayLoadingData = (isFetching || isUserTyping) && searchTerm
   const searchData = allSearchData?.pages
-  const shouldDisplayData = searchData && searchTerm && !isLoadingFirstPage
+  const shouldDisplayData =
+    (searchData?.[0]?.albums?.[0] ||
+      searchData?.[0]?.tracks?.[0] ||
+      searchData?.[0]?.artists?.[0]) &&
+    searchTerm &&
+    !isLoadingFirstPage
 
   useEffect(() => {
     if (shouldDisplayData) {
@@ -100,11 +109,8 @@ const SearchPage: NextPage<Props> = (
   return (
     <>
       <Head>
-        <title>Search Page</title>
-        <meta
-          name='description'
-          content='You can search for albums, songs and artists from spotify.'
-        />
+        <title>{t('search:title')}</title>
+        <meta name='description' content={t('search:description')} />
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <div className='bg-dark-gray'>
@@ -116,15 +122,15 @@ const SearchPage: NextPage<Props> = (
                 <SearchForm search={searchTerm} />
                 {shouldDisplayData || shouldDisplayLoadingData ? (
                   <h1 className='my-4 mt-14 text-3xl text-white-gray'>
-                    Results found for &quot;{searchTerm}&quot;
+                    {t('search:results-for')} &quot;{searchTerm}&quot;
                   </h1>
                 ) : searchTerm ? (
                   <h1 className='my-4 mt-14 text-3xl text-white-gray'>
-                    No results found for &quot;{searchTerm}&quot;
+                    {t('search:no-results')} &quot;{searchTerm}&quot;
                   </h1>
                 ) : lastSearchedAlbums ? (
                   <h1 className='my-4 mt-14 text-3xl text-white-gray'>
-                    Recently searched albums
+                    {t('search:last-searched')}
                   </h1>
                 ) : null}
               </div>
@@ -158,7 +164,9 @@ const SearchPage: NextPage<Props> = (
                     </div>
                   ))}
 
-                {!hasNextPage && !isFetching && 'Nothing more to load'}
+                {!hasNextPage && !isFetching && shouldDisplayData && (
+                  <p className='text-white'>{t('common:nothing-load')}</p>
+                )}
               </div>
             </div>
           </main>

@@ -1,3 +1,4 @@
+import useTranslation from 'next-translate/useTranslation'
 import { useState, type FC } from 'react'
 import AudioPlayer from 'react-h5-audio-player'
 import 'react-h5-audio-player/lib/styles.css'
@@ -7,6 +8,7 @@ const Player: FC<{
   songList: SimplifiedTrack[]
 }> = ({ songList }) => {
   const [currentSongIndex, setSongIndex] = useState(0)
+  const { t } = useTranslation()
 
   const goToNextSong = () => {
     setSongIndex(currentSongIndex =>
@@ -23,6 +25,7 @@ const Player: FC<{
   const currentSong = songList[currentSongIndex]
   const songSource = currentSong?.preview_url
   const isPlaylist = songList.length > 1
+
   return (
     <div>
       {songSource ? (
@@ -47,8 +50,8 @@ const Player: FC<{
         </div>
       ) : (
         <p className='fixed bottom-16 w-full text-center text-2xl text-white'>
-          This {isPlaylist ? 'album' : 'song'} doesn&apos;t have a preview
-          available
+          {t('common:this')} {isPlaylist ? 'album' : t('common:song')}{' '}
+          {t('common:no-song-preview')}
         </p>
       )}
     </div>

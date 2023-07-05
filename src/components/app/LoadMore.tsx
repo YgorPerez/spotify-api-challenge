@@ -1,5 +1,6 @@
 import Button from '@components/ui/Button'
 import { Loader2 } from 'lucide-react'
+import useTranslation from 'next-translate/useTranslation'
 
 interface Props {
   fetchNextPage: () => void
@@ -12,6 +13,8 @@ const LoadMore: React.FC<Props> = ({
   isLoading,
   hasNextPage,
 }) => {
+  const { t } = useTranslation()
+
   return (
     <Button
       variant='secondary'
@@ -21,12 +24,12 @@ const LoadMore: React.FC<Props> = ({
       {isLoading ? (
         <>
           <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-          Loading...
+          {t('common:loading')}
         </>
       ) : hasNextPage ? (
-        <>Load more</>
+        <>{t('common:load-more')}</>
       ) : (
-        <>Nothing more to load</>
+        <>{t('common:nothing-load')}</>
       )}
     </Button>
   )
