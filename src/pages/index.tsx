@@ -59,7 +59,7 @@ const SearchPage: NextPage<Props> = (
   const searchTerm = stringOrNull(
     props.searchTerm ? props.searchTerm : router.query.search,
   )
-  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)?.trim()
 
   const searchOptions = {
     searchTerm: debouncedSearchTerm as string,

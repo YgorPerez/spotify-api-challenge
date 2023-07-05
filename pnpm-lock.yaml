@@ -10,6 +10,9 @@ patchedDependencies:
     path: patches/react-h5-audio-player@3.8.6.patch
 
 dependencies:
+  '@clerk/localizations':
+    specifier: ^1.22.0
+    version: 1.22.0(react@18.2.0)
   '@clerk/nextjs':
     specifier: ^4.21.1
     version: 4.21.1(next@13.4.4)(react-dom@18.2.0)(react@18.2.0)
@@ -246,6 +249,16 @@ packages:
       tslib: 2.4.1
     dev: false
 
+  /@clerk/localizations@1.22.0(react@18.2.0):
+    resolution: {integrity: sha512-iCU3ccNSOTjg8QMfwq6jkM3/fuF2jxuwOFDt/8/TFNHyemWFpqpAA5lpqJeS7G1nl0lLM23643DUd5JdGhri/Q==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      '@clerk/types': 3.46.1
+      react: 18.2.0
+    dev: false
+
   /@clerk/nextjs@4.21.1(next@13.4.4)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-Kkx8rp48jm0kWrFhMtFUTolitA4PVd2OEjxanhfmzlIhYcnH2ji/8UnH8U/dG3BvFcSeRwM1QO9wM4RsdXIKQg==}
     engines: {node: '>=14'}
@@ -278,6 +291,13 @@ packages:
 
   /@clerk/types@3.42.0:
     resolution: {integrity: sha512-wEiBJFT3/Itzmu3jQfHK4zCMTqiE4fUheB1fpYx8JE2q498wzjTEHpglgxl88c0tudtWomUKqXIMJnBBEVVZBg==}
+    engines: {node: '>=14'}
+    dependencies:
+      csstype: 3.1.1
+    dev: false
+
+  /@clerk/types@3.46.1:
+    resolution: {integrity: sha512-IA/iSXJJZym4Z6f9OcT9OJayK2opVhxUVJky15aY4iVsJCPScgApBuuzC7N4vfXwA6RI/wGebFbvmsEQ3oI/UA==}
     engines: {node: '>=14'}
     dependencies:
       csstype: 3.1.1

@@ -10,6 +10,7 @@
     "tailwind-config-viewer": "tailwind-config-viewer -o -p 3005 -c tailwind.config.cjs"
   },
   "dependencies": {
+    "@clerk/localizations": "^1.22.0",
     "@clerk/nextjs": "^4.21.1",
     "@next/bundle-analyzer": "^13.4.5",
     "@radix-ui/react-label": "^2.0.2",

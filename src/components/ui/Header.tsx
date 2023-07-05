@@ -8,7 +8,13 @@ const Header: FC = () => {
     <header className='h-16 w-16 pt-8'>
       <div className='ml-6 block'>
         <Link href={`/`}>
-          <Image src={spotifyLogo} width='64' height='64' alt='Spotify logo' />
+          <Image
+            src={spotifyLogo}
+            width='64'
+            height='64'
+            alt='Spotify logo'
+            placeholder='blur'
+          />
         </Link>
       </div>
     </header>
