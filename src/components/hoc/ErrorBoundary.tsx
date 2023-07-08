@@ -1,29 +1,29 @@
-import Button from '@components/ui/Button'
-import { log } from 'next-axiom'
-import Link from 'next/link'
-import { Component, type ErrorInfo, type ReactNode } from 'react'
+import { Button } from '@components/ui/Button';
+import { log } from 'next-axiom';
+import Link from 'next/link';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 interface Props {
-  children?: ReactNode
+  children?: ReactNode;
 }
 
 interface State {
-  hasError: boolean
+  hasError: boolean;
 }
 
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
-  }
+  };
 
   public static getDerivedStateFromError(_: Error): State {
     // Update state so the next render will show the fallback UI.
-    return { hasError: true }
+    return { hasError: true };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo)
-    log.error(`Uncaught error: ${String(error)}, ${String(errorInfo)}`)
+    console.error('Uncaught error:', error, errorInfo);
+    log.error(`Uncaught error: ${String(error)}, ${String(errorInfo)}`);
   }
 
   public render() {
@@ -56,11 +56,11 @@ class ErrorBoundary extends Component<Props, State> {
             </main>
           </div>
         </div>
-      )
+      );
     }
 
-    return this.props.children
+    return this.props.children;
   }
 }
 
-export default ErrorBoundary
+export default ErrorBoundary;
