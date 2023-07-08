@@ -13,7 +13,8 @@
   "go-home": "Go back home",
   "go-back": "Go back",
   "try-again": "Try again",
-  "followers": "Followers",
+  "fans": "Fans",
+  "artist-picture": "Artist picture",
   "home-try-again": "Please go back to the home and try again.",
   "generic-error": "Oops an error ocurred..."
 }

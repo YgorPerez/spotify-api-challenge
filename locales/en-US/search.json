@@ -3,7 +3,8 @@
   "description": "Search for artists, albums or tracks and listen to the songs previews while reading it's lyrics.",
   "search-for": "Search for artists, albums or tracks",
   "input-placeholder": "Start typing...",
-  "results-for": "Results found for: ",
-  "no-results": "No results for: ",
+  "results-for": "Results found for ",
+  "no-results": "No results for ",
+  "did-not-search": "You didn't search for anything yet",
   "last-searched": "Recently searched albums"
 }

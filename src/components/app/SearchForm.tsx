@@ -1,12 +1,12 @@
-import Label from '@components/ui/Label'
-import useTranslation from 'next-translate/useTranslation'
-import { useRouter } from 'next/router'
-import { useId, type FC } from 'react'
-import { useEffectOnce } from 'usehooks-ts'
+import Label from '@components/ui/Label';
+import useTranslation from 'next-translate/useTranslation';
+import { useRouter } from 'next/router';
+import { useId, type FC } from 'react';
+import { useEffectOnce } from 'usehooks-ts';
 
 const SearchForm: FC<{ search: string | null }> = ({ search }) => {
-  const router = useRouter()
-  const formId = useId()
+  const router = useRouter();
+  const formId = useId();
   const setSearchQueryParam = (value: string) => {
     void router.push(
       {
@@ -17,53 +17,58 @@ const SearchForm: FC<{ search: string | null }> = ({ search }) => {
       },
       undefined,
       { shallow: true, scroll: false },
-    )
-  }
+    );
+  };
 
   // performance optimization, it's much faster to change
   useEffectOnce(() => {
-    !search && setSearchQueryParam('')
-  })
+    !search && setSearchQueryParam('');
+  });
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   function submitHandler(e: React.FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
   }
   return (
     <>
       <form
         onSubmit={e => {
-          submitHandler(e)
+          submitHandler(e);
         }}
       >
-        <Label
-          className='ml-2 text-left text-xl text-white-gray'
-          htmlFor={`search-${formId}`}
-        >
-          {t('search:search-for')}
-        </Label>
-        <input
-          type='search'
-          autoFocus
-          id={`search-${formId}`}
-          placeholder={t('search:input-placeholder')}
-          className='search-cancel:invert-100 -m-px mt-4 h-16 w-full border-separate bg-dark-gray p-2 pb-8 text-left text-5xl font-bold text-white-gray outline-none placeholder:text-light-gray placeholder:opacity-100 search-cancel:brightness-[1.08] search-cancel:contrast-[1.01] search-cancel:hue-rotate-[336deg] search-cancel:saturate-[0] search-cancel:sepia-[.04] focus:border-b-2 focus:border-light-gray 2xl:focus:border-b-4'
-          defaultValue={search || ''}
-          onInput={e => {
-            setSearchQueryParam(e.currentTarget.value)
-          }}
-          // set cursor to the end
-          onFocus={e =>
-            e.currentTarget.setSelectionRange(
-              e.currentTarget.value.length,
-              e.currentTarget.value.length,
-            )
-          }
-        />
+        <div className='mt-6 flex justify-center text-white-gray sm:mt-0 sm:block sm:text-left'>
+          <Label
+            className='ml-2 w-4/5 sm:text-left sm:text-xl'
+            htmlFor={`search-${formId}`}
+          >
+            {t('search:search-for')}
+          </Label>
+        </div>
+        <div className='flex justify-center'>
+          <input
+            type='search'
+            autoFocus
+            id={`search-${formId}`}
+            placeholder={t('search:input-placeholder')}
+            className='search-cancel:invert-100 mt-4 h-8 w-4/5 border-separate bg-dark-gray p-1 pb-2 text-2xl font-bold text-white-gray outline-none placeholder:text-light-gray placeholder:opacity-100 search-cancel:ml-2 search-cancel:brightness-[1.08] search-cancel:contrast-[1.01] search-cancel:hue-rotate-[336deg] search-cancel:saturate-[0] search-cancel:sepia-[.04]  focus:border-b-2 focus:border-light-gray sm:-m-px sm:mt-4 sm:h-16 sm:w-full sm:p-3 sm:pb-4 sm:text-left sm:text-4xl sm:focus:border-b-4 lg:pb-8 xl:text-5xl'
+            defaultValue={search || ''}
+            onInput={e => {
+              setSearchQueryParam(e.currentTarget.value.trim().toLowerCase());
+            }}
+            maxLength={20}
+            // set cursor to the end
+            onFocus={e =>
+              e.currentTarget.setSelectionRange(
+                e.currentTarget.value.length,
+                e.currentTarget.value.length,
+              )
+            }
+          />
+        </div>
       </form>
     </>
-  )
-}
+  );
+};
 
-export default SearchForm
+export default SearchForm;

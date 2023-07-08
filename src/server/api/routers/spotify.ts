@@ -1,18 +1,18 @@
-import { env } from '@/env.mjs'
-import { getSpotifyToken } from '@lib/getClerkSpotifyToken'
+import { env } from '@/env.mjs';
+import { getSpotifyToken } from '@lib/getClerkSpotifyToken';
 import {
   TRPCError,
   type inferRouterInputs,
   type inferRouterOutputs,
-} from '@trpc/server'
-import getLyrics from 'genius-lyrics-ts'
+} from '@trpc/server';
+import getLyrics from 'genius-lyrics-ts';
 import type {
   Artist,
   Paging,
   SimplifiedAlbum,
   Track,
-} from 'spotify-web-api-ts-edge/types/types/SpotifyObjects'
-import { z } from 'zod'
+} from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
+import { z } from 'zod';
 import {
   AlbumSchema,
   ArtistSchema,
@@ -23,9 +23,9 @@ import {
   SimplifiedAlbumSchema,
   SimplifiedTrackSchema,
   TrackSchema,
-} from '../../../schema/spotifyApiSchemas'
-import { protectedProcedure, protectedTokenProcedure } from '../middleware'
-import { createTRPCRouter } from '../trpc'
+} from '../../../schema/spotifyApiSchemas';
+import { protectedProcedure, protectedTokenProcedure } from '../middleware';
+import { createTRPCRouter } from '../trpc';
 
 export const spotifyRouter = createTRPCRouter({
   getAlbum: protectedTokenProcedure
@@ -45,16 +45,16 @@ export const spotifyRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const album = await ctx.spotifyApi.albums.getAlbum(input.albumId)
-      const validatedAlbum = AlbumSchema.safeParse(album)
+      const album = await ctx.spotifyApi.albums.getAlbum(input.albumId);
+      const validatedAlbum = AlbumSchema.safeParse(album);
       if (!validatedAlbum.success) {
         throw new TRPCError({
           message: 'returned type from spotify-api.js get album not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedAlbum?.error,
-        })
+        });
       }
-      return { album: validatedAlbum.data }
+      return { album: validatedAlbum.data };
     }),
   getAlbumTracks: protectedTokenProcedure
     .meta({
@@ -86,38 +86,38 @@ export const spotifyRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { cursor, albumId, limit } = input
+      const { cursor, albumId, limit } = input;
       const tracks = await ctx.spotifyApi.albums.getAlbumTracks(albumId, {
         offset: cursor ?? 0,
         limit: limit || 15,
-      })
+      });
       if (!tracks) {
         throw new TRPCError({
           message: "didn't find the tracks",
           code: 'NOT_FOUND',
-        })
+        });
       }
-      const validatedTracks = PagingSimplifiedTracksSchema.safeParse(tracks)
+      const validatedTracks = PagingSimplifiedTracksSchema.safeParse(tracks);
       if (!validatedTracks.success) {
         throw new TRPCError({
           message:
             'returned type from spotify-api.js  get album tracks not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedTracks?.error,
-        })
+        });
       }
-      const { data } = validatedTracks
-      const nextUrl = data?.next && new URL(data.next)
+      const { data } = validatedTracks;
+      const nextUrl = data?.next && new URL(data.next);
       const trackOffset =
         Number(
           new URLSearchParams((nextUrl?.search as string) || undefined).get(
             'offset',
           ),
-        ) || undefined
+        ) || undefined;
       return {
         tracks: validatedTracks.data?.items,
         nextCursor: trackOffset,
-      }
+      };
     }),
   getArtist: protectedTokenProcedure
     .meta({
@@ -136,17 +136,17 @@ export const spotifyRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { artistId } = input
-      const artist = await ctx.spotifyApi.artists.getArtist(artistId)
-      const validatedArtist = ArtistSchema.safeParse(artist)
+      const { artistId } = input;
+      const artist = await ctx.spotifyApi.artists.getArtist(artistId);
+      const validatedArtist = ArtistSchema.safeParse(artist);
       if (!validatedArtist.success) {
         throw new TRPCError({
           message: 'returned type from spotify-api.js get artist not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedArtist?.error,
-        })
+        });
       }
-      return { artist: validatedArtist.data }
+      return { artist: validatedArtist.data };
     }),
   getArtistAlbums: protectedTokenProcedure
     .meta({
@@ -180,30 +180,30 @@ export const spotifyRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { cursor, artistId, limit } = input
+      const { cursor, artistId, limit } = input;
       const albums = await ctx.spotifyApi.artists.getArtistAlbums(artistId, {
         offset: cursor ?? 0,
         limit: limit || 15,
-      })
-      const validatedAlbums = PagingSimplifiedAlbumsSchema.safeParse(albums)
+      });
+      const validatedAlbums = PagingSimplifiedAlbumsSchema.safeParse(albums);
       if (!validatedAlbums.success) {
         throw new TRPCError({
           message:
             'returned type from spotify-api.js  get artist albums not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedAlbums?.error,
-        })
+        });
       }
-      const { data } = validatedAlbums
-      const nextUrl = data?.next && new URL(data.next)
+      const { data } = validatedAlbums;
+      const nextUrl = data?.next && new URL(data.next);
       const albumOffset =
         Number(
           new URLSearchParams((nextUrl?.search as string) || undefined).get(
             'offset',
           ),
-        ) || undefined
+        ) || undefined;
 
-      return { albums: data?.items, nextCursor: albumOffset }
+      return { albums: data?.items, nextCursor: albumOffset };
     }),
   getTrack: protectedTokenProcedure
     .meta({ description: 'Gets a track using an id' })
@@ -214,16 +214,16 @@ export const spotifyRouter = createTRPCRouter({
     )
     .output(z.object({ track: TrackSchema }))
     .query(async ({ ctx, input }) => {
-      const track = await ctx.spotifyApi.tracks.getTrack(input.trackId)
-      const validatedTrack = TrackSchema.safeParse(track)
+      const track = await ctx.spotifyApi.tracks.getTrack(input.trackId);
+      const validatedTrack = TrackSchema.safeParse(track);
       if (validatedTrack.success) {
-        return { track: validatedTrack.data }
+        return { track: validatedTrack.data };
       } else {
         throw new TRPCError({
           message: 'returned type from spotify-api.js get track not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedTrack.error,
-        })
+        });
       }
     }),
   getSearch: protectedTokenProcedure
@@ -277,13 +277,13 @@ export const spotifyRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const { cursor, mediaType, limit, searchTerm, includeExternalAudio } =
-        input
+        input;
       type Promises = [
         Promise<Paging<SimplifiedAlbum>> | undefined,
         Promise<Paging<Track>> | undefined,
         Promise<Paging<Artist>> | undefined,
-      ]
-      const promises: Promises = [undefined, undefined, undefined]
+      ];
+      const promises: Promises = [undefined, undefined, undefined];
       if (
         mediaType?.includes('album') ||
         (!mediaType && (cursor ? Boolean(cursor.albums) : true))
@@ -291,7 +291,7 @@ export const spotifyRouter = createTRPCRouter({
         promises[0] = ctx.spotifyApi.search.searchAlbums(searchTerm, {
           limit: limit || 15,
           offset: cursor?.albums ?? 0,
-        })
+        });
       }
       if (
         mediaType?.includes('track') ||
@@ -301,7 +301,7 @@ export const spotifyRouter = createTRPCRouter({
           limit: limit || 15,
           offset: cursor?.tracks ?? 0,
           include_external: includeExternalAudio ? 'audio' : undefined,
-        })
+        });
       }
       if (
         mediaType?.includes('artist') ||
@@ -310,36 +310,37 @@ export const spotifyRouter = createTRPCRouter({
         promises[2] = ctx.spotifyApi.search.searchArtists(searchTerm, {
           limit: limit || 15,
           offset: cursor?.artists ?? 0,
-        })
+        });
       }
       const [albumsSearchContent, tracksSearchContent, artistsSearchContent] =
-        await Promise.all(promises)
+        await Promise.all(promises);
       const validatedSearchContent = SearchContentSchema.safeParse({
         albums: albumsSearchContent,
         tracks: tracksSearchContent,
         artists: artistsSearchContent,
-      })
+      });
       if (!validatedSearchContent.success) {
+        console.error({albumsSearchContent, tracksSearchContent, artistsSearchContent})
         throw new TRPCError({
           message: 'returned type from spotify-api.js not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedSearchContent.error,
-        })
+        });
       }
-      const { data } = validatedSearchContent
+      const { data } = validatedSearchContent;
 
       const albumOffset =
         Number(
           new URLSearchParams(data?.albums?.next ?? undefined).get('offset'),
-        ) || null
+        ) || null;
       const trackOffset =
         Number(
           new URLSearchParams(data?.tracks?.next ?? undefined).get('offset'),
-        ) || null
+        ) || null;
       const artistOffset =
         Number(
           new URLSearchParams(data?.artists?.next ?? undefined).get('offset'),
-        ) || null
+        ) || null;
 
       const nextCursor =
         !albumOffset && !trackOffset && !artistOffset
@@ -348,13 +349,13 @@ export const spotifyRouter = createTRPCRouter({
               albums: albumOffset,
               tracks: trackOffset,
               artists: artistOffset,
-            }
+            };
       return {
         albums: data?.albums?.items,
         tracks: data?.tracks?.items,
         artists: data?.artists?.items,
         nextCursor,
-      }
+      };
     }),
   getAccessToken: protectedProcedure
     .meta({
@@ -362,8 +363,8 @@ export const spotifyRouter = createTRPCRouter({
     })
     .output(z.string().describe('The accessToken from the user'))
     .query(async ({ ctx }) => {
-      const accessToken = await getSpotifyToken(ctx.auth.userId)
-      return accessToken
+      const accessToken = await getSpotifyToken(ctx.auth.userId);
+      return accessToken;
     }),
   getSongLyrics: protectedTokenProcedure
     .meta({
@@ -377,27 +378,27 @@ export const spotifyRouter = createTRPCRouter({
     )
     .output(z.string().nullable().describe('The lyrics of the song'))
     .query(async ({ input }) => {
-      const { artistName, songTitle } = input
+      const { artistName, songTitle } = input;
 
       const options = {
         apiKey: env.GENIUS_ACCESS_TOKEN,
         title: songTitle,
         artist: artistName,
-      }
+      };
 
-      const lyrics = await getLyrics(options)
+      const lyrics = await getLyrics(options);
 
-      const validatedLyrics = z.string().nullable().safeParse(lyrics)
+      const validatedLyrics = z.string().nullable().safeParse(lyrics);
       if (!validatedLyrics.success) {
         throw new TRPCError({
           message: `Lyrics error on: ${songTitle} from ${artistName}`,
           code: 'INTERNAL_SERVER_ERROR',
-        })
+        });
       }
 
-      return validatedLyrics.data
+      return validatedLyrics.data;
     }),
-})
+});
 
-export type SpotifyRouterInputs = inferRouterInputs<typeof spotifyRouter>
-export type SpotifyRouterOutputs = inferRouterOutputs<typeof spotifyRouter>
+export type SpotifyRouterInputs = inferRouterInputs<typeof spotifyRouter>;
+export type SpotifyRouterOutputs = inferRouterOutputs<typeof spotifyRouter>;

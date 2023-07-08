@@ -4,19 +4,19 @@ module.exports = {
   darkMode: ['class'],
   content: ['./src/pages/**/*.{ts,tsx}', './src/components/**/*.{ts,tsx}'],
   theme: {
+    fontFamily: {
+      body: ['Roboto'],
+    },
     container: {
       center: true,
       padding: '2rem',
-      screens: {
-        '2xl': '1400px',
-      },
     },
     extend: {
       colors: {
-        'light-gray': '#999999',
-        'dark-gray': '#161616',
-        'white-gray': '#fafafa',
-        'opacity-gray': 'rgba(255, 255, 255, 0.5)',
+        'light-gray': 'hsl(var(--light-gray))',
+        'dark-gray': 'hsl(var(--dark-gray))',
+        'white-gray': 'hsl(var(--white-gray))',
+        'opacity-gray': 'hsla(var(--opacity-gray))',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -73,9 +73,10 @@ module.exports = {
     },
   },
   plugins: [
+    require('@tailwindcss/typography'),
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('tailwindcss/plugin')(({ addVariant }) => {
-      addVariant('search-cancel', '&::-webkit-search-cancel-button')
+      addVariant('search-cancel', '&::-webkit-search-cancel-button');
     }),
     // @ts-ignore
     require('tailwindcss-animate'),
@@ -87,4 +88,4 @@ module.exports = {
     // @ts-ignore
     require('tailwindcss-debug-screens'),
   ],
-}
+};

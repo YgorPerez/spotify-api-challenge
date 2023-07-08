@@ -32,7 +32,8 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
-    "**/*.mjs"
+    "**/*.mjs",
+    "i18n.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "i18n.cjs"]
 }

@@ -1,11 +1,11 @@
-import Button from '@components/ui/Button'
-import { Loader2 } from 'lucide-react'
-import useTranslation from 'next-translate/useTranslation'
+import { Button } from '@components/ui/Button';
+import { Loader2 } from 'lucide-react';
+import useTranslation from 'next-translate/useTranslation';
 
 interface Props {
-  fetchNextPage: () => void
-  isLoading: boolean
-  hasNextPage: boolean | undefined
+  fetchNextPage: () => void;
+  isLoading: boolean;
+  hasNextPage: boolean | undefined;
 }
 
 const LoadMore: React.FC<Props> = ({
@@ -13,10 +13,11 @@ const LoadMore: React.FC<Props> = ({
   isLoading,
   hasNextPage,
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <Button
+      className='sm:text-base'
       variant='secondary'
       disabled={isLoading || !hasNextPage}
       onClick={() => fetchNextPage()}
@@ -32,7 +33,7 @@ const LoadMore: React.FC<Props> = ({
         <>{t('common:nothing-load')}</>
       )}
     </Button>
-  )
-}
+  );
+};
 
-export default LoadMore
+export default LoadMore;
