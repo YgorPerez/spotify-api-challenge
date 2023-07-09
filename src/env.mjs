@@ -1,5 +1,5 @@
-import { createEnv } from '@t3-oss/env-nextjs'
-import { z } from 'zod'
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 
 export const env = createEnv({
   skipValidation:
@@ -24,6 +24,7 @@ export const env = createEnv({
     GENIUS_CLIENT_SECRET: z.string(),
     GENIUS_ACCESS_TOKEN: z.string(),
     CLERK_REDIRECT_URI: z.string().url(),
+    REDIS_URL: z.string().url(),
     PORT: z
       .string()
       .optional()
@@ -57,9 +58,10 @@ export const env = createEnv({
     GENIUS_ACCESS_TOKEN: process.env.GENIUS_ACCESS_TOKEN,
     GENIUS_CLIENT_SECRET: process.env.GENIUS_CLIENT_SECRET,
     CLERK_REDIRECT_URI: process.env.CLERK_REDIRECT_URI,
+    REDIS_URL: process.env.REDIS_URL,
     PORT: process.env.PORT,
     ANALYZE: process.env.ANALYZE,
     NODE_ENV: process.env.NODE_ENV,
     VERCEL_URL: process.env.VERCEL_URL,
   },
-})
+});
