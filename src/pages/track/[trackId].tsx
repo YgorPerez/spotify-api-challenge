@@ -68,7 +68,7 @@ const SingleTrackPage: NextPage<Props> = (
           isFetching={isFetchingLyrics}
           isError={isErrorLyrics}
         />
-        <Player songList={[track as SimplifiedTrack]} />
+        {track && <Player songList={[track as SimplifiedTrack]} />}
       </main>
     </div>
   );
