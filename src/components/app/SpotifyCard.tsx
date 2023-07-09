@@ -265,13 +265,12 @@ const CardMain: FC<{
       ) : (
         <div className='flex flex-col items-center justify-center'>
           <Skeleton
-            className='h-full min-h-[64px] w-full min-w-[64px]
-              rounded-none sm:min-h-[320px] sm:min-w-[320px]
+            className='min-h-[300px] min-w-[300px] rounded-none lg:h-full lg:min-h-[320px] lg:w-full lg:min-w-[320px]
               2xl:min-h-[448px] 2xl:min-w-[448px]'
           />
-          <div className='mb-2 mt-7 flex flex-col items-center'>
-            <Skeleton className='h-7 w-[64px] sm:w-[250px]' />
-            <Skeleton className='mt-5 h-5 w-[64px] sm:w-[200px]' />
+          <div className='mb-2 mt-5 flex flex-col items-center lg:mt-7'>
+            <Skeleton className='h-6 w-[250px] lg:h-7 lg:w-[250px]' />
+            <Skeleton className='mt-5 h-5 w-[230px] lg:w-[200px]' />
           </div>
         </div>
       )}

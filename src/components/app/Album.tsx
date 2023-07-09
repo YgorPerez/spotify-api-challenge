@@ -31,11 +31,9 @@ const Album: FC<{ album: AlbumType | null }> = ({ album }) => {
 
   if (!album) {
     return (
-      <div className='flex w-4/5 items-center justify-between lg:min-w-[28rem] lg:max-w-lg xl:ml-8 xl:min-w-[36rem] xl:max-w-2xl 2xl:min-w-[48rem] 2xl:max-w-5xl'>
-        <li className='py-1 text-center text-lg 2xl:mb-1 2xl:text-2xl'>
-          <Skeleton className='mb-1 ml-4 h-4 w-[70ch] 2xl:mb-[0.575rem] 2xl:h-6' />
-        </li>
-      </div>
+      <li className='ml-8 w-[85vw] py-1 text-center text-lg lg:w-[55vw] 2xl:mb-1 2xl:text-2xl'>
+        <Skeleton className='mb-3 ml-4 h-4 w-[calc(100vw_-_6rem)] lg:w-[calc(55vw_-_4rem)] 2xl:mb-[0.575rem] 2xl:h-6' />
+      </li>
     );
   }
   return (

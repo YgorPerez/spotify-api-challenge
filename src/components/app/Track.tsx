@@ -33,8 +33,8 @@ const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
 
   if (!track) {
     return (
-      <li className='ml-8 text-base sm:text-xl 2xl:text-2xl'>
-        <div className='my-3 flex w-[85vw] justify-between lg:w-[55vw] 2xl:mb-[1.125rem]'>
+      <li className='my-4 ml-8 text-base sm:text-xl 2xl:text-2xl'>
+        <div className='flex w-[85vw] justify-between lg:w-[55vw] 2xl:mb-[1.125rem]'>
           <Skeleton className='ml-4 h-4 w-[28ch] sm:w-[40ch] lg:w-[50ch] xl:w-[60ch] 2xl:h-5' />
           <Skeleton className='h-4 w-[4ch] lg:mr-4 2xl:h-5' />
         </div>

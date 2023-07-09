@@ -12,17 +12,17 @@ const Lyrics: FC<{
 
   if (!lyrics && !isError && isFetching) {
     return (
-      <div className='grid w-1/2 place-items-center'>
-        <Skeleton className='h-5 w-[80ch] 2xl:h-6' />
-        <Skeleton className='h-5 w-[80ch] 2xl:h-6' />
-        <Skeleton className='h-5 w-[80ch] 2xl:h-6' />
-        <Skeleton className='h-5 w-[80ch] 2xl:h-6' />
-        <Skeleton className='h-5 w-[80ch] 2xl:h-6' />
-        <Skeleton className='h-5 w-[80ch] 2xl:h-6' />
-        <Skeleton className='h-5 w-[80ch] 2xl:h-6' />
-        <Skeleton className='h-5 w-[80ch] 2xl:h-6' />
-        <Skeleton className='h-5 w-[80ch] 2xl:h-6' />
-        <Skeleton className='h-5 w-[80ch] 2xl:h-6' />
+      <div className='grid w-full place-items-center lg:w-1/2'>
+        <Skeleton className='my-2 h-5 w-[28ch] sm:w-[55ch] lg:my-0 lg:w-[60ch] xl:w-[80ch] 2xl:h-6' />
+        <Skeleton className='my-2 h-5 w-[28ch] sm:w-[55ch] lg:my-0 lg:w-[60ch] xl:w-[80ch] 2xl:h-6' />
+        <Skeleton className='my-2 h-5 w-[28ch] sm:w-[55ch] lg:my-0 lg:w-[60ch] xl:w-[80ch] 2xl:h-6' />
+        <Skeleton className='my-2 h-5 w-[28ch] sm:w-[55ch] lg:my-0 lg:w-[60ch] xl:w-[80ch] 2xl:h-6' />
+        <Skeleton className='my-2 h-5 w-[28ch] sm:w-[55ch] lg:my-0 lg:w-[60ch] xl:w-[80ch] 2xl:h-6' />
+        <Skeleton className='my-2 h-5 w-[28ch] sm:w-[55ch] lg:my-0 lg:w-[60ch] xl:w-[80ch] 2xl:h-6' />
+        <Skeleton className='my-2 h-5 w-[28ch] sm:w-[55ch] lg:my-0 lg:w-[60ch] xl:w-[80ch] 2xl:h-6' />
+        <Skeleton className='my-2 h-5 w-[28ch] sm:w-[55ch] lg:my-0 lg:w-[60ch] xl:w-[80ch] 2xl:h-6' />
+        <Skeleton className='my-2 h-5 w-[28ch] sm:w-[55ch] lg:my-0 lg:w-[60ch] xl:w-[80ch] 2xl:h-6' />
+        <Skeleton className='my-2 h-5 w-[28ch] sm:w-[55ch] lg:my-0 lg:w-[60ch] xl:w-[80ch] 2xl:h-6' />
       </div>
     );
   } else if ((!lyrics && !isError) || (!lyrics && !isFetching)) {
