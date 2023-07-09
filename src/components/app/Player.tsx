@@ -22,7 +22,7 @@ const Player: FC<{
 
   const goToPreviousSong = () => {
     setSongIndex(currentSongIndex =>
-      currentSongIndex > 0 ? currentSongIndex - 1 : 0,
+      currentSongIndex > 0 ? currentSongIndex - 1 : songList.length - 1,
     );
   };
 
