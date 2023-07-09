@@ -1,4 +1,3 @@
-import { Button } from '@components/ui/Button';
 import Skeleton from '@components/ui/Skeleton';
 import { api } from '@utils/api';
 import formatFollowers from '@utils/formatFollowers';
@@ -135,16 +134,14 @@ const SpotifyCard: FC<{
             {formatText(cardData.name, titleLength)}
           </h1>
           {cardSubData.slugUrl ? (
-            <Button asChild variant='link'>
-              <Link
-                href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
-                onFocus={() => prefetchArtist(cardSubData.id)}
-                onMouseEnter={() => prefetchArtist(cardSubData.id)}
-                className='text-xl !text-primary-foreground lg:text-2xl'
-              >
-                {cardSubData.name}
-              </Link>
-            </Button>
+            <Link
+              href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
+              onFocus={() => prefetchArtist(cardSubData.id)}
+              onMouseEnter={() => prefetchArtist(cardSubData.id)}
+              className='text-xl text-primary-foreground underline-offset-4 hover:underline lg:text-2xl'
+            >
+              {cardSubData.name}
+            </Link>
           ) : (
             <span className='text-xl text-primary-foreground lg:text-2xl'>
               {cardSubData.name}
@@ -181,16 +178,14 @@ const SpotifyCard: FC<{
           </Link>
 
           {cardSubData?.slugUrl ? (
-            <Button asChild variant='link'>
-              <Link
-                href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
-                onFocus={() => prefetchArtist(cardSubData.id)}
-                onMouseEnter={() => prefetchArtist(cardSubData.id)}
-                className='!px-0 text-xs !text-primary-foreground sm:mt-2 sm:w-3/4 sm:text-xl'
-              >
-                {cardSubData.name}
-              </Link>
-            </Button>
+            <Link
+              href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
+              onFocus={() => prefetchArtist(cardSubData.id)}
+              onMouseEnter={() => prefetchArtist(cardSubData.id)}
+              className='text-xs text-primary-foreground underline-offset-4 hover:underline sm:mt-2 sm:w-3/4 sm:text-xl'
+            >
+              {cardSubData.name}
+            </Link>
           ) : (
             <span className='text-xs text-primary-foreground sm:mt-2 sm:w-3/4 sm:text-xl'>
               {cardSubData?.name}
@@ -291,11 +286,9 @@ const CardMain: FC<{
             height={imageSize}
             width={imageSize}
           />
-          <Button asChild variant='link'>
-            <p className='mt-2 text-xs underline-offset-4 group-hover:underline sm:mt-4 sm:w-4/5 sm:text-2xl'>
-              {formatText(cardData.name, titleLength)}
-            </p>
-          </Button>
+          <p className='mt-2 text-xs underline-offset-4 group-hover:underline sm:mt-4 sm:w-4/5 sm:text-2xl'>
+            {formatText(cardData.name, titleLength)}
+          </p>
         </>
       ) : (
         <>

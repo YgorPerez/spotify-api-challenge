@@ -1,4 +1,3 @@
-import { Button } from '@components/ui/Button';
 import Skeleton from '@components/ui/Skeleton';
 import { api } from '@utils/api';
 import formatText from '@utils/formatText';
@@ -42,28 +41,25 @@ const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
     );
   }
   return (
-    <Button asChild variant='link'>
-      <Link
-        href={`/track/${track.id}`}
-        onFocus={() => {
-          prefetchTrack(track);
-        }}
-        onMouseEnter={() => {
-          prefetchTrack(track);
-        }}
-      >
-        <li className='ml-3 text-center text-base marker:!text-primary-foreground sm:text-xl md:text-2xl lg:text-xl xl:ml-4 2xl:text-2xl'>
-          <div className='flex w-[85vw] justify-between py-1 lg:w-[55vw]'>
-            <h2 className='ml-2 lg:ml-4'>
-              {formatText(track.name, textLength)}
-            </h2>
-            <span className='text-primary-foreground lg:mr-4'>
-              {formatMilliseconds({ milliseconds: track.duration_ms })}
-            </span>
-          </div>
-        </li>
-      </Link>
-    </Button>
+    <Link
+      className='underline-offset-4 hover:underline'
+      href={`/track/${track.id}`}
+      onFocus={() => {
+        prefetchTrack(track);
+      }}
+      onMouseEnter={() => {
+        prefetchTrack(track);
+      }}
+    >
+      <li className='ml-3 text-center text-base marker:!text-primary-foreground sm:text-xl md:text-2xl lg:text-xl xl:ml-4 2xl:text-2xl'>
+        <div className='flex w-[85vw] justify-between py-1 lg:w-[55vw]'>
+          <h2 className='ml-2 lg:ml-4'>{formatText(track.name, textLength)}</h2>
+          <span className='text-primary-foreground lg:mr-4'>
+            {formatMilliseconds({ milliseconds: track.duration_ms })}
+          </span>
+        </div>
+      </li>
+    </Link>
   );
 };
 

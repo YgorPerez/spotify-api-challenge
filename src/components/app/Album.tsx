@@ -1,4 +1,3 @@
-import { Button } from '@components/ui/Button';
 import Skeleton from '@components/ui/Skeleton';
 import { api } from '@utils/api';
 import formatText from '@utils/formatText';
@@ -40,18 +39,16 @@ const Album: FC<{ album: AlbumType | null }> = ({ album }) => {
     );
   }
   return (
-    <Button asChild variant='link'>
-      <Link
-        href={`/album/${album.id}`}
-        className='flex justify-between lg:w-[55vw]'
-        onFocus={() => prefetchAlbum(album.id)}
-        onMouseEnter={() => prefetchAlbum(album.id)}
-      >
-        <li className='mx-4 py-1 text-center text-lg marker:!text-primary-foreground 2xl:mb-1 2xl:text-2xl'>
-          <h2 className='ml-4'>{formatText(album.name, textLength)}</h2>
-        </li>
-      </Link>
-    </Button>
+    <Link
+      href={`/album/${album.id}`}
+      className='flex justify-between underline-offset-4 hover:underline lg:w-[55vw]'
+      onFocus={() => prefetchAlbum(album.id)}
+      onMouseEnter={() => prefetchAlbum(album.id)}
+    >
+      <li className='mx-4 py-1 text-center text-lg marker:!text-primary-foreground 2xl:mb-1 2xl:text-2xl'>
+        <h2 className='ml-4'>{formatText(album.name, textLength)}</h2>
+      </li>
+    </Link>
   );
 };
 
