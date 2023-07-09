@@ -9,11 +9,14 @@ import { useMediaQuery } from 'usehooks-ts';
 
 const Album: FC<{ album: AlbumType | null }> = ({ album }) => {
   const utils = api.useContext();
+  const isSmallerXS = useMediaQuery('(max-width: 374px)');
   const isSmallerSM = useMediaQuery('(max-width: 639px)');
   const isSmaller2XL = useMediaQuery('(max-width: 1535px)');
   let textLength;
-  if (isSmallerSM) {
-    textLength = 25;
+  if (isSmallerXS) {
+    textLength = 22;
+  } else if (isSmallerSM) {
+    textLength = 28;
   } else if (isSmaller2XL) {
     textLength = 70;
   } else {
@@ -44,10 +47,8 @@ const Album: FC<{ album: AlbumType | null }> = ({ album }) => {
         onFocus={() => prefetchAlbum(album.id)}
         onMouseEnter={() => prefetchAlbum(album.id)}
       >
-        <li className='mx-4 py-1 text-center text-lg marker:!text-light-gray 2xl:mb-1 2xl:text-2xl'>
-          <h2 className='ml-4 text-white-gray'>
-            {formatText(album.name, textLength)}
-          </h2>
+        <li className='mx-4 py-1 text-center text-lg marker:!text-primary-foreground 2xl:mb-1 2xl:text-2xl'>
+          <h2 className='ml-4'>{formatText(album.name, textLength)}</h2>
         </li>
       </Link>
     </Button>

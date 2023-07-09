@@ -8,8 +8,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@components/ui/DropdownMenu';
+import { type FC } from 'react';
 
-export function ModeToggle() {
+const ThemeSwitcher: FC = () => {
   const { setTheme } = useTheme();
 
   return (
@@ -34,4 +35,6 @@ export function ModeToggle() {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+};
+
+export default ThemeSwitcher;

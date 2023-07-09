@@ -8,7 +8,6 @@ import Error from 'next/error';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import Album from '../../components/app/Album';
-import GoBack from '../../components/app/GoBack';
 import SpotifyCard from '../../components/app/SpotifyCard';
 import Header from '../../components/ui/Header';
 import useGetArtistsAlbums from '../../hooks/useGetArtistAlbums';
@@ -80,10 +79,7 @@ const SingleArtistPage: NextPage<Props> = (
   return (
     <div>
       <div className='flex'>
-        <Header />
-        <div className='mr-4 mt-4 flex w-full justify-end lg:mt-8 xl:ml-14 xl:block'>
-          <GoBack />
-        </div>
+        <Header goBack />
       </div>
       <main className='mt-6 lg:flex lg:justify-center 2xl:mt-8'>
         <div className='mb-4 lg:mb-0 lg:ml-6 2xl:ml-0'>
@@ -91,7 +87,7 @@ const SingleArtistPage: NextPage<Props> = (
         </div>
         <div className='flex flex-col lg:ml-4 xl:ml-8 2xl:ml-16'>
           <ScrollArea className='lg:max-h-[75vh]'>
-            <ol className='mx-2 list-decimal text-light-gray lg:mb-4'>
+            <ol className='mx-2 list-decimal text-primary-foreground lg:mb-4'>
               {albums?.map((album, index) => (
                 <div key={index}>
                   <Album album={album} />

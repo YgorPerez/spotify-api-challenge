@@ -124,19 +124,19 @@ const SearchPage: NextPage<Props> = (
                 <SearchForm search={searchTerm} />
                 <div className='ml-8 sm:ml-0'>
                   {shouldDisplayData || shouldDisplayLoadingData ? (
-                    <h1 className='my-4 mt-6 text-white-gray sm:mt-14 sm:text-2xl xl:text-3xl'>
+                    <h1 className='my-4 mt-6 text-primary sm:mt-14 sm:text-2xl xl:text-3xl'>
                       {t('search:results-for')} &#8220;{searchTerm}&#8221;
                     </h1>
                   ) : searchTerm ? (
-                    <h1 className='my-4 mt-6 text-white-gray sm:mt-14 sm:text-2xl xl:text-3xl'>
+                    <h1 className='my-4 mt-6 text-primary sm:mt-14 sm:text-2xl xl:text-3xl'>
                       {t('search:no-results')} &#8220;{searchTerm}&#8221;
                     </h1>
                   ) : lastSearchedAlbums[0] ? (
-                    <h1 className='my-4 mt-6 text-white-gray sm:mt-14 sm:text-2xl xl:text-3xl'>
+                    <h1 className='my-4 mt-6 text-primary sm:mt-14 sm:text-2xl xl:text-3xl'>
                       {t('search:last-searched')}
                     </h1>
                   ) : (
-                    <h1 className='my-4 mt-6 text-white-gray sm:mt-14 sm:text-2xl xl:text-3xl'>
+                    <h1 className='my-4 mt-6 text-primary sm:mt-14 sm:text-2xl xl:text-3xl'>
                       {t('search:did-not-search')}
                     </h1>
                   )}
@@ -144,7 +144,7 @@ const SearchPage: NextPage<Props> = (
               </div>
               <div
                 className='m-auto flex w-[95%] flex-wrap justify-center gap-6
-                  bg-dark-gray 2xl:w-11/12 2xl:gap-12'
+                  2xl:w-11/12 2xl:gap-12'
               >
                 {shouldDisplayData &&
                   searchData.flatMap((searchResults, index) => (

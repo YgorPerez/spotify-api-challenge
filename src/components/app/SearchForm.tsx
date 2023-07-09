@@ -37,7 +37,7 @@ const SearchForm: FC<{ search: string | null }> = ({ search }) => {
           submitHandler(e);
         }}
       >
-        <div className='mt-6 flex justify-center text-white-gray sm:mt-0 sm:block sm:text-left'>
+        <div className='mt-6 flex justify-center text-primary sm:mt-0 sm:block sm:text-left'>
           <Label
             className='ml-2 w-4/5 sm:text-left sm:text-xl'
             htmlFor={`search-${formId}`}
@@ -51,7 +51,7 @@ const SearchForm: FC<{ search: string | null }> = ({ search }) => {
             autoFocus
             id={`search-${formId}`}
             placeholder={t('search:input-placeholder')}
-            className='search-cancel:invert-100 mt-4 h-8 w-4/5 border-separate bg-dark-gray p-1 pb-2 text-2xl font-bold text-white-gray outline-none placeholder:text-light-gray placeholder:opacity-100 search-cancel:ml-2 search-cancel:brightness-[1.08] search-cancel:contrast-[1.01] search-cancel:hue-rotate-[336deg] search-cancel:saturate-[0] search-cancel:sepia-[.04]  focus:border-b-2 focus:border-light-gray sm:-m-px sm:mt-4 sm:h-16 sm:w-full sm:p-3 sm:pb-4 sm:text-left sm:text-4xl sm:focus:border-b-4 lg:pb-8 xl:text-5xl'
+            className='search-cancel:invert-100 mt-4 h-8 w-4/5 border-separate bg-background p-1 pb-2 text-2xl font-bold text-primary outline-none placeholder:text-primary-foreground placeholder:opacity-100 search-cancel:ml-2 search-cancel:brightness-[1.08] search-cancel:contrast-[1.01] search-cancel:hue-rotate-[336deg] search-cancel:saturate-[0] search-cancel:sepia-[.04]  focus:border-b-2 focus:border-border sm:-m-px sm:mt-4 sm:h-16 sm:w-full sm:p-3 sm:pb-4 sm:text-left sm:text-4xl sm:focus:border-b-4 lg:pb-8 xl:text-5xl'
             defaultValue={search || ''}
             onInput={e => {
               setSearchQueryParam(e.currentTarget.value.trim().toLowerCase());

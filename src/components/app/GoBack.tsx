@@ -11,7 +11,7 @@ const GoBack: React.FC = () => {
     <Button
       variant='link'
       onClick={() => router.back()}
-      className='flex items-center px-0 text-white-gray sm:text-xl'
+      className='flex items-center px-0 sm:text-xl'
     >
       <ChevronLeft size='30' />
       <span className=''>{t('common:go-back')}</span>

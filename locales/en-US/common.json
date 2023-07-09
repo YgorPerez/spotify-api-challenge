@@ -4,6 +4,7 @@
   "load-more": "Load more",
   "this": "This",
   "song": "song",
+  "album": "album",
   "no-song-preview": "doesn't have a preview available",
   "server-error": "Internal server error",
   "lyrics-not-found": "No lyrics found",
@@ -14,6 +15,7 @@
   "go-back": "Go back",
   "try-again": "Try again",
   "fans": "Fans",
+  "album-cover": "Album cover",
   "artist-picture": "Artist picture",
   "home-try-again": "Please go back to the home and try again.",
   "generic-error": "Oops an error ocurred..."

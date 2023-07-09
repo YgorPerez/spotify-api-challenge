@@ -131,7 +131,7 @@ const SpotifyCard: FC<{
       >
         <CardMain cardMainData={cardMainData} cardData={cardData} big />
         <div className='mt-4 flex flex-col items-center'>
-          <h1 className=' mb-2 w-4/5 text-2xl text-white-gray lg:text-3xl'>
+          <h1 className='mb-2 w-4/5 text-2xl lg:text-3xl'>
             {formatText(cardData.name, titleLength)}
           </h1>
           {cardSubData.slugUrl ? (
@@ -140,13 +140,13 @@ const SpotifyCard: FC<{
                 href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
                 onFocus={() => prefetchArtist(cardSubData.id)}
                 onMouseEnter={() => prefetchArtist(cardSubData.id)}
-                className='text-xl !text-light-gray lg:text-2xl'
+                className='text-xl !text-primary-foreground lg:text-2xl'
               >
                 {cardSubData.name}
               </Link>
             </Button>
           ) : (
-            <span className='text-xl text-light-gray lg:text-2xl'>
+            <span className='text-xl text-primary-foreground lg:text-2xl'>
               {cardSubData.name}
             </span>
           )}
@@ -158,8 +158,8 @@ const SpotifyCard: FC<{
     <>
       {cardData && cardMainData ? (
         <div
-          className='items-center justify-center text-center sm:my-2 sm:w-60
-            2xl:w-72'
+          className='items-center justify-center text-center
+            sm:w-60 2xl:w-72'
         >
           <Link
             href={`/${cardMainData.slugUrl}/${cardData.id}`}
@@ -175,7 +175,7 @@ const SpotifyCard: FC<{
               cardMainData.slugUrl === 'track' &&
                 prefetchTrack(cardData as TrackType);
             }}
-            className='flex flex-col items-center'
+            className='group flex flex-col items-center'
           >
             <CardMain cardMainData={cardMainData} cardData={cardData} />
           </Link>
@@ -186,13 +186,13 @@ const SpotifyCard: FC<{
                 href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
                 onFocus={() => prefetchArtist(cardSubData.id)}
                 onMouseEnter={() => prefetchArtist(cardSubData.id)}
-                className='!px-0 text-xs !text-light-gray sm:mt-2 sm:w-3/4 sm:text-xl'
+                className='!px-0 text-xs !text-primary-foreground sm:mt-2 sm:w-3/4 sm:text-xl'
               >
                 {cardSubData.name}
               </Link>
             </Button>
           ) : (
-            <span className='text-xs text-light-gray sm:mt-2 sm:w-3/4 sm:text-xl'>
+            <span className='text-xs text-primary-foreground sm:mt-2 sm:w-3/4 sm:text-xl'>
               {cardSubData?.name}
             </span>
           )}
@@ -285,15 +285,17 @@ const CardMain: FC<{
             loading='lazy'
             alt={
               cardMainData?.images?.[imageIndex]?.url
-                ? 'album cover'
-                : 'artist picture'
+                ? t('common:album-cover')
+                : t('common:artist-picture')
             }
             height={imageSize}
             width={imageSize}
           />
-          <p className='mt-2 text-xs text-white-gray sm:mb-1 sm:mt-4 sm:w-4/5 sm:text-2xl'>
-            {formatText(cardData.name, titleLength)}
-          </p>
+          <Button asChild variant='link'>
+            <p className='mt-2 text-xs underline-offset-4 group-hover:underline sm:mt-4 sm:w-4/5 sm:text-2xl'>
+              {formatText(cardData.name, titleLength)}
+            </p>
+          </Button>
         </>
       ) : (
         <>

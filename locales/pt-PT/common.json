@@ -4,6 +4,7 @@
   "load-more": "Carregar mais",
   "this": "Esse",
   "song": "música",
+  "album": "álbum",
   "no-song-preview": "não tem uma prévia disponível",
   "server-error": "Erro interno do servidor",
   "lyrics-not-found": "Nenhuma letra encontrada",
@@ -14,6 +15,7 @@
   "go-back": "Voltar",
   "try-again": "Tentar novamente",
   "fans": "Fãs",
+  "album-cover": "Foto do álbum",
   "artist-picture": "Foto do artista",
   "home-try-again": "Por favor volte para o ínicio e tente novamente.",
   "generic-error": "Ops ocorreu um erro..."

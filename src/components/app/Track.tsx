@@ -52,12 +52,12 @@ const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
           prefetchTrack(track);
         }}
       >
-        <li className='ml-3 text-center text-base marker:!text-light-gray sm:text-xl md:text-2xl lg:text-xl xl:ml-4 2xl:text-2xl'>
+        <li className='ml-3 text-center text-base marker:!text-primary-foreground sm:text-xl md:text-2xl lg:text-xl xl:ml-4 2xl:text-2xl'>
           <div className='flex w-[85vw] justify-between py-1 lg:w-[55vw]'>
-            <h2 className='ml-2 text-white-gray lg:ml-4'>
+            <h2 className='ml-2 lg:ml-4'>
               {formatText(track.name, textLength)}
             </h2>
-            <span className='text-light-gray lg:mr-4'>
+            <span className='text-primary-foreground lg:mr-4'>
               {formatMilliseconds({ milliseconds: track.duration_ms })}
             </span>
           </div>

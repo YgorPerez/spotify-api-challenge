@@ -7,7 +7,6 @@ import { type InferGetServerSidePropsType, type NextPage } from 'next';
 import Error from 'next/error';
 import { useRouter } from 'next/router';
 import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
-import GoBack from '../../components/app/GoBack';
 import SpotifyCard from '../../components/app/SpotifyCard';
 import Header from '../../components/ui/Header';
 import { ssrHelper } from '../../utils/ssrHelper';
@@ -54,10 +53,7 @@ const SingleTrackPage: NextPage<Props> = (
   return (
     <div>
       <div className='flex'>
-        <Header />
-        <div className='mr-4 mt-4 flex w-full justify-end lg:mt-8 xl:ml-14 xl:block'>
-          <GoBack />
-        </div>
+        <Header goBack />
       </div>
       <main className='mt-6 lg:flex lg:justify-center 2xl:mt-8'>
         <div className='lg:-ml-18 mb-4 lg:mb-0 2xl:-ml-40'>

@@ -9,7 +9,6 @@ import Error from 'next/error';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
-import GoBack from '../../components/app/GoBack';
 import SpotifyCard from '../../components/app/SpotifyCard';
 import Track from '../../components/app/Track';
 import Header from '../../components/ui/Header';
@@ -81,27 +80,26 @@ const SingleAlbumPage: NextPage<Props> = (
   return (
     <div>
       <div className='flex'>
-        <Header />
-        <div className='mr-4 mt-4 flex w-full justify-end lg:mt-8 xl:ml-14 xl:block'>
-          <GoBack />
-        </div>
+        <Header goBack />
       </div>
       <main className='mt-6 lg:flex lg:justify-center 2xl:mt-4'>
         <div className='mb-4 lg:mb-0 lg:ml-6 2xl:ml-0'>
           <SpotifyCard cardData={album} big />
         </div>
-        <ScrollArea className='mb-36 lg:mb-0 lg:ml-4 lg:max-h-[75vh] xl:ml-16'>
-          <ol className='mx-2 list-decimal text-light-gray lg:mb-4'>
-            {tracks?.map((track, index) => (
-              <div
-                key={index}
-                className='flex justify-around lg:block 2xl:my-1'
-              >
-                <Track track={track as SimplifiedTrack} />
-              </div>
-            ))}
-            {isFetchingTracks && loadingData}
-          </ol>
+        <div className='mb-36 flex flex-col lg:mb-0 lg:ml-4 xl:ml-8 2xl:ml-16'>
+          <ScrollArea className='lg:max-h-[calc(75vh_-_10rem)] 2xl:max-h-[calc(75vh_-_6rem)]'>
+            <ol className='mx-2 list-decimal text-primary-foreground lg:mb-4'>
+              {tracks?.map((track, index) => (
+                <div
+                  key={index}
+                  className='flex justify-around lg:block 2xl:my-1'
+                >
+                  <Track track={track as SimplifiedTrack} />
+                </div>
+              ))}
+              {isFetchingTracks && loadingData}
+            </ol>
+          </ScrollArea>
           <Separator className='my-2' />
           <div className='mt-4 flex justify-center lg:block'>
             <LoadMore
@@ -110,7 +108,7 @@ const SingleAlbumPage: NextPage<Props> = (
               hasNextPage={hasNextPage}
             />
           </div>
-        </ScrollArea>
+        </div>
         {tracks && <Player songList={tracks as SimplifiedTrack[]} />}
       </main>
     </div>

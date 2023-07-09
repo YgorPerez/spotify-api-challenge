@@ -13,10 +13,6 @@ module.exports = {
     },
     extend: {
       colors: {
-        'light-gray': 'hsl(var(--light-gray))',
-        'dark-gray': 'hsl(var(--dark-gray))',
-        'white-gray': 'hsl(var(--white-gray))',
-        'opacity-gray': 'hsla(var(--opacity-gray))',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

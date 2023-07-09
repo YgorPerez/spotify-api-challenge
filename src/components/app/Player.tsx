@@ -31,10 +31,10 @@ const Player: FC<{
   const isPlaylist = songList.length > 1;
 
   return (
-    <div className='fixed bottom-0 w-full bg-dark-gray pt-2'>
+    <div className='fixed bottom-0 w-full bg-background pt-2'>
       {songSource ? (
         <div>
-          <p className='w-full text-center text-2xl text-white'>
+          <p className='w-full text-center text-2xl'>
             {isPlaylist && (
               <span className='text-gray-400'>{currentSongIndex + 1}. </span>
             )}
@@ -52,8 +52,8 @@ const Player: FC<{
           />
         </div>
       ) : (
-        <p className='mb-16 w-full text-center text-2xl text-white'>
-          {t('common:this')} {isPlaylist ? 'album' : t('common:song')}{' '}
+        <p className='mb-16 w-full text-center text-2xl'>
+          {t('common:this')} {isPlaylist ? t('common:album') : t('common:song')}{' '}
           {t('common:no-song-preview')}
         </p>
       )}

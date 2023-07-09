@@ -28,7 +28,7 @@ const Lyrics: FC<{
   } else if ((!lyrics && !isError) || (!lyrics && !isFetching)) {
     return (
       <div className='grid w-1/2 place-items-center'>
-        <p className='text-center text-2xl text-white 2xl:text-4xl'>
+        <p className='text-2x text-center 2xl:text-4xl'>
           {t('common:lyrics-not-found')}
         </p>
       </div>
@@ -37,7 +37,7 @@ const Lyrics: FC<{
   return (
     <ScrollArea className='mb-36 p-4 lg:mb-0 lg:ml-8 lg:max-h-[75vh] xl:ml-12 2xl:ml-16'>
       <div className='flex justify-center'>
-        <p className='prose prose-base whitespace-pre-wrap text-white sm:prose-lg lg:prose-xl xl:prose-2xl lg:w-[55vw]'>
+        <p className='prose prose-base whitespace-pre-wrap text-foreground sm:prose-lg lg:prose-xl xl:prose-2xl lg:w-[55vw]'>
           {lyrics}
         </p>
       </div>
