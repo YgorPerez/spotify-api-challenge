@@ -127,7 +127,7 @@ const SpotifyCard: FC<{
     return (
       <div
         className='m-auto max-w-[300px] items-center justify-center text-center
-          lg:m-0 lg:my-2 lg:max-w-xs 2xl:max-w-md'
+          lg:m-0 lg:max-w-[440px]'
       >
         <CardMain cardMainData={cardMainData} cardData={cardData} big />
         <div className='mt-4 flex flex-col items-center'>
@@ -218,12 +218,12 @@ const CardMain: FC<{
   big?: boolean;
 }> = ({ cardMainData, cardData, big }) => {
   const { t } = useTranslation();
-  const isPhone = useMediaQuery('(max-width: 640px)');
-  const isTablet = useMediaQuery('(max-width: 1023px)');
+  const isSmallerSM = useMediaQuery('(max-width: 639px)');
+  const isSmallerLG = useMediaQuery('(max-width: 1023px)');
   let imageSize;
   let imageIndex;
   if (big) {
-    if (isTablet) {
+    if (isSmallerLG) {
       imageIndex = 1;
       imageSize = 300;
       titleLength = 34;
@@ -235,7 +235,7 @@ const CardMain: FC<{
       subtitleLength = 50;
     }
   } else {
-    if (isPhone) {
+    if (isSmallerSM) {
       imageIndex = 2;
       imageSize = 64;
       titleLength = 12;
@@ -259,7 +259,7 @@ const CardMain: FC<{
             loading='lazy'
             width={imageSize}
             height={imageSize}
-            className='aspect-square h-full w-full 2xl:w-[440px]'
+            className='aspect-square h-full w-full lg:w-[340px] xl:w-[380px] 2xl:w-[420px]'
           />
         </div>
       ) : (

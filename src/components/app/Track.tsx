@@ -10,12 +10,12 @@ import formatMilliseconds from '../../utils/formatMilliseconds';
 
 const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
   const utils = api.useContext();
-  const isXs = useMediaQuery('(max-width: 640px)');
-  const isXl = useMediaQuery('(max-width: 1536px)');
+  const isSmallerSM = useMediaQuery('(max-width: 639px)');
+  const isSmaller2XL = useMediaQuery('(max-width: 1535px)');
   let textLength;
-  if (isXs) {
+  if (isSmallerSM) {
     textLength = 28;
-  } else if (isXl) {
+  } else if (isSmaller2XL) {
     textLength = 45;
   } else {
     textLength = 70;
@@ -33,9 +33,9 @@ const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
 
   if (!track) {
     return (
-      <li className='sm:text-lg lg:ml-8 2xl:text-2xl'>
-        <div className='my-3 flex w-screen justify-between lg:max-w-xs xl:max-w-xl 2xl:mb-[1.125rem] 2xl:max-w-5xl'>
-          <Skeleton className='h-4 w-[60ch] lg:ml-4 2xl:h-5' />
+      <li className='ml-8 text-base sm:text-xl 2xl:text-2xl'>
+        <div className='my-3 flex w-[85vw] justify-between lg:w-[55vw] 2xl:mb-[1.125rem]'>
+          <Skeleton className='ml-4 h-4 w-[28ch] sm:w-[40ch] lg:w-[50ch] xl:w-[60ch] 2xl:h-5' />
           <Skeleton className='h-4 w-[4ch] lg:mr-4 2xl:h-5' />
         </div>
       </li>
@@ -53,7 +53,7 @@ const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
         }}
       >
         <li className='ml-3 text-center text-base marker:!text-light-gray sm:text-xl md:text-2xl lg:text-xl xl:ml-4 2xl:text-2xl'>
-          <div className='flex w-[85vw] justify-between py-1 lg:max-w-lg xl:max-w-2xl 2xl:mb-1 2xl:max-w-5xl'>
+          <div className='flex w-[85vw] justify-between py-1 lg:w-[55vw]'>
             <h2 className='ml-2 text-white-gray lg:ml-4'>
               {formatText(track.name, textLength)}
             </h2>

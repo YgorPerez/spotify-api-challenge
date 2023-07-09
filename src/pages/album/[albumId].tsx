@@ -90,7 +90,7 @@ const SingleAlbumPage: NextPage<Props> = (
         <div className='mb-4 lg:mb-0 lg:ml-6 2xl:ml-0'>
           <SpotifyCard cardData={album} big />
         </div>
-        <ScrollArea className='mb-44 lg:mb-0 lg:ml-4 lg:max-h-[75vh] xl:ml-16'>
+        <ScrollArea className='mb-36 lg:mb-0 lg:ml-4 lg:max-h-[75vh] xl:ml-16'>
           <ol className='mx-2 list-decimal text-light-gray lg:mb-4'>
             {tracks?.map((track, index) => (
               <div
@@ -111,8 +111,8 @@ const SingleAlbumPage: NextPage<Props> = (
             />
           </div>
         </ScrollArea>
+        {tracks && <Player songList={tracks as SimplifiedTrack[]} />}
       </main>
-      {tracks && <Player songList={tracks as SimplifiedTrack[]} />}
     </div>
   );
 };

@@ -11,8 +11,8 @@ const Player: FC<{
 }> = ({ songList }) => {
   const [currentSongIndex, setSongIndex] = useState(0);
   const { t } = useTranslation();
-  const isXs = useMediaQuery('(max-width: 640px)');
-  const textLength = isXs ? 45 : 70;
+  const isSmallerSM = useMediaQuery('(max-width: 639px)');
+  const textLength = isSmallerSM ? 45 : 70;
 
   const goToNextSong = () => {
     setSongIndex(currentSongIndex =>

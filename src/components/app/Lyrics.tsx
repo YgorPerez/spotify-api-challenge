@@ -29,16 +29,18 @@ const Lyrics: FC<{
     return (
       <div className='grid w-1/2 place-items-center'>
         <p className='text-center text-2xl text-white 2xl:text-4xl'>
-          {t('common:loading')}
+          {t('common:lyrics-not-found')}
         </p>
       </div>
     );
   }
   return (
-    <ScrollArea className='max-h-[70vh] max-w-[50vw] translate-x-1/4 p-4'>
-      <p className='prose whitespace-pre text-white lg:prose-xl xl:prose-2xl'>
-        {lyrics}
-      </p>
+    <ScrollArea className='mb-36 p-4 lg:mb-0 lg:ml-8 lg:max-h-[75vh] xl:ml-12 2xl:ml-16'>
+      <div className='flex justify-center'>
+        <p className='prose prose-base whitespace-pre-wrap text-white sm:prose-lg lg:prose-xl xl:prose-2xl lg:w-[55vw]'>
+          {lyrics}
+        </p>
+      </div>
     </ScrollArea>
   );
 };
