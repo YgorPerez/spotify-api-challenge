@@ -5,7 +5,7 @@
   "this": "Esse",
   "song": "música",
   "album": "álbum",
-  "no-song-preview": "não tem uma prévia disponível",
+  "no-song-preview": "não tem uma prévia disponível e você não tem um conta premium",
   "server-error": "Erro interno do servidor",
   "lyrics-not-found": "Nenhuma letra encontrada",
   "server-error-extended": "O servidor se deparou com um erro interno. Por favor tente novamente",

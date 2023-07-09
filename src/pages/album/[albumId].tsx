@@ -88,7 +88,7 @@ const SingleAlbumPage: NextPage<Props> = (
         </div>
         <div className='mb-36 flex flex-col lg:mb-0 lg:ml-4 xl:ml-8 2xl:ml-16'>
           <ScrollArea className='lg:max-h-[calc(75vh_-_10rem)] 2xl:max-h-[calc(75vh_-_6rem)]'>
-            <ol className='mx-2 list-decimal text-primary-foreground lg:mb-4'>
+            <ol className='mx-2 list-decimal lg:mb-4'>
               {tracks?.map((track, index) => (
                 <div
                   key={index}
@@ -109,7 +109,7 @@ const SingleAlbumPage: NextPage<Props> = (
             />
           </div>
         </div>
-        {tracks && <Player songList={tracks as SimplifiedTrack[]} />}
+        {tracks && <Player tracks={tracks as SimplifiedTrack[]} />}
       </main>
     </div>
   );
@@ -132,6 +132,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     albumId,
     limit: tracksLimit,
   });
+  await trpc.spotify.getUser.prefetch();
+  await trpc.spotify.getAccessToken.prefetch();
 
   return {
     props: {

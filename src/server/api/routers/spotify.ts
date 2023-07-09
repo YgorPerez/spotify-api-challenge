@@ -18,6 +18,7 @@ import {
   ArtistSchema,
   PagingSimplifiedAlbumsSchema,
   PagingSimplifiedTracksSchema,
+  PrivateUserSchema,
   SearchContentItemsSchema,
   SearchContentSchema,
   SimplifiedAlbumSchema,
@@ -320,7 +321,11 @@ export const spotifyRouter = createTRPCRouter({
         artists: artistsSearchContent,
       });
       if (!validatedSearchContent.success) {
-        console.error({albumsSearchContent, tracksSearchContent, artistsSearchContent})
+        console.error({
+          albumsSearchContent,
+          tracksSearchContent,
+          artistsSearchContent,
+        });
         throw new TRPCError({
           message: 'returned type from spotify-api.js not valid',
           code: 'INTERNAL_SERVER_ERROR',
@@ -397,6 +402,27 @@ export const spotifyRouter = createTRPCRouter({
       }
 
       return validatedLyrics.data;
+    }),
+  getUser: protectedTokenProcedure
+    .meta({
+      description: 'Gets the current user info from spotify',
+    })
+    .output(
+      PrivateUserSchema.nullable()
+        .optional()
+        .describe('User info got from spotify'),
+    )
+    .query(async ({ ctx }) => {
+      const user = await ctx.spotifyApi.users.getMe();
+      const validatedUser = PrivateUserSchema.safeParse(user);
+      if (!validatedUser.success) {
+        throw new TRPCError({
+          message: `Error retrieving user info`,
+          code: 'INTERNAL_SERVER_ERROR',
+        });
+      }
+
+      return validatedUser.data;
     }),
 });
 

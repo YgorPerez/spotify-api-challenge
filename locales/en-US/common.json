@@ -5,7 +5,7 @@
   "this": "This",
   "song": "song",
   "album": "album",
-  "no-song-preview": "doesn't have a preview available",
+  "no-song-preview": "doesn't have a preview available and you don't have a premium account",
   "server-error": "Internal server error",
   "lyrics-not-found": "No lyrics found",
   "server-error-extended": "The server encountered an internal error. Please try again.",

@@ -64,7 +64,7 @@ const SingleTrackPage: NextPage<Props> = (
           isFetching={isFetchingLyrics}
           isError={isErrorLyrics}
         />
-        {track && <Player songList={[track as SimplifiedTrack]} />}
+        {track && <Player tracks={[track as SimplifiedTrack]} />}
       </main>
     </div>
   );
@@ -88,6 +88,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     artistName: track.track.artists[0]?.name as string,
     songTitle: track.track.name,
   });
+
+  await trpc.spotify.getUser.prefetch();
+  await trpc.spotify.getAccessToken.prefetch();
 
   return {
     props: {
