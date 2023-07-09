@@ -115,10 +115,6 @@ const SingleAlbumPage: NextPage<Props> = (
   );
 };
 
-export const config = {
-  runtime: 'experimental-edge',
-};
-
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context: GetServerSidePropsContext,
 ) => {
