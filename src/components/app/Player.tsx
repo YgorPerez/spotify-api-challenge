@@ -1,19 +1,15 @@
 import { api } from '@utils/api';
-import formatText from '@utils/formatText';
 import useTranslation from 'next-translate/useTranslation';
 import { useState, type FC } from 'react';
 import AudioPlayer from 'react-h5-audio-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
-import { useMediaQuery } from 'usehooks-ts';
 
 const Player: FC<{
   tracks: SimplifiedTrack[];
 }> = ({ tracks: tracks }) => {
   const [currentSongIndex, setSongIndex] = useState(0);
   const { t } = useTranslation();
-  const isSmallerSM = useMediaQuery('(max-width: 639px)');
-  const textLength = isSmallerSM ? 45 : 70;
 
   const { data: user } = api.spotify.getUser.useQuery();
   const { data: token } = api.spotify.getAccessToken.useQuery();
@@ -48,14 +44,18 @@ const Player: FC<{
     <div className='fixed bottom-0 w-full bg-background pt-2'>
       {songSource || (isPremium && currentSong) ? (
         <div>
-          <p className='w-full text-center text-2xl'>
+          <p className='w-full overflow-hidden text-ellipsis text-center text-2xl'>
             {isPlaylist && (
               <span className='text-gray-400'>{currentSongIndex + 1}. </span>
             )}
-            {formatText(currentSong.name, textLength)}
+            {currentSong.name}
           </p>
           {isPremium ? (
-            <SpotifyPlayer token={token as string} uris={uris} />
+            <SpotifyPlayer
+              token={token as string}
+              uris={uris}
+              initialVolume={0.4}
+            />
           ) : (
             <AudioPlayer
               preload='metadata'
@@ -70,7 +70,7 @@ const Player: FC<{
           )}
         </div>
       ) : (
-        <p className='mb-16 w-full text-center text-2xl'>
+        <p className='mb-10 w-full text-center text-xl sm:text-2xl'>
           {t('common:this')} {isPlaylist ? t('common:album') : t('common:song')}{' '}
           {t('common:no-song-preview')}
         </p>

@@ -1,7 +1,6 @@
 import Skeleton from '@components/ui/Skeleton';
 import { api } from '@utils/api';
 import formatFollowers from '@utils/formatFollowers';
-import formatText from '@utils/formatText';
 import { log } from 'next-axiom';
 import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
@@ -24,9 +23,6 @@ type CardMainData = {
   slugUrl: string;
 } | null;
 
-let titleLength = 27;
-let subtitleLength = 24;
-
 const SpotifyCard: FC<{
   cardData: CardData;
   big?: boolean;
@@ -44,10 +40,7 @@ const SpotifyCard: FC<{
             slugUrl: 'album',
           },
           cardSubData: {
-            name: formatText(
-              cardData.artists?.[0]?.name as string,
-              subtitleLength,
-            ),
+            name: cardData.artists?.[0]?.name as string,
             id: cardData.artists?.[0]?.id as string,
             slugUrl: 'albums',
           },
@@ -61,10 +54,8 @@ const SpotifyCard: FC<{
             slugUrl: 'track',
           },
           cardSubData: {
-            name: formatText(
-              cardData.artists?.[0]?.name as string,
-              subtitleLength,
-            ),
+            name: cardData.artists?.[0]?.name as string,
+
             id: cardData.artists?.[0]?.id as string,
             slugUrl: 'albums',
           },
@@ -130,20 +121,20 @@ const SpotifyCard: FC<{
       >
         <CardMain cardMainData={cardMainData} cardData={cardData} big />
         <div className='mt-4 flex flex-col items-center'>
-          <h1 className='mb-2 w-4/5 text-2xl lg:text-3xl'>
-            {formatText(cardData.name, titleLength)}
+          <h1 className='mb-2 line-clamp-2 w-4/5  text-2xl lg:text-3xl'>
+            {cardData.name}
           </h1>
           {cardSubData.slugUrl ? (
             <Link
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
               onFocus={() => prefetchArtist(cardSubData.id)}
               onMouseEnter={() => prefetchArtist(cardSubData.id)}
-              className='text-xl text-primary-foreground underline-offset-4 hover:underline lg:text-2xl'
+              className='line-clamp-2 w-4/5 text-ellipsis text-xl text-primary-foreground underline-offset-4 hover:underline lg:text-2xl'
             >
               {cardSubData.name}
             </Link>
           ) : (
-            <span className='text-xl text-primary-foreground lg:text-2xl'>
+            <span className='line-clamp-2 w-4/5 text-xl text-primary-foreground lg:text-2xl'>
               {cardSubData.name}
             </span>
           )}
@@ -155,8 +146,8 @@ const SpotifyCard: FC<{
     <>
       {cardData && cardMainData ? (
         <div
-          className='items-center justify-center text-center
-            sm:w-60 2xl:w-72'
+          className='w-full max-w-[64px] items-center justify-center text-center
+            sm:w-60 sm:max-w-[300px] 2xl:w-72'
         >
           <Link
             href={`/${cardMainData.slugUrl}/${cardData.id}`}
@@ -182,12 +173,12 @@ const SpotifyCard: FC<{
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
               onFocus={() => prefetchArtist(cardSubData.id)}
               onMouseEnter={() => prefetchArtist(cardSubData.id)}
-              className='text-xs text-primary-foreground underline-offset-4 hover:underline sm:mt-2 sm:w-3/4 sm:text-xl'
+              className='mt-2 line-clamp-2 w-full text-center text-xs text-primary-foreground underline-offset-4 hover:underline sm:text-xl'
             >
               {cardSubData.name}
             </Link>
           ) : (
-            <span className='text-xs text-primary-foreground sm:mt-2 sm:w-3/4 sm:text-xl'>
+            <span className='mt-2 line-clamp-2 w-full text-center text-xs text-primary-foreground sm:text-xl'>
               {cardSubData?.name}
             </span>
           )}
@@ -221,20 +212,14 @@ const CardMain: FC<{
     if (isSmallerLG) {
       imageIndex = 1;
       imageSize = 300;
-      titleLength = 34;
-      subtitleLength = 34;
     } else {
       imageIndex = 0;
       imageSize = 640;
-      titleLength = 50;
-      subtitleLength = 50;
     }
   } else {
     if (isSmallerSM) {
       imageIndex = 2;
       imageSize = 64;
-      titleLength = 12;
-      subtitleLength = 12;
     } else {
       imageIndex = 1;
       imageSize = 300;
@@ -286,8 +271,8 @@ const CardMain: FC<{
             height={imageSize}
             width={imageSize}
           />
-          <p className='mt-2 text-xs underline-offset-4 group-hover:underline sm:mt-4 sm:w-4/5 sm:text-2xl'>
-            {formatText(cardData.name, titleLength)}
+          <p className='mt-2 line-clamp-2 w-full text-xs underline-offset-4 group-hover:underline sm:mt-4 sm:w-4/5 sm:text-2xl'>
+            {cardData.name}
           </p>
         </>
       ) : (

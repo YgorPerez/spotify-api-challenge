@@ -1,24 +1,12 @@
 import Skeleton from '@components/ui/Skeleton';
 import { api } from '@utils/api';
-import formatText from '@utils/formatText';
 import Link from 'next/link';
 import { type FC } from 'react';
 import { type SimplifiedTrack as SimplifiedTrackType } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
-import { useMediaQuery } from 'usehooks-ts';
 import formatMilliseconds from '../../utils/formatMilliseconds';
 
 const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
   const utils = api.useContext();
-  const isSmallerSM = useMediaQuery('(max-width: 639px)');
-  const isSmaller2XL = useMediaQuery('(max-width: 1535px)');
-  let textLength;
-  if (isSmallerSM) {
-    textLength = 28;
-  } else if (isSmaller2XL) {
-    textLength = 45;
-  } else {
-    textLength = 70;
-  }
 
   const prefetchTrack = (track: SimplifiedTrackType) => {
     void utils.spotify.getTrack.prefetch({
@@ -51,9 +39,11 @@ const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
         prefetchTrack(track);
       }}
     >
-      <li className='ml-3 text-center text-base marker:!text-primary-foreground sm:text-xl md:text-2xl lg:text-xl xl:ml-4 2xl:text-2xl'>
-        <div className='flex w-[85vw] justify-between py-1 lg:w-[55vw]'>
-          <h2 className='ml-2 lg:ml-4'>{formatText(track.name, textLength)}</h2>
+      <li className='ml-3 text-center text-base marker:!text-primary-foreground sm:text-lg lg:ml-8 2xl:text-xl'>
+        <div className='flex w-[85vw] justify-between py-1 lg:ml-3 lg:w-[55vw]'>
+          <h2 className='ml-2 mr-4 overflow-hidden text-ellipsis whitespace-nowrap'>
+            {track.name}
+          </h2>
           <span className='text-primary-foreground lg:mr-4'>
             {formatMilliseconds({ milliseconds: track.duration_ms })}
           </span>
