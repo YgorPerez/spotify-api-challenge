@@ -2,7 +2,6 @@ import formatText from '@utils/formatText';
 import useTranslation from 'next-translate/useTranslation';
 import { useState, type FC } from 'react';
 import AudioPlayer from 'react-h5-audio-player';
-import 'react-h5-audio-player/lib/styles.css';
 import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 import { useMediaQuery } from 'usehooks-ts';
 

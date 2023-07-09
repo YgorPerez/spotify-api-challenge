@@ -65,6 +65,7 @@
     "eslint-config-next": "^13.4.7",
     "next-translate-plugin": "^2.4.4",
     "postcss": "^8.4.24",
+    "postcss-nesting": "^12.0.0",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0",
     "tailwind-config-viewer": "^1.7.2",
@@ -80,10 +81,5 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.5.1"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "react-h5-audio-player@3.8.6": "patches/react-h5-audio-player@3.8.6.patch"
-    }
   }
 }

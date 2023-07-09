@@ -7,6 +7,7 @@ import { ThemeProvider } from 'next-themes';
 import { type AppType } from 'next/app';
 import { useSSRIntercept } from '../hooks/useSSRIntercept';
 import '../styles/globals.css';
+import '../styles/player.css';
 import { api } from '../utils/api';
 
 const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
