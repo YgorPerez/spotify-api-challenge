@@ -1,11 +1,11 @@
-import useTranslation from 'next-translate/useTranslation'
-import Link from 'next/link'
+import useTranslation from 'next-translate/useTranslation';
+import Link from 'next/link';
 
 const Custom404 = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
-    <div className='min-h-full bg-white px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8'>
+    <div className='min-h-[100vh] bg-white px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8'>
       <div className='mx-auto max-w-max'>
         <main className='sm:flex'>
           <p className='bg-gradient-to-br from-pink-400 to-cyan-600 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl'>
@@ -17,7 +17,7 @@ const Custom404 = () => {
                 {t('common:page-not-found')}
               </h1>
               <p className='mt-1 text-base text-gray-500'>
-              {t('common:not-found-suggestion')}
+                {t('common:not-found-suggestion')}
               </p>
             </div>
             <div className='mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6'>
@@ -32,7 +32,7 @@ const Custom404 = () => {
         </main>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Custom404
+export default Custom404;

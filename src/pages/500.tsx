@@ -4,7 +4,7 @@ import Link from 'next/link';
 const Custom500 = () => {
   const { t } = useTranslation();
   return (
-    <div className='min-h-full bg-white px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8'>
+    <div className='min-h-[100vh] bg-white px-4 py-16 sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8'>
       <div className='mx-auto max-w-max'>
         <main className='sm:flex'>
           <p className='bg-gradient-to-br from-red-400 to-yellow-600 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl'>
