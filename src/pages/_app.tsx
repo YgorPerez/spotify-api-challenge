@@ -8,6 +8,7 @@ import { type AppType } from 'next/app';
 import dynamic from 'next/dynamic';
 import { Roboto } from 'next/font/google';
 import '../styles/globals.css';
+import '/next-seo.config';
 
 const ErrorBoundary = dynamic(() => import('@components/hoc/ErrorBoundary'));
 

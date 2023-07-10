@@ -4,6 +4,7 @@
   "load-more": "Carregar mais",
   "this": "Esse",
   "song": "música",
+  "see-more": "Veja mais de",
   "album": "álbum",
   "no-song-preview": "não tem uma prévia disponível e você não tem um conta premium",
   "server-error": "Erro interno do servidor",
@@ -16,7 +17,7 @@
   "try-again": "Tentar novamente",
   "fans": "Fãs",
   "album-cover": "Foto do álbum",
-  "artist-picture": "Foto do artista",
+  "picture-from": "Foto de",
   "home-try-again": "Por favor volte para o ínicio e tente novamente.",
   "generic-error": "Ops ocorreu um erro..."
 }

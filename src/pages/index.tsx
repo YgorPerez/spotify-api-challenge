@@ -10,6 +10,7 @@ import type {
   InferGetServerSidePropsType,
   NextPage,
 } from 'next';
+import { NextSeo, SiteLinksSearchBoxJsonLd } from 'next-seo';
 import useTranslation from 'next-translate/useTranslation';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -118,10 +119,21 @@ const SearchPage: NextPage<Props> = (
   return (
     <>
       <Head>
-        <title>{t('search:title')}</title>
-        <meta name='description' content={t('search:description')} />
         <link rel='icon' href='/favicon.ico' />
       </Head>
+      <NextSeo
+        title={t('search:title')}
+        description={t('search:description')}
+      />
+      <SiteLinksSearchBoxJsonLd
+        url='spotify-api-challenge.vercel.app/'
+        potentialActions={[
+          {
+            target: 'spotify-api-challenge.vercel.app/?search',
+            queryInput: searchTerm ?? 'Taylor',
+          },
+        ]}
+      />
       <div>
         <div className='min-h-[calc(100vh_-_4em_-_5px)]'>
           <Header />
@@ -158,17 +170,77 @@ const SearchPage: NextPage<Props> = (
                     <Fragment key={index}>
                       {searchResults.albums?.map(album => (
                         <div key={album.id}>
+                          <NextSeo
+                            openGraph={{
+                              type: 'website',
+                              url: album.external_urls[0],
+                              title: `${t('common:album')} ${album.name}`,
+                              description: `${t('common:see-more')} ${
+                                album.name
+                              }`,
+                              images: [
+                                {
+                                  url: album.images[0]?.url as string,
+                                  alt: `${album.name} ${t(
+                                    'common:album-cover',
+                                  )}`,
+                                  width: album.images[0]?.width,
+                                  height: album.images[0]?.height,
+                                },
+                              ],
+                            }}
+                          />
                           <SpotifyCard cardData={album} />
                         </div>
                       ))}
                       {searchResults.tracks?.map(track => (
                         <div key={track.id}>
                           <SpotifyCard cardData={track} />
+                          <NextSeo
+                            openGraph={{
+                              type: 'website',
+                              url: track.external_urls[0],
+                              title: `${t('common:song')}: ${track.name}`,
+                              description: `${t('common:listen-to')} ${
+                                track.name
+                              }`,
+                              images: [
+                                {
+                                  url: track.album.images[0]?.url as string,
+                                  alt: `${track.name} ${t(
+                                    'common:album-cover',
+                                  )}`,
+                                  width: track.album.images[0]?.width,
+                                  height: track.album.images[0]?.height,
+                                },
+                              ],
+                            }}
+                          />
                         </div>
                       ))}
                       {searchResults.artists?.map(artist => (
                         <div key={artist.id}>
                           <SpotifyCard cardData={artist} />
+                          <NextSeo
+                            openGraph={{
+                              type: 'website',
+                              url: artist.external_urls[0],
+                              title: `${t('common:artist')}: ${artist.name}`,
+                              description: `${t('common:see-more')} ${
+                                artist.name
+                              }`,
+                              images: [
+                                {
+                                  url: artist.images[0]?.url as string,
+                                  alt: `${t('common:artist-picture')} ${
+                                    artist.name
+                                  }`,
+                                  width: artist.images[0]?.width,
+                                  height: artist.images[0]?.height,
+                                },
+                              ],
+                            }}
+                          />
                         </div>
                       ))}
                     </Fragment>

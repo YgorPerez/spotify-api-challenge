@@ -4,6 +4,7 @@
   "load-more": "Load more",
   "this": "This",
   "song": "song",
+  "see-more": "See more from",
   "album": "album",
   "no-song-preview": "doesn't have a preview available and you don't have a premium account",
   "server-error": "Internal server error",
@@ -16,7 +17,7 @@
   "try-again": "Try again",
   "fans": "Fans",
   "album-cover": "Album cover",
-  "artist-picture": "Artist picture",
+  "picture-from": "Picture from",
   "home-try-again": "Please go back to the home and try again.",
   "generic-error": "Oops an error ocurred..."
 }

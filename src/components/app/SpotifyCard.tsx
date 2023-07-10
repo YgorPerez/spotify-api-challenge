@@ -227,14 +227,14 @@ const CardMain: FC<{
   }
   return big ? (
     <>
-      {cardMainData ? (
+      {cardMainData && cardData ? (
         <div className='flex justify-center'>
           <Image
             src={cardMainData?.images?.[imageIndex]?.url || artistFallBackImg}
             alt={
               cardMainData?.images?.[imageIndex]?.url
-                ? t('common:album-cover')
-                : t('common:artist-picture')
+                ? `${cardData.name} ${t('common:album-cover')}`
+                : `${t('common:picture-from')} ${cardData.name}`
             }
             loading='eager'
             width={imageSize}
@@ -262,11 +262,11 @@ const CardMain: FC<{
           <Image
             className='aspect-square'
             src={cardMainData.images?.[imageIndex]?.url || artistFallBackImg}
-            loading='lazy'
+            loading='eager'
             alt={
               cardMainData?.images?.[imageIndex]?.url
-                ? t('common:album-cover')
-                : t('common:artist-picture')
+                ? `${cardData.name} ${t('common:album-cover')}`
+                : `${t('common:picture-from')} ${cardData.name}`
             }
             height={imageSize}
             width={imageSize}

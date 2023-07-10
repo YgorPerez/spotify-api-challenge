@@ -35,6 +35,7 @@
     "lucide-react": "^0.244.0",
     "next": "13.4.4",
     "next-axiom": "^0.17.0",
+    "next-seo": "^6.1.0",
     "next-themes": "^0.2.1",
     "next-translate": "^2.4.4",
     "react": "18.2.0",
