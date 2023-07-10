@@ -21,10 +21,7 @@ import {
   useLocalStorage,
 } from 'usehooks-ts';
 
-const SpotifyCard = dynamic(() => import('@components/app/SpotifyCard'), {
-  loading: () => <p>Loading...</p>,
-});
-
+const SpotifyCard = dynamic(() => import('@components/app/SpotifyCard'));
 const Header = dynamic(() => import('@components/ui/Header'), {
   loading: () => <p>Loading...</p>,
 });
