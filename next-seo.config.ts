@@ -1,6 +1,6 @@
 import { type DefaultSeoProps } from 'next-seo';
 import favicon from '/public/favicon.ico';
-import homePreview from '/public/images/home-preview.png';
+import homePreview from '/public/images/home-preview.webp';
 
 const config: DefaultSeoProps = {
   defaultTitle: 'Listen to Spotify',
@@ -10,7 +10,7 @@ const config: DefaultSeoProps = {
     description:
       "Search for artists, albums or tracks and listen to the songs previews while reading it's lyrics",
     locale: 'en-US',
-    siteName: 'Spotify in T3',
+    siteName: 'Spotify Api Challenge',
     images: [
       {
         url: homePreview.src,
@@ -30,6 +30,7 @@ const config: DefaultSeoProps = {
       href: favicon.src,
       sizes: '64x64',
     },
+    { rel: 'manifest', href: '/manifest.json' },
   ],
   canonical: 'spotify-api-challenge.vercel.app',
   twitter: {
