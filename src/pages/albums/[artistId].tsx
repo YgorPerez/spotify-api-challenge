@@ -97,11 +97,9 @@ const SingleArtistPage: NextPage<Props> = (
         </div>
         <div className='flex flex-col lg:ml-4 xl:ml-8 2xl:ml-16'>
           <ScrollArea className='lg:max-h-[75vh]'>
-            <ol className='mx-2 list-decimal text-primary-foreground lg:mb-4'>
+            <ol className='mx-2 flex w-[95vw] list-decimal flex-col justify-center lg:w-[55vw]'>
               {albums?.map((album, index) => (
-                <div key={index}>
-                  <Album album={album} />
-                </div>
+                <Album album={album} key={index} />
               ))}
               {isFetchingAlbums && loadingData}
             </ol>

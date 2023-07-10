@@ -5,7 +5,7 @@ module.exports = {
   content: ['./src/pages/**/*.{ts,tsx}', './src/components/**/*.{ts,tsx}'],
   theme: {
     fontFamily: {
-      body: ['Roboto'],
+      roboto: ['var(--font-roboto)', 'Segoe UI'],
     },
     container: {
       center: true,

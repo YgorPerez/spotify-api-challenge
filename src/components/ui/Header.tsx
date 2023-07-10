@@ -19,14 +19,7 @@ const Header: FC<Props> = ({ goBack }: Props) => {
         <header className='mx-4 flex w-[calc(100%_-_2rem)] max-w-[100vw] justify-between pt-4 sm:pt-4 lg:pt-6'>
           <div className='block h-9 w-9 sm:h-12 sm:w-12 lg:h-14 lg:w-14'>
             <Link href={`/`}>
-              <Image
-                src={spotifyLogo}
-                alt='Spotify logo'
-                height={64}
-                width={64}
-                sizes='(min-width: 639) 48px, (min-width: 1023) 56px, 36px'
-                loading='eager'
-              />
+              <Image src={spotifyLogo} alt='Spotify logo' loading='eager' />
             </Link>
           </div>
           {goBack && (
@@ -50,7 +43,6 @@ const Header: FC<Props> = ({ goBack }: Props) => {
                 alt='Spotify logo'
                 height={64}
                 width={64}
-                sizes='(min-width: 639) 48px, (min-width: 1023) 56px, 36px'
                 loading='eager'
               />
             </Link>
@@ -71,7 +63,6 @@ const Header: FC<Props> = ({ goBack }: Props) => {
                 alt='Spotify logo'
                 height={64}
                 width={64}
-                sizes='(min-width: 639) 48px, (min-width: 1023) 56px, 36px'
                 loading='eager'
               />
             </Link>

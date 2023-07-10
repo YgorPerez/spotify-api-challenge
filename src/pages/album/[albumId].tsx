@@ -103,12 +103,7 @@ const SingleAlbumPage: NextPage<Props> = (
             <ScrollArea className='lg:max-h-[calc(75vh_-_10rem)] 2xl:max-h-[calc(75vh_-_6rem)]'>
               <ol className='mx-2 list-decimal lg:mb-4'>
                 {tracks?.map((track, index) => (
-                  <div
-                    key={index}
-                    className='flex justify-around lg:block 2xl:my-1'
-                  >
-                    <Track track={track as SimplifiedTrack} />
-                  </div>
+                  <Track track={track as SimplifiedTrack} key={index} />
                 ))}
                 {isFetchingTracks && loadingData}
               </ol>

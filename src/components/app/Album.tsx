@@ -24,18 +24,20 @@ const Album: FC<{ album: AlbumType | null }> = ({ album }) => {
     );
   }
   return (
-    <Link
-      href={`/album/${album.id}`}
-      className='inline-block w-[95vw] whitespace-nowrap underline-offset-4 hover:underline lg:w-[55vw]'
-      onFocus={() => prefetchAlbum(album.id)}
-      onMouseEnter={() => prefetchAlbum(album.id)}
-    >
-      <li className='ml-8 mr-4 py-1 text-base marker:text-center marker:!text-primary-foreground sm:ml-12 sm:text-lg 2xl:mb-1 2xl:text-2xl'>
-        <h2 className='ml-4 overflow-hidden text-ellipsis text-foreground'>
-          {album.name}
-        </h2>
-      </li>
-    </Link>
+    <li className='ml-8 mr-4 marker:!text-primary-foreground sm:ml-12 sm:text-lg 2xl:text-2xl'>
+      <Link
+        href={`/album/${album.id}`}
+        className=' underline-offset-4 hover:underline'
+        onFocus={() => prefetchAlbum(album.id)}
+        onMouseEnter={() => prefetchAlbum(album.id)}
+      >
+        <div className='py-1 text-base sm:text-lg 2xl:mb-1 2xl:text-2xl'>
+          <h2 className='ml-4 line-clamp-1 overflow-hidden text-ellipsis'>
+            {album.name}
+          </h2>
+        </div>
+      </Link>
+    </li>
   );
 };
 

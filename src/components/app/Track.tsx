@@ -29,27 +29,27 @@ const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
     );
   }
   return (
-    <Link
-      className='underline-offset-4 hover:underline'
-      href={`/track/${track.id}`}
-      onFocus={() => {
-        prefetchTrack(track);
-      }}
-      onMouseEnter={() => {
-        prefetchTrack(track);
-      }}
-    >
-      <li className='ml-3 text-center text-base marker:!text-primary-foreground sm:text-lg lg:ml-8 2xl:text-2xl'>
-        <div className='flex w-[85vw] justify-between py-1 lg:ml-3 lg:w-[55vw]'>
-          <h2 className='ml-2 mr-4 overflow-hidden text-ellipsis whitespace-nowrap'>
-            {track.name}
-          </h2>
-          <span className='text-primary-foreground lg:mr-4'>
-            {formatMilliseconds({ milliseconds: track.duration_ms })}
-          </span>
+    <li className='ml-8 text-base marker:!text-primary-foreground sm:text-lg 2xl:text-2xl'>
+      <Link
+        className='underline-offset-4 hover:underline lg:inline-block 2xl:my-1'
+        href={`/track/${track.id}`}
+        onFocus={() => {
+          prefetchTrack(track);
+        }}
+        onMouseEnter={() => {
+          prefetchTrack(track);
+        }}
+      >
+        <div className='text-base sm:text-lg 2xl:text-2xl'>
+          <div className='flex w-[85vw] justify-between py-1 lg:w-[55vw]'>
+            <h2 className='mx-2 line-clamp-1 sm:mr-4'>{track.name}</h2>
+            <span className='text-primary-foreground lg:mr-4'>
+              {formatMilliseconds({ milliseconds: track.duration_ms })}
+            </span>
+          </div>
         </div>
-      </li>
-    </Link>
+      </Link>
+    </li>
   );
 };
 

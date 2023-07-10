@@ -18,7 +18,8 @@ const ThemeProvider = dynamic(() =>
 const roboto = Roboto({
   weight: '400',
   subsets: ['latin'],
-  variable: '--font-primary',
+  variable: '--font-roboto',
+  fallback: ['Segoe UI'],
 });
 
 const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
