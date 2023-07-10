@@ -5,6 +5,14 @@ import dynamic from 'next/dynamic';
 import { useState, type FC } from 'react';
 import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 
+const SpotifyPlayer = dynamic(() => import('react-spotify-web-playback'), {
+  loading: () => <p>Loading...</p>,
+});
+const AudioPlayer = dynamic(() => import('react-h5-audio-player'), {
+  loading: () => <p>Loading...</p>,
+});
+const Head = dynamic(() => import('next/head'));
+
 const Player: FC<{
   tracks: SimplifiedTrack[];
 }> = ({ tracks: tracks }) => {
@@ -40,53 +48,23 @@ const Player: FC<{
   const songSource = currentSong?.preview_url;
   const isPlaylist = tracks.length > 1;
 
-  if (isPremium) {
-    const SpotifyPlayer = dynamic(() => import('react-spotify-web-playback'), {
-      loading: () => <p>Loading...</p>,
-    });
-    return (
-      <div className='fixed bottom-0 w-full bg-background pt-2'>
-        {songSource || (isPremium && currentSong) ? (
-          <div>
-            <p className='w-full overflow-hidden text-ellipsis text-center text-2xl'>
-              {isPlaylist && (
-                <span className='text-gray-400'>{currentSongIndex + 1}. </span>
-              )}
-              {currentSong.name}
-            </p>
+  return (
+    <div className='fixed bottom-0 w-full bg-background pt-2'>
+      {songSource || (isPremium && currentSong) ? (
+        <div>
+          <p className='w-full overflow-hidden text-ellipsis text-center text-2xl'>
+            {isPlaylist && (
+              <span className='text-gray-400'>{currentSongIndex + 1}. </span>
+            )}
+            {currentSong.name}
+          </p>
+          {isPremium ? (
             <SpotifyPlayer
               token={token as string}
               uris={uris}
               initialVolume={0.4}
             />
-          </div>
-        ) : (
-          <p className='mb-10 w-full text-center text-xl sm:text-2xl'>
-            {t('common:this')}{' '}
-            {isPlaylist ? t('common:album') : t('common:song')}{' '}
-            {t('common:no-song-preview')}
-          </p>
-        )}
-      </div>
-    );
-  } else {
-    const AudioPlayer = dynamic(() => import('react-h5-audio-player'), {
-      loading: () => <p>Loading...</p>,
-    });
-    const Head = dynamic(() => import('next/head'), {
-      loading: () => <p>Loading...</p>,
-    });
-
-    return (
-      <div className='fixed bottom-0 w-full bg-background pt-2'>
-        {songSource ? (
-          <div>
-            <p className='w-full overflow-hidden text-ellipsis text-center text-2xl'>
-              {isPlaylist && (
-                <span className='text-gray-400'>{currentSongIndex + 1}. </span>
-              )}
-              {currentSong.name}
-            </p>
+          ) : (
             <>
               <Head>
                 <link href='/player.css' rel='stylesheet' />
@@ -102,17 +80,16 @@ const Player: FC<{
                 footer
               />
             </>
-          </div>
-        ) : (
-          <p className='mb-10 w-full text-center text-xl sm:text-2xl'>
-            {t('common:this')}{' '}
-            {isPlaylist ? t('common:album') : t('common:song')}{' '}
-            {t('common:no-song-preview')}
-          </p>
-        )}
-      </div>
-    );
-  }
+          )}
+        </div>
+      ) : (
+        <p className='mb-10 w-full text-center text-xl sm:text-2xl'>
+          {t('common:this')} {isPlaylist ? t('common:album') : t('common:song')}{' '}
+          {t('common:no-song-preview')}
+        </p>
+      )}
+    </div>
+  );
 };
 
 export default Player;

@@ -170,77 +170,17 @@ const SearchPage: NextPage<Props> = (
                     <Fragment key={index}>
                       {searchResults.albums?.map(album => (
                         <div key={album.id}>
-                          <NextSeo
-                            openGraph={{
-                              type: 'website',
-                              url: album.external_urls[0],
-                              title: `${t('common:album')} ${album.name}`,
-                              description: `${t('common:see-more')} ${
-                                album.name
-                              }`,
-                              images: [
-                                {
-                                  url: album.images[0]?.url as string,
-                                  alt: `${album.name} ${t(
-                                    'common:album-cover',
-                                  )}`,
-                                  width: album.images[0]?.width,
-                                  height: album.images[0]?.height,
-                                },
-                              ],
-                            }}
-                          />
                           <SpotifyCard cardData={album} />
                         </div>
                       ))}
                       {searchResults.tracks?.map(track => (
                         <div key={track.id}>
                           <SpotifyCard cardData={track} />
-                          <NextSeo
-                            openGraph={{
-                              type: 'website',
-                              url: track.external_urls[0],
-                              title: `${t('common:song')}: ${track.name}`,
-                              description: `${t('common:listen-to')} ${
-                                track.name
-                              }`,
-                              images: [
-                                {
-                                  url: track.album.images[0]?.url as string,
-                                  alt: `${track.name} ${t(
-                                    'common:album-cover',
-                                  )}`,
-                                  width: track.album.images[0]?.width,
-                                  height: track.album.images[0]?.height,
-                                },
-                              ],
-                            }}
-                          />
                         </div>
                       ))}
                       {searchResults.artists?.map(artist => (
                         <div key={artist.id}>
                           <SpotifyCard cardData={artist} />
-                          <NextSeo
-                            openGraph={{
-                              type: 'website',
-                              url: artist.external_urls[0],
-                              title: `${t('common:artist')}: ${artist.name}`,
-                              description: `${t('common:see-more')} ${
-                                artist.name
-                              }`,
-                              images: [
-                                {
-                                  url: artist.images[0]?.url as string,
-                                  alt: `${t('common:artist-picture')} ${
-                                    artist.name
-                                  }`,
-                                  width: artist.images[0]?.width,
-                                  height: artist.images[0]?.height,
-                                },
-                              ],
-                            }}
-                          />
                         </div>
                       ))}
                     </Fragment>

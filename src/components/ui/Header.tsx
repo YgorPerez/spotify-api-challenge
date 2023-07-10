@@ -1,5 +1,4 @@
-import GoBack from '@components/app/GoBack';
-import ThemeSwitcher from '@components/app/ThemeSwitcher';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { type FC } from 'react';
@@ -9,6 +8,13 @@ import spotifyLogo from '/public/images/spotify-app-logo.webp';
 interface Props {
   goBack?: boolean;
 }
+
+const ThemeSwitcher = dynamic(() => import('@components/app/ThemeSwitcher'), {
+  loading: () => <p>Loading...</p>,
+});
+const GoBack = dynamic(() => import('@components/app/GoBack'), {
+  loading: () => <p>Loading...</p>,
+});
 
 const Header: FC<Props> = ({ goBack }: Props) => {
   const isSmallerLG = useMediaQuery('(max-width: 1023px)');
