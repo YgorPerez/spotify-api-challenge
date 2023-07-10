@@ -28,8 +28,6 @@ interface Props {
   trackId: string;
 }
 
-export const runtime = 'experimental-edge';
-
 const SingleTrackPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {

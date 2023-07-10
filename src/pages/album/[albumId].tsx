@@ -32,8 +32,6 @@ interface Props {
   albumId: string;
 }
 
-export const runtime = 'experimental-edge';
-
 const tracksLimit = 15;
 
 function generateLoadingData(amount: number) {

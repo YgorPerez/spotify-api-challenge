@@ -33,8 +33,6 @@ interface Props {
   searchTerm: string | null;
 }
 
-export const runtime = 'experimental-edge';
-
 const searchLimit = 5;
 
 const generateLoadingData = (amount: number) => {

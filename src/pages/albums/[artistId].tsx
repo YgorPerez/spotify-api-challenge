@@ -28,8 +28,6 @@ interface Props {
   artistId: string;
 }
 
-export const runtime = 'experimental-edge';
-
 const albumsLimit = 15;
 
 function generateLoadingData(amount: number) {
