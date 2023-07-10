@@ -1,4 +1,9 @@
+import SearchForm from '@components/app/SearchForm';
+import Footer from '@components/ui/Footer';
 import useGetLastSearchedAlbum from '@hooks/useGetLastSearchedAlbums';
+import useGetSearch from '@hooks/useGetSearch';
+import { ssrHelper } from '@utils/ssrHelper';
+import { stringOrNull } from '@utils/stringOrNull';
 import type {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -6,6 +11,7 @@ import type {
   NextPage,
 } from 'next';
 import useTranslation from 'next-translate/useTranslation';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useRef } from 'react';
@@ -14,17 +20,20 @@ import {
   useIntersectionObserver,
   useLocalStorage,
 } from 'usehooks-ts';
-import SearchForm from '../components/app/SearchForm';
-import SpotifyCard from '../components/app/SpotifyCard';
-import Footer from '../components/ui/Footer';
-import Header from '../components/ui/Header';
-import useGetSearch from '../hooks/useGetSearch';
-import { ssrHelper } from '../utils/ssrHelper';
-import { stringOrNull } from '../utils/stringOrNull';
+
+const SpotifyCard = dynamic(() => import('@components/app/SpotifyCard'), {
+  loading: () => <p>Loading...</p>,
+});
+
+const Header = dynamic(() => import('@components/ui/Header'), {
+  loading: () => <p>Loading...</p>,
+});
 
 interface Props {
   searchTerm: string | null;
 }
+
+export const runtime = 'experimental-edge';
 
 const searchLimit = 5;
 

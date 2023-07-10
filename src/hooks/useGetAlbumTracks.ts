@@ -1,13 +1,13 @@
-import { api } from '../utils/api'
+import { api } from '@utils/api';
 
 export default function useGetAlbumTracks({
   albumId,
   enabled = true,
   limit = 15,
 }: {
-  albumId: string
-  enabled?: boolean
-  limit?: number
+  albumId: string;
+  enabled?: boolean;
+  limit?: number;
 }) {
   return api.spotify.getAlbumTracks.useInfiniteQuery(
     {
@@ -19,5 +19,5 @@ export default function useGetAlbumTracks({
       staleTime: Infinity,
       enabled,
     },
-  )
+  );
 }

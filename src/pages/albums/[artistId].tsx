@@ -1,22 +1,34 @@
-import LoadMore from '@components/app/LoadMore';
+import Album from '@components/app/Album';
 import ScrollArea from '@components/ui/ScrollArea';
-import Separator from '@components/ui/Separator';
 import useGetArtist from '@hooks/useGetArtist';
+import useGetArtistsAlbums from '@hooks/useGetArtistAlbums';
+import { ssrHelper } from '@utils/ssrHelper';
+import { stringOrNull } from '@utils/stringOrNull';
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { type InferGetServerSidePropsType, type NextPage } from 'next';
-import Error from 'next/error';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
-import Album from '../../components/app/Album';
-import SpotifyCard from '../../components/app/SpotifyCard';
-import Header from '../../components/ui/Header';
-import useGetArtistsAlbums from '../../hooks/useGetArtistAlbums';
-import { ssrHelper } from '../../utils/ssrHelper';
-import { stringOrNull } from '../../utils/stringOrNull';
+
+const Error = dynamic(() => import('next/error'), {
+  loading: () => <p>Loading...</p>,
+});
+const Header = dynamic(() => import('@components/ui/Header'), {
+  loading: () => <p>Loading...</p>,
+});
+const LoadMore = dynamic(() => import('@components/app/LoadMore'), {
+  loading: () => <p>Loading...</p>,
+});
+const SpotifyCard = dynamic(() => import('@components/app/SpotifyCard'), {
+  loading: () => <p>Loading...</p>,
+});
+const Separator = dynamic(() => import('@components/ui/Separator'));
 
 interface Props {
   artistId: string;
 }
+
+export const runtime = 'experimental-edge';
 
 const albumsLimit = 15;
 

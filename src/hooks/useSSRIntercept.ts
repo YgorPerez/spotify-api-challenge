@@ -6,7 +6,7 @@
 import PageRouter from 'next/router'
 import { useEffectOnce } from 'usehooks-ts'
 
-export const useSSRIntercept = () => {
+const useSSRIntercept = () => {
   useEffectOnce(() => {
     if (!PageRouter.router?.components) return
 
@@ -34,3 +34,4 @@ export const useSSRIntercept = () => {
     }
   })
 }
+export default useSSRIntercept

@@ -1,24 +1,38 @@
 import ScrollArea from '@/components/ui/ScrollArea';
-import Separator from '@/components/ui/Separator';
-import LoadMore from '@components/app/LoadMore';
-import Player from '@components/app/Player';
+import Track from '@components/app/Track';
 import useGetAlbum from '@hooks/useGetAlbum';
+import useGetAlbumTracks from '@hooks/useGetAlbumTracks';
+import { ssrHelper } from '@utils/ssrHelper';
+import { stringOrNull } from '@utils/stringOrNull';
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { type InferGetServerSidePropsType, type NextPage } from 'next';
-import Error from 'next/error';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
-import SpotifyCard from '../../components/app/SpotifyCard';
-import Track from '../../components/app/Track';
-import Header from '../../components/ui/Header';
-import useGetAlbumTracks from '../../hooks/useGetAlbumTracks';
-import { ssrHelper } from '../../utils/ssrHelper';
-import { stringOrNull } from '../../utils/stringOrNull';
+
+const Error = dynamic(() => import('next/error'), {
+  loading: () => <p>Loading...</p>,
+});
+const SpotifyCard = dynamic(() => import('@components/app/SpotifyCard'), {
+  loading: () => <p>Loading...</p>,
+});
+const Separator = dynamic(() => import('@components/ui/Separator'));
+const Header = dynamic(() => import('@components/ui/Header'), {
+  loading: () => <p>Loading...</p>,
+});
+const LoadMore = dynamic(() => import('@components/app/LoadMore'), {
+  loading: () => <p>Loading...</p>,
+});
+const Player = dynamic(() => import('@components/app/Player'), {
+  loading: () => <p>Loading...</p>,
+});
 
 interface Props {
   albumId: string;
 }
+
+export const runtime = 'experimental-edge';
 
 const tracksLimit = 15;
 
@@ -78,40 +92,42 @@ const SingleAlbumPage: NextPage<Props> = (
   const album = getAlbumData?.album ?? null;
 
   return (
-    <div>
-      <div className='flex'>
-        <Header goBack />
-      </div>
-      <main className='mt-6 lg:flex lg:justify-center 2xl:mt-4'>
-        <div className='mb-4 lg:mb-0 lg:ml-6 2xl:ml-0'>
-          <SpotifyCard cardData={album} big />
+    <>
+      <div>
+        <div className='flex'>
+          <Header goBack />
         </div>
-        <div className='mb-36 flex flex-col lg:mb-0 lg:ml-4 xl:ml-8 2xl:ml-16'>
-          <ScrollArea className='lg:max-h-[calc(75vh_-_10rem)] 2xl:max-h-[calc(75vh_-_6rem)]'>
-            <ol className='mx-2 list-decimal lg:mb-4'>
-              {tracks?.map((track, index) => (
-                <div
-                  key={index}
-                  className='flex justify-around lg:block 2xl:my-1'
-                >
-                  <Track track={track as SimplifiedTrack} />
-                </div>
-              ))}
-              {isFetchingTracks && loadingData}
-            </ol>
-          </ScrollArea>
-          <Separator className='my-2' />
-          <div className='mt-4 flex justify-center lg:block'>
-            <LoadMore
-              fetchNextPage={() => void fetchNextPage()}
-              isLoading={isFetchingTracks}
-              hasNextPage={hasNextPage}
-            />
+        <main className='mt-6 lg:flex lg:justify-center 2xl:mt-4'>
+          <div className='mb-4 lg:mb-0 lg:ml-6 2xl:ml-0'>
+            <SpotifyCard cardData={album} big />
           </div>
-        </div>
-        {tracks && <Player tracks={tracks as SimplifiedTrack[]} />}
-      </main>
-    </div>
+          <div className='mb-36 flex flex-col lg:mb-0 lg:ml-4 xl:ml-8 2xl:ml-16'>
+            <ScrollArea className='lg:max-h-[calc(75vh_-_10rem)] 2xl:max-h-[calc(75vh_-_6rem)]'>
+              <ol className='mx-2 list-decimal lg:mb-4'>
+                {tracks?.map((track, index) => (
+                  <div
+                    key={index}
+                    className='flex justify-around lg:block 2xl:my-1'
+                  >
+                    <Track track={track as SimplifiedTrack} />
+                  </div>
+                ))}
+                {isFetchingTracks && loadingData}
+              </ol>
+            </ScrollArea>
+            <Separator className='my-2' />
+            <div className='mt-4 flex justify-center lg:block'>
+              <LoadMore
+                fetchNextPage={() => void fetchNextPage()}
+                isLoading={isFetchingTracks}
+                hasNextPage={hasNextPage}
+              />
+            </div>
+          </div>
+          {tracks && <Player tracks={tracks as SimplifiedTrack[]} />}
+        </main>
+      </div>
+    </>
   );
 };
 

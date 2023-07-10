@@ -1,6 +1,18 @@
 import { env } from '@/env.mjs';
 import { getSpotifyToken } from '@lib/getClerkSpotifyToken';
 import {
+  AlbumSchema,
+  ArtistSchema,
+  PagingSimplifiedAlbumsSchema,
+  PagingSimplifiedTracksSchema,
+  PrivateUserSchema,
+  SearchContentItemsSchema,
+  SearchContentSchema,
+  SimplifiedAlbumSchema,
+  SimplifiedTrackSchema,
+  TrackSchema,
+} from '@schema/spotifyApiSchemas';
+import {
   TRPCError,
   type inferRouterInputs,
   type inferRouterOutputs,
@@ -13,18 +25,6 @@ import type {
   Track,
 } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 import { z } from 'zod';
-import {
-  AlbumSchema,
-  ArtistSchema,
-  PagingSimplifiedAlbumsSchema,
-  PagingSimplifiedTracksSchema,
-  PrivateUserSchema,
-  SearchContentItemsSchema,
-  SearchContentSchema,
-  SimplifiedAlbumSchema,
-  SimplifiedTrackSchema,
-  TrackSchema,
-} from '../../../schema/spotifyApiSchemas';
 import { protectedProcedure, protectedTokenProcedure } from '../middleware';
 import { createTRPCRouter } from '../trpc';
 

@@ -1,20 +1,34 @@
-import Lyrics from '@components/app/Lyrics';
-import Player from '@components/app/Player';
 import useGetLyrics from '@hooks/useGetLyrics';
 import useGetTrack from '@hooks/useGetTrack';
+import { ssrHelper } from '@utils/ssrHelper';
+import { stringOrNull } from '@utils/stringOrNull';
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { type InferGetServerSidePropsType, type NextPage } from 'next';
-import Error from 'next/error';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
-import SpotifyCard from '../../components/app/SpotifyCard';
-import Header from '../../components/ui/Header';
-import { ssrHelper } from '../../utils/ssrHelper';
-import { stringOrNull } from '../../utils/stringOrNull';
+
+const Error = dynamic(() => import('next/error'), {
+  loading: () => <p>Loading...</p>,
+});
+const Header = dynamic(() => import('@components/ui/Header'), {
+  loading: () => <p>Loading...</p>,
+});
+const Player = dynamic(() => import('@components/app/Player'), {
+  loading: () => <p>Loading...</p>,
+});
+const SpotifyCard = dynamic(() => import('@components/app/SpotifyCard'), {
+  loading: () => <p>Loading...</p>,
+});
+const Lyrics = dynamic(() => import('@components/app/Lyrics'), {
+  loading: () => <p>Loading...</p>,
+});
 
 interface Props {
   trackId: string;
 }
+
+export const runtime = 'experimental-edge';
 
 const SingleTrackPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -51,22 +65,24 @@ const SingleTrackPage: NextPage<Props> = (
   const track = trackData?.track ?? null;
 
   return (
-    <div>
-      <div className='flex'>
-        <Header goBack />
-      </div>
-      <main className='mt-6 lg:flex lg:justify-center 2xl:mt-8'>
-        <div className='lg:-ml-18 mb-4 lg:mb-0 2xl:-ml-40'>
-          <SpotifyCard cardData={track} big />
+    <>
+      <div>
+        <div className='flex'>
+          <Header goBack />
         </div>
-        <Lyrics
-          lyrics={lyrics}
-          isFetching={isFetchingLyrics}
-          isError={isErrorLyrics}
-        />
-        {track && <Player tracks={[track as SimplifiedTrack]} />}
-      </main>
-    </div>
+        <main className='mt-6 lg:flex lg:justify-center 2xl:mt-8'>
+          <div className='lg:-ml-18 mb-4 lg:mb-0 2xl:-ml-40'>
+            <SpotifyCard cardData={track} big />
+          </div>
+          <Lyrics
+            lyrics={lyrics}
+            isFetching={isFetchingLyrics}
+            isError={isErrorLyrics}
+          />
+          {track && <Player tracks={[track as SimplifiedTrack]} />}
+        </main>
+      </div>
+    </>
   );
 };
 

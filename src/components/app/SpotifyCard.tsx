@@ -236,7 +236,7 @@ const CardMain: FC<{
                 ? t('common:album-cover')
                 : t('common:artist-picture')
             }
-            loading='lazy'
+            loading='eager'
             width={imageSize}
             height={imageSize}
             className='aspect-square h-full w-full lg:w-[340px] xl:w-[380px] 2xl:w-[420px]'

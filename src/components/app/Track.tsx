@@ -1,9 +1,9 @@
 import Skeleton from '@components/ui/Skeleton';
 import { api } from '@utils/api';
+import formatMilliseconds from '@utils/formatMilliseconds';
 import Link from 'next/link';
 import { type FC } from 'react';
 import { type SimplifiedTrack as SimplifiedTrackType } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
-import formatMilliseconds from '../../utils/formatMilliseconds';
 
 const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
   const utils = api.useContext();
@@ -39,7 +39,7 @@ const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
         prefetchTrack(track);
       }}
     >
-      <li className='ml-3 text-center text-base marker:!text-primary-foreground sm:text-lg lg:ml-8 2xl:text-xl'>
+      <li className='ml-3 text-center text-base marker:!text-primary-foreground sm:text-lg lg:ml-8 2xl:text-2xl'>
         <div className='flex w-[85vw] justify-between py-1 lg:ml-3 lg:w-[55vw]'>
           <h2 className='ml-2 mr-4 overflow-hidden text-ellipsis whitespace-nowrap'>
             {track.name}

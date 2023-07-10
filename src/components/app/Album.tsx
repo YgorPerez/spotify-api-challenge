@@ -30,7 +30,7 @@ const Album: FC<{ album: AlbumType | null }> = ({ album }) => {
       onFocus={() => prefetchAlbum(album.id)}
       onMouseEnter={() => prefetchAlbum(album.id)}
     >
-      <li className='ml-8 mr-4 py-1 text-base marker:text-center marker:!text-primary-foreground sm:ml-12 sm:text-lg 2xl:mb-1 2xl:text-xl'>
+      <li className='ml-8 mr-4 py-1 text-base marker:text-center marker:!text-primary-foreground sm:ml-12 sm:text-lg 2xl:mb-1 2xl:text-2xl'>
         <h2 className='ml-4 overflow-hidden text-ellipsis text-foreground'>
           {album.name}
         </h2>

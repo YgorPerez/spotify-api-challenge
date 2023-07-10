@@ -1,15 +1,15 @@
-import { api } from '../utils/api'
+import { api } from '@utils/api';
 
 export default function useGetSearch({
   searchTerm,
   enabled = true,
   limit = 5,
 }: {
-  searchTerm: string
-  enabled?: boolean
-  limit?: number
+  searchTerm: string;
+  enabled?: boolean;
+  limit?: number;
 }) {
-  const utils = api.useContext()
+  const utils = api.useContext();
   return api.spotify.getSearch.useInfiniteQuery(
     {
       searchTerm,
@@ -25,22 +25,22 @@ export default function useGetSearch({
             utils.spotify.getAlbum.setData(
               { albumId: album.id },
               { album: album },
-            )
-          })
+            );
+          });
           page.artists?.map(artist => {
             utils.spotify.getArtist.setData(
               { artistId: artist.id },
               { artist: artist },
-            )
-          })
+            );
+          });
           page.tracks?.map(track => {
             utils.spotify.getTrack.setData(
               { trackId: track.id },
               { track: track },
-            )
-          })
-        })
+            );
+          });
+        });
       },
     },
-  )
+  );
 }

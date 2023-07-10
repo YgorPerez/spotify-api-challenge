@@ -22,9 +22,10 @@ const Header: FC<Props> = ({ goBack }: Props) => {
               <Image
                 src={spotifyLogo}
                 alt='Spotify logo'
-                placeholder='blur'
                 height={64}
                 width={64}
+                sizes='(min-width: 639) 48px, (min-width: 1023) 56px, 36px'
+                loading='eager'
               />
             </Link>
           </div>
@@ -47,9 +48,10 @@ const Header: FC<Props> = ({ goBack }: Props) => {
               <Image
                 src={spotifyLogo}
                 alt='Spotify logo'
-                placeholder='blur'
                 height={64}
                 width={64}
+                sizes='(min-width: 639) 48px, (min-width: 1023) 56px, 36px'
+                loading='eager'
               />
             </Link>
             <div className='ml-14 mr-4 mt-8 2xl:ml-20'>
@@ -67,9 +69,10 @@ const Header: FC<Props> = ({ goBack }: Props) => {
               <Image
                 src={spotifyLogo}
                 alt='Spotify logo'
-                placeholder='blur'
                 height={64}
                 width={64}
+                sizes='(min-width: 639) 48px, (min-width: 1023) 56px, 36px'
+                loading='eager'
               />
             </Link>
           </div>
