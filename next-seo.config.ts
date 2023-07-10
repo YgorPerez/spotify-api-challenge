@@ -1,4 +1,5 @@
 import { type DefaultSeoProps } from 'next-seo';
+import favicon from '/public/favicon.ico';
 import homePreview from '/public/images/home-preview.png';
 
 const config: DefaultSeoProps = {
@@ -19,6 +20,17 @@ const config: DefaultSeoProps = {
       },
     ],
   },
+  additionalLinkTags: [
+    {
+      rel: 'icon',
+      href: favicon.src,
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: favicon.src,
+      sizes: '64x64',
+    },
+  ],
   canonical: 'spotify-api-challenge.vercel.app',
   twitter: {
     handle: '@ygorperez',

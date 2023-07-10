@@ -4,19 +4,17 @@ import { ssrHelper } from '@utils/ssrHelper';
 import { stringOrNull } from '@utils/stringOrNull';
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { type InferGetServerSidePropsType, type NextPage } from 'next';
+import { NextSeo } from 'next-seo';
+import useTranslation from 'next-translate/useTranslation';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 
-const Error = dynamic(() => import('next/error'), {
-  loading: () => <p>Loading...</p>,
-});
+const Error = dynamic(() => import('next/error'));
 const Header = dynamic(() => import('@components/ui/Header'), {
   loading: () => <p>Loading...</p>,
 });
-const Player = dynamic(() => import('@components/app/Player'), {
-  loading: () => <p>Loading...</p>,
-});
+const Player = dynamic(() => import('@components/app/Player'));
 const SpotifyCard = dynamic(() => import('@components/app/SpotifyCard'), {
   loading: () => <p>Loading...</p>,
 });
@@ -32,6 +30,7 @@ const SingleTrackPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const trackId = stringOrNull(
     props.trackId ? props.trackId : router.query.trackId,
@@ -64,6 +63,23 @@ const SingleTrackPage: NextPage<Props> = (
 
   return (
     <>
+      <NextSeo
+        title={`${t('common:listen-to')} ${track?.name ?? ''}`}
+        description={`${t('common:you-can-listen')} ${
+          track?.artists?.[0]?.name ?? ''
+        } ${track?.name ?? ''} ${t('common:album')}`}
+        openGraph={{
+          title: `${t('common:listen-to')} ${track?.name ?? ''}`,
+          description: `${t('common:you-can-listen')} ${
+            track?.artists?.[0]?.name ?? ''
+          } ${track?.name ?? ''} ${t('common:song')}`,
+          url: track?.album?.external_urls[0] as string,
+          audio: track?.preview_url
+            ? [{ url: track.preview_url, type: 'audio/mpeg' }]
+            : undefined,
+          images: track?.album?.images,
+        }}
+      />
       <div>
         <div className='flex'>
           <Header goBack />
