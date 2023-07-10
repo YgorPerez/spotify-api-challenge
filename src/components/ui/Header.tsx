@@ -18,8 +18,13 @@ const Header: FC<Props> = ({ goBack }: Props) => {
       {isSmallerLG ? (
         <header className='mx-4 flex w-[calc(100%_-_2rem)] max-w-[100vw] justify-between pt-4 sm:pt-4 lg:pt-6'>
           <div className='block h-9 w-9 sm:h-12 sm:w-12 lg:h-14 lg:w-14'>
-            <Link href={`/`}>
-              <Image src={spotifyLogo} alt='Spotify logo' loading='eager' />
+            <Link href={`/?search=`}>
+              <Image
+                src={spotifyLogo}
+                alt='Spotify logo'
+                loading='eager'
+                onClick={() => document.getElementById('search')?.click()}
+              />
             </Link>
           </div>
           {goBack && (
@@ -35,16 +40,10 @@ const Header: FC<Props> = ({ goBack }: Props) => {
         <header className='mx-4 flex w-[calc(100%_-_2rem)] max-w-[100vw] justify-between pt-4 sm:pt-4 lg:pt-6'>
           <div className='flex'>
             <Link
-              href={`/`}
+              href={`/?search=`}
               className='h-9 w-9 sm:h-12 sm:w-12 lg:h-14 lg:w-14'
             >
-              <Image
-                src={spotifyLogo}
-                alt='Spotify logo'
-                height={64}
-                width={64}
-                loading='eager'
-              />
+              <Image src={spotifyLogo} alt='Spotify logo' loading='eager' />
             </Link>
             <div className='ml-14 mr-4 mt-8 2xl:ml-20'>
               <GoBack />
@@ -57,14 +56,8 @@ const Header: FC<Props> = ({ goBack }: Props) => {
       ) : (
         <header className='mx-4 flex w-[calc(100%_-_2rem)] max-w-[100vw] justify-between pt-4 sm:pt-4 lg:pt-6'>
           <div className='block h-9 w-9 sm:h-12 sm:w-12 lg:h-14 lg:w-14'>
-            <Link href={`/`}>
-              <Image
-                src={spotifyLogo}
-                alt='Spotify logo'
-                height={64}
-                width={64}
-                loading='eager'
-              />
+            <Link href={`/?search=`}>
+              <Image src={spotifyLogo} alt='Spotify logo' loading='eager' />
             </Link>
           </div>
           <div>
