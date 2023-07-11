@@ -1,9 +1,8 @@
 import { type DefaultSeoProps } from 'next-seo';
-import homePreviewCropped from './public/images/home-preview-cropped.png';
-import homePreview from './public/images/home-preview.png';
 
 const config: DefaultSeoProps = {
   defaultTitle: 'Listen to Spotify songs',
+  canonical: 'https://music-api-challenge.vercel.app/',
   themeColor: '#fafafa',
   robotsProps: {
     notranslate: false,
@@ -19,16 +18,16 @@ const config: DefaultSeoProps = {
     siteName: 'Music Api Challenge',
     images: [
       {
-        url: homePreview.src,
+        url: 'https://i.imgur.com/XlwJ2ue.png',
         alt: 'home image preview',
-        width: homePreview.width,
-        height: homePreview.height,
+        width: 1920,
+        height: 1080,
       },
       {
-        url: homePreviewCropped.src,
+        url: 'https://i.imgur.com/9uuDwGJ.png',
         alt: 'home image preview, cropped to fit',
-        width: homePreviewCropped.width,
-        height: homePreviewCropped.height,
+        width: 1200,
+        height: 630,
       },
     ],
   },
