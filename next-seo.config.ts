@@ -1,6 +1,5 @@
 import { type DefaultSeoProps } from 'next-seo';
-import favicon from '/public/favicon.ico';
-import homePreview from '/public/images/home-preview.webp';
+import homePreview from './public/images/home-preview.webp';
 
 const config: DefaultSeoProps = {
   defaultTitle: 'Listen to Spotify songs',
@@ -29,14 +28,14 @@ const config: DefaultSeoProps = {
   additionalLinkTags: [
     {
       rel: 'icon',
-      href: favicon.src,
+      href: './public/favicon.ico',
     },
     {
       rel: 'apple-touch-icon',
-      href: favicon.src,
+      href: './public/favicon.ico',
       sizes: '64x64',
     },
-    { rel: 'manifest', href: '/manifest.json' },
+    { rel: 'manifest', href: './manifest.json' },
   ],
   twitter: {
     handle: '@ygorperez',
