@@ -18,12 +18,6 @@ const config: DefaultSeoProps = {
     siteName: 'Music Api Challenge',
     images: [
       {
-        url: 'https://i.imgur.com/XlwJ2ue.png',
-        alt: 'home image preview',
-        width: 1920,
-        height: 1080,
-      },
-      {
         url: 'https://i.imgur.com/9uuDwGJ.png',
         alt: 'home image preview, cropped to fit',
         width: 1200,
