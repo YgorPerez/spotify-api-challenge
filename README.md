@@ -82,6 +82,9 @@ to their quota extension to allow any user, but it is possible that I can't sinc
 and lots of requirements that would end up degrading the app's UI and I decided not to implement 
 it to follow the layout given.
 
+I can't run all the backend on the edge runtime due to vercel limitation in mode
+free that allows only 1MB for edge function size and I use 80KB more than that.
+
 # View the app
 App Home
 ![App Home](/public/images/home-preview.png "App Home")
