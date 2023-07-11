@@ -23,14 +23,14 @@ async function nextApiHandler(
     onError: ({ path, error }) => {
       env.NODE_ENV === 'development'
         ? console.error(
-            `❌ tRPC failed on ${path ?? '<no-path>'}: ${
-              error.message
-            }, cause: ${(error.cause as unknown as string) ?? '<no-path>'}`,
+            `❌ tRPC failed on ${path ?? '<no-path>'}: ${error.message},
+            cause: ${(error.cause as unknown as string) ?? '<no-path>'},
+            code: ${error.code}, stack: ${error.stack ?? '<no-stack>'}`,
           )
         : req.log.error(
-            `❌ tRPC failed on ${path ?? '<no-path>'}: ${
-              error.message
-            }, cause: ${(error.cause as unknown as string) ?? '<no-path>'}`,
+            `❌ tRPC failed on ${path ?? '<no-path>'}: ${error.message},
+            cause: ${(error.cause as unknown as string) ?? '<no-path>'},
+            code: ${error.code}, stack: ${error.stack ?? '<no-stack>'}`,
           );
     },
   });
@@ -41,7 +41,7 @@ function handler(req: AxiomRequest, res: NextResponse, event: NextFetchEvent) {
   const MAX_CACHE_TIME = ONE_DAY_IN_SECONDS * 31;
   res?.headers?.set(
     'cache-control',
-    `s-maxage=${MAX_CACHE_TIME}, stale-whi, le-revalidate=${MAX_CACHE_TIME}`,
+    `s-maxage=${MAX_CACHE_TIME}, stale-while-revalidate=${MAX_CACHE_TIME}`,
   );
   return nextApiHandler(req, res, event);
 }

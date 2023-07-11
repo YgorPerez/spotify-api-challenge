@@ -1,5 +1,4 @@
 import { env } from '@/env.mjs';
-import { getSpotifyToken } from '@lib/getClerkSpotifyToken';
 import {
   AlbumSchema,
   ArtistSchema,
@@ -25,8 +24,8 @@ import type {
   Track,
 } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 import { z } from 'zod';
-import { protectedProcedure, protectedTokenProcedure } from '../middleware';
 import { createTRPCRouter } from '../trpc';
+import { protectedTokenProcedure } from '../trpc-middleware';
 
 export const spotifyRouter = createTRPCRouter({
   getAlbum: protectedTokenProcedure
@@ -362,13 +361,13 @@ export const spotifyRouter = createTRPCRouter({
         nextCursor,
       };
     }),
-  getAccessToken: protectedProcedure
+  getAccessToken: protectedTokenProcedure
     .meta({
       description: 'Gets the spotify access token from the clerk database',
     })
     .output(z.string().describe('The accessToken from the user'))
-    .query(async ({ ctx }) => {
-      const accessToken = await getSpotifyToken(ctx.auth.userId);
+    .query(({ ctx }) => {
+      const accessToken = ctx.spotifyApi.getAccessToken();
       return accessToken;
     }),
   getSongLyrics: protectedTokenProcedure

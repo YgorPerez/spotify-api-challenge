@@ -40,7 +40,6 @@ const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
   if (!globalForSpotifyClient.spotifyApi) {
     spotifyApi = spotifyClientOauth(await getSpotifyToken(userId));
   }
-
   return next({
     ctx: {
       ...ctx,

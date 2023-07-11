@@ -3,7 +3,7 @@ import favicon from '/public/favicon.ico';
 import homePreview from '/public/images/home-preview.webp';
 
 const config: DefaultSeoProps = {
-  defaultTitle: 'Listen to Spotify',
+  defaultTitle: 'Listen to Spotify musics',
   openGraph: {
     title: 'Songs online',
     type: 'website',
