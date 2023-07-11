@@ -34,11 +34,11 @@ const config: DefaultSeoProps = {
   additionalLinkTags: [
     {
       rel: 'icon',
-      href: './public/favicon.ico',
+      href: '/public/favicon.ico',
     },
     {
       rel: 'apple-touch-icon',
-      href: './public/favicon.ico',
+      href: '/public/favicon.ico',
       sizes: '64x64',
     },
   ],
