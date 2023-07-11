@@ -44,7 +44,7 @@
 - [x] Dark mode and light mode.
 - [x] SEO friendly.
 - [x] SSR for speed and better SEO.
-- [x] Ratelimitng the api through upstash.
+- [x] Ratelimiting the api through upstash.
 - [x] Localhost query caching.
 - [x] Playing the full song in case you have an premium account by using the spotify-web-player sdk.
 - [x] Run on the edge runtime for maximum performance and lowest cost with no cold starts.
