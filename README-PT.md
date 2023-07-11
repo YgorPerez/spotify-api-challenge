@@ -8,26 +8,28 @@
 - [Upstash Ratelimiting](https://upstash.com/blog/upstash-ratelimit)
 - [Clerk](https://clerk.dev)
 - [Axiom](https://clerk.dev)
-
+---
+Um desafio de https://github.com/RodyRafa/challenge/tree/master/react
+---
 # Requisitos
 - [x] Possibilidade de inserir o nome da música ou do álbum e obter uma lista;
-- [x] Se um álbum for pesquisado e devolvido, quando o álbum for selecionado, o utilizador será direcionado para a lista de músicas desse álbum.
-- [x] Reproduzir a pré-visualização da música.
+- [x] Caso um album seja procurado e retornado, quando selecionado o album, usuário será direcionado a lista de música desse album.
+- [x] Reproduzir a preview da música.
 - [x] É necessário utilizar React;
-- [x] Tem de criar um repositório e partilhá-lo connosco;
-- [ ] Não deve usar nenhuma Framework CSS (Bootstrap, PureCss, etc.);
+- [x] Você deve criar um repositório e compartilhar com a gente;
+- [ ] Não deve usar nenhum Framework CSS (Bootstrap, PureCss, etc.);
 - [ ] Não deve usar scaffolds (Create React App, etc.), queremos ver como vai construir a estrutura do seu projeto;
-- [x] Quero poder executar o seu projeto com yarn/npm start;
-- [x] A aplicação deve solicitar o token que será utilizado para efetuar pedidos à API;
+- [x] Quero poder rodar o seu projeto com yarn/npm start;
+- [x] A aplicação deve solicitar o token que será utilizado para realizar as requisições para a API;
 - [x] Persistência do TOKEN, quando expirado solicitar um novo token;
-- [] Precisamos ter certeza que nossa aplicação funciona como esperado, alguns testes seriam bem vindos, estamos usando enzima e jest aqui, mas sinta-se livre para testar com o que se sentir mais confortável.
-- [x] Pense que sua aplicação passará por 3 ambientes, DSV - HML - PRD, monte o build e use variáveis de ambiente.
+- [ ] Precisamos ter certeza que nossa aplicação funciona conforme o esperado, alguns testes seriam bem vindos, estamos usando por aqui enzyme e jest, mas sinta-se a vontade para testar com o que sente maior conforto.
+- [x] Pense que sua aplicação passará por 3 ambientes, DSV - HML - PRD, monte build e use variaveis de ambiente.
 
-## É bom ter
-- [x] Quando o utilizador faz um pedido, seria bom guardá-lo dentro do redux, se ele digitar e procurar o álbum novamente, obtemos uma cópia de lá para não fazer vários pedidos à API.
-- [x] Quando o usuário entra na aplicação, podemos exibir uma lista com os últimos álbuns pesquisados/clicados para melhorar a experiência.
-- [x] Hoje em dia a maioria dos acessos a sites são feitos por telemóvel, um layout responsivo faz todo o sentido para a nossa aplicação!
-- [x] A nossa equipa de UX é muito exigente, pensam muito na experiência do utilizador, algumas animações e efeitos também seriam interessantes.
+## Requisitos adicionais
+- [x] Quando o usuário fizer uma requisição seria legal salvar dentro do redux, caso ele digite e busque novamente o album nós pegamos uma cópia de lá para não fazer múltiplas requisições para a API.
+- [x] Quando o usuário entrar na aplicação podemos exibir uma lista com os últimos albums buscados/clicados para melhorar a experiência.
+- [x] Hoje grande parte dos acessos a sites são feitos por celular, um layout responsivo faz todo sentido para nossa aplicação!
+- [x] Nosso time de UX é bem exigente, pensam bastante na experiência do usuário, algumas animações e efeitos seriam interessantes também.
 
 ### Extras
 - [x] Tudo usando uma infraestrutura grátis.
