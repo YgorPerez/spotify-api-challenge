@@ -61,13 +61,12 @@ Um desafio de https://github.com/RodyRafa/challenge/tree/master/react
 - [ ] Redis para armazenar em cache o token de acesso.
 
 # Desenvolvimento
+Abra o terminal
 
-Faça o fork do repositório
+Baixe o repositório com `git clone https://github.com/YgorPerez/spotify-api-challenge.git`
 
-execute `pnpm i`
+cd spotify-api-challenge
 
-Em seguida, vá para o env.example e siga as instruções
+Rode `pnpm i`
 
-execute `pnpm dev`
-
-Traduzido com a versão gratuita do tradutor - www.DeepL.com/Translator
+Agora você pode rodar o projeto com `pnpm dev` e vai estar no localhost:3000
