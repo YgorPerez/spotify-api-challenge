@@ -46,7 +46,7 @@ const SingleAlbumPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
 
   const albumId = stringOrNull(
     props.albumId ? props.albumId : router.query.albumId,
@@ -96,6 +96,7 @@ const SingleAlbumPage: NextPage<Props> = (
           album?.artists?.[0]?.name ?? ''
         } ${album?.name ?? ''} ${t('common:album')}`}
         openGraph={{
+          locale: lang,
           title: `${t('common:listen-to')} ${album?.name ?? ''}`,
           description: `${t('common:you-can-listen')} ${
             album?.artists?.[0]?.name ?? ''

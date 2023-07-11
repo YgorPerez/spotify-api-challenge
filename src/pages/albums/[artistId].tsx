@@ -44,7 +44,7 @@ const SingleArtistPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
 
   const artistId = stringOrNull(
     props.artistId ? props.artistId : router.query.artistId,
@@ -93,6 +93,7 @@ const SingleArtistPage: NextPage<Props> = (
         title={`${t('common:artist')}: ${artist?.name ?? ''}`}
         description={`${t('common:see-more')} ${artist?.name ?? ''}`}
         openGraph={{
+          locale: lang,
           type: 'website',
           url: artist?.external_urls[0],
           title: `${t('common:artist')}: ${artist?.name ?? ''}`,

@@ -30,7 +30,7 @@ const SingleTrackPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
 
   const trackId = stringOrNull(
     props.trackId ? props.trackId : router.query.trackId,
@@ -69,6 +69,7 @@ const SingleTrackPage: NextPage<Props> = (
           track?.artists?.[0]?.name ?? ''
         } ${track?.name ?? ''} ${t('common:album')}`}
         openGraph={{
+          locale: lang,
           title: `${t('common:listen-to')} ${track?.name ?? ''}`,
           description: `${t('common:you-can-listen')} ${
             track?.artists?.[0]?.name ?? ''

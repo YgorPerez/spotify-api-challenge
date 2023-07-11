@@ -25,6 +25,27 @@ const config: DefaultSeoProps = {
       },
     ],
   },
+  additionalLinkTags: [
+    {
+      rel: 'icon',
+      href: 'https://i.imgur.com/VdjeMM7.png',
+      sizes: '32x32',
+      type: 'image/png',
+    },
+    {
+      rel: 'icon',
+      href: 'https://i.imgur.com/DXIslqf.png',
+      sizes: '16x16',
+      type: 'image/png',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: 'https://i.imgur.com/VdjeMM7.png',
+      sizes: '32x32',
+      type: 'image/png',
+    },
+  ],
+
   twitter: {
     handle: '@ygorperez',
     site: '@ygorperez',
