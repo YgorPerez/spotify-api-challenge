@@ -54,13 +54,16 @@
 - [x] Panel with documentation for viewing the backend api.
 - [x] Accesible for everyone, Screen reader friendly and keyboard navegation.
 - [ ] Docker container.
-- [ ] PWA.
+- [ ] Transform in a PWA.
 - [ ] Create blur url for image on load through server for faster load speeds.
 - [ ] Redis for caching the access token.
 
 # Development
 
 Fork the repo
+
 run `pnpm i`
+
 Then go to the env.example and follow the instructions
+
 run `pnpm dev`
