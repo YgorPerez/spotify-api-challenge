@@ -1,5 +1,6 @@
 import { type DefaultSeoProps } from 'next-seo';
-import homePreview from './public/images/home-preview.jpg';
+import homePreviewCropped from './public/images/home-preview-cropped.png';
+import homePreview from './public/images/home-preview.png';
 
 const config: DefaultSeoProps = {
   defaultTitle: 'Listen to Spotify songs',
@@ -22,6 +23,12 @@ const config: DefaultSeoProps = {
         alt: 'home image preview',
         width: homePreview.width,
         height: homePreview.height,
+      },
+      {
+        url: homePreviewCropped.src,
+        alt: 'home image preview, cropped to fit',
+        width: homePreviewCropped.width,
+        height: homePreviewCropped.height,
       },
     ],
   },
