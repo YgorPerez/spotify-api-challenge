@@ -8,9 +8,9 @@
 - [Upstash Ratelimiting](https://upstash.com/blog/upstash-ratelimit)
 - [Clerk](https://clerk.dev)
 - [Axiom](https://axiom.co)
-
-  A challenge from https://github.com/RodyRafa/challenge/tree/master/react
-
+---
+A challenge from https://github.com/RodyRafa/challenge/tree/master/react
+---
 # Requirements
 - [x] Possibility to insert the name of the song or album and get a list;
 - [x] If an album is searched and returned, when the album is selected, the user will be directed to the music list of that album.
@@ -64,8 +64,8 @@
 
 Fork the repo
 
-run `pnpm i`
+Run `pnpm i`
 
 Then go to the env.example and follow the instructions
 
-now you can run `pnpm dev` for serving the application on localhost:3000
+Now you can run `pnpm dev` for serving the application on localhost:3000
