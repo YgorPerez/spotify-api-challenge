@@ -1,11 +1,11 @@
-import NextBundleAnalyzer from '@next/bundle-analyzer'
-import { withAxiom } from 'next-axiom'
-import nextTranslate from 'next-translate-plugin'
-import { env } from './src/env.mjs'
+import NextBundleAnalyzer from '@next/bundle-analyzer';
+import { withAxiom } from 'next-axiom';
+import nextTranslate from 'next-translate-plugin';
+import { env } from './src/env.mjs';
 
 const bundleAnalyzer = NextBundleAnalyzer({
   enabled: env.ANALYZE == true,
-})
+});
 
 /** @type {import("next").NextConfig} */
 const config = withAxiom({
@@ -13,6 +13,7 @@ const config = withAxiom({
   ...nextTranslate(),
   swcMinify: true,
   optimizeFonts: true,
+  output: 'standalone',
   images: {
     domains: ['i.scdn.co'],
     remotePatterns: [
@@ -26,6 +27,6 @@ const config = withAxiom({
   eslint: {
     dirs: ['src'],
   },
-})
+});
 
-export default bundleAnalyzer(config)
+export default bundleAnalyzer(config);
