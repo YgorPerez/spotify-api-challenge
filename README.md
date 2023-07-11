@@ -34,6 +34,7 @@ A challenge from https://github.com/RodyRafa/challenge/tree/master/react
 ### Extras
 - [x] Everything running on a free infrastructure.
 - [x] OAuth for logging in and getting the access token.
+- [x] Infinite scroling and load more button for better ux.
 - [x] Backend so that the access token doesn't get exposed and for SSR.
 - [x] Deployed online on vercel.
 - [x] Display song lyrics.
@@ -73,3 +74,22 @@ Run `pnpm i`
 Then go to the env.example and follow the instructions
 
 Now you can run `pnpm dev` for serving the application on localhost:3000
+
+# Limitations
+spotify only leaves emails registered in the dashboard connect in the app so anyone who wants to 
+see the app will have to ask me to add their spotify email there. I have already requested access 
+to their quota extension to allow any user, but it is possible that I can't since they have lots
+and lots of requirements that would end up degrading the app's UI and I decided not to implement 
+it to follow the layout given.
+
+# View the app
+App Home
+![App Home](/public/images/home-preview.png "App Home")
+App home in light mode
+![App home in light mode](/public/images/home-preview-light.png "App home in light mode")
+![Mobile App Home](/public/images/home-preview-mobile.png "Mobile App Home")
+App album page
+![App album page](/public/images/album-preview.png "App album page")
+App album page in light mode
+![App album page in light mode](/public/images/album-preview-light.png "App album page in light mode")
+![Mobile App Album Page](/public/images/album-preview-mobile.png "Mobile App Album Page")
