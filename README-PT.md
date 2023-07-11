@@ -34,6 +34,7 @@ Um desafio de https://github.com/RodyRafa/challenge/tree/master/react
 ### Extras
 - [x] Tudo usando uma infraestrutura grátis.
 - [x] OAuth para fazer login e obter o token de acesso.
+- [x] Scroll infinito e botão de carregar mais para um melhor UX.
 - [x] Backend para que o token de acesso não fique exposto e para SSR.
 - [x] Hospedado online no vercel.
 - [x] Mostrar letras de músicas.
@@ -81,9 +82,13 @@ eu näo consiga já que eles tem muitos e muitos requistos que acabariam degrada
 e eu decidi näo implementar para seguir layout.
 
 # Veja o app
+Página inicial do app
 ![Página inicial do app](/public/images/home-preview.png "Página inicial do app")
+Página inicial do app no light mode
 ![Página inicial do app no light mode](/public/images/home-preview-light.png "Página inicial do app no light mode")
 ![Página inicial do app no mobile](/public/images/home-preview-mobile.png "Página inicial do app no mobile")
+Página de álbum do app
 ![Página de álbum do app](/public/images/album-preview.png "Página de álbum do app")
+Página de álbum do app no light mode
 ![Página de álbum do app no light mode](/public/images/album-preview-light.png "Página de álbum do app no light mode")
 ![Página de álbum do app no mobile](/public/images/album-preview-mobile.png "Página de álbum do app no mobile")
