@@ -62,7 +62,11 @@ A challenge from https://github.com/RodyRafa/challenge/tree/master/react
 
 # Development
 
-Fork the repo
+Open the terminal
+
+Download the repo with git clone `https://github.com/YgorPerez/spotify-api-challenge.git`
+
+`cd spotify-api-challenge`
 
 Run `pnpm i`
 
