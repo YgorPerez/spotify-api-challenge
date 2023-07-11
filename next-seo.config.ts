@@ -3,13 +3,15 @@ import favicon from '/public/favicon.ico';
 import homePreview from '/public/images/home-preview.webp';
 
 const config: DefaultSeoProps = {
-  defaultTitle: 'Listen to Spotify musics',
+  defaultTitle: 'Listen to Spotify songs',
   themeColor: '#fafafa',
   robotsProps: {
     notranslate: false,
+    maxImagePreview: 'large',
+    noarchive: true,
   },
   openGraph: {
-    title: 'Songs online',
+    title: 'Listen to Spotify songs',
     type: 'website',
     description:
       "Search for artists, albums or tracks and listen to the songs previews while reading it's lyrics",
@@ -36,7 +38,6 @@ const config: DefaultSeoProps = {
     },
     { rel: 'manifest', href: '/manifest.json' },
   ],
-  canonical: 'spotify-api-challenge.vercel.app',
   twitter: {
     handle: '@ygorperez',
     site: '@ygorperez',

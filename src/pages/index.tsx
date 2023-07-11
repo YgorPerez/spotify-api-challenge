@@ -117,6 +117,7 @@ const SearchPage: NextPage<Props> = (
       <NextSeo
         title={t('search:title')}
         description={t('search:description')}
+        canonical='https://music-api-challenge.vercel.app'
       />
       <SiteLinksSearchBoxJsonLd
         url='spotify-api-challenge.vercel.app/'
