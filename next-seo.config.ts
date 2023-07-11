@@ -1,5 +1,5 @@
 import { type DefaultSeoProps } from 'next-seo';
-import homePreview from './public/images/home-preview.webp';
+import homePreview from './public/images/home-preview.jpg';
 
 const config: DefaultSeoProps = {
   defaultTitle: 'Listen to Spotify songs',
