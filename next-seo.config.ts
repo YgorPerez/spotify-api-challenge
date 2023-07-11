@@ -4,13 +4,17 @@ import homePreview from '/public/images/home-preview.webp';
 
 const config: DefaultSeoProps = {
   defaultTitle: 'Listen to Spotify musics',
+  themeColor: '#fafafa',
+  robotsProps: {
+    notranslate: false,
+  },
   openGraph: {
     title: 'Songs online',
     type: 'website',
     description:
       "Search for artists, albums or tracks and listen to the songs previews while reading it's lyrics",
     locale: 'en-US',
-    siteName: 'Spotify Api Challenge',
+    siteName: 'Music Api Challenge',
     images: [
       {
         url: homePreview.src,
