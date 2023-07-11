@@ -48,7 +48,7 @@ const SearchPage: NextPage<Props> = (
   const router = useRouter();
   const queryRouter = router.query.search as string | undefined;
 
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
 
   const ref = useRef<HTMLDivElement | null>(null);
   const inView = useIntersectionObserver(ref, {
@@ -122,6 +122,15 @@ const SearchPage: NextPage<Props> = (
         }
         description={t('search:description')}
         canonical='https://music-api-challenge.vercel.app'
+        openGraph={{
+          locale: lang,
+          title: searchTerm
+            ? `${t('search:searching-for')} ${searchTerm}`
+            : t('search:title'),
+          description: searchTerm
+            ? `${t('search:see-results-for')} ${searchTerm}`
+            : t('search:description'),
+        }}
       />
       <SiteLinksSearchBoxJsonLd
         url='spotify-api-challenge.vercel.app/'
