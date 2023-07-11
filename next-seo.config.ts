@@ -35,7 +35,7 @@ const config: DefaultSeoProps = {
       href: './public/favicon.ico',
       sizes: '64x64',
     },
-    { rel: 'manifest', href: './manifest.json' },
+    { rel: 'manifest', href: './public/manifest.json' },
   ],
   twitter: {
     handle: '@ygorperez',
