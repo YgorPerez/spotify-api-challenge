@@ -81,6 +81,9 @@ Eu já requisitei acesso a extensäo de quota deles para permitir qualquer usuá
 eu näo consiga já que eles tem muitos e muitos requistos que acabariam degradando a UI do aplicativo
 e eu decidi näo implementar para seguir layout.
 
+Eu näo consigo rodar todo o backend no edge runtime devido à uma limitação da vercel em modo 
+gratuíto que permite apenas 1MB para o tamanho da funçäo edge e eu utilizo 80KB a mais que isso. 
+
 # Veja o app
 Página inicial do app
 ![Página inicial do app](/public/images/home-preview.png "Página inicial do app")
