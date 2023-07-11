@@ -7,7 +7,7 @@
 - [TanStack Query](https://tanstack.com/query/latest)
 - [Upstash Ratelimiting](https://upstash.com/blog/upstash-ratelimit)
 - [Clerk](https://clerk.dev)
-- [Axiom](https://clerk.dev)
+- [Axiom](https://axiom.co)
 
 # Requirements
 - [x] Possibility to insert the name of the song or album and get a list;
@@ -55,7 +55,7 @@
 - [x] Accesible for everyone, Screen reader friendly and keyboard navegation.
 - [ ] Docker container.
 - [ ] Transform in a PWA.
-- [ ] Create blur url for image on load through server for faster load speeds.
+- [ ] Create blur url for images on load through server, for faster load speeds.
 - [ ] Redis for caching the access token.
 
 # Development
