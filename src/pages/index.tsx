@@ -13,6 +13,7 @@ import type {
 import { NextSeo, SiteLinksSearchBoxJsonLd } from 'next-seo';
 import useTranslation from 'next-translate/useTranslation';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useRef } from 'react';
 import {
@@ -114,6 +115,10 @@ const SearchPage: NextPage<Props> = (
 
   return (
     <>
+      <Head>
+        <link rel='icon' href='/public/favicon.ico' />
+        <link rel='apple' href='/public/favicon.ico' sizes='64x64' />
+      </Head>
       <NextSeo
         title={
           searchTerm
