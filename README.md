@@ -7,8 +7,10 @@
 - [TanStack Query](https://tanstack.com/query/latest)
 - [Upstash Ratelimiting](https://upstash.com/blog/upstash-ratelimit)
 - [Clerk](https://clerk.dev)
-- [Axiom](https://clerk.dev)
-
+- [Axiom](https://axiom.co)
+---
+A challenge from https://github.com/RodyRafa/challenge/tree/master/react
+---
 # Requirements
 - [x] Possibility to insert the name of the song or album and get a list;
 - [x] If an album is searched and returned, when the album is selected, the user will be directed to the music list of that album.
@@ -44,7 +46,7 @@
 - [x] Dark mode and light mode.
 - [x] SEO friendly.
 - [x] SSR for speed and better SEO.
-- [x] Ratelimitng the api through upstash.
+- [x] Ratelimiting the api through upstash.
 - [x] Localhost query caching.
 - [x] Playing the full song in case you have an premium account by using the spotify-web-player sdk.
 - [x] Run on the edge runtime for maximum performance and lowest cost with no cold starts.
@@ -54,13 +56,20 @@
 - [x] Panel with documentation for viewing the backend api.
 - [x] Accesible for everyone, Screen reader friendly and keyboard navegation.
 - [ ] Docker container.
-- [ ] PWA.
-- [ ] Create blur url for image on load through server for faster load speeds.
+- [ ] Transform in a PWA.
+- [ ] Create blur url for images on load through server, for faster load speeds.
 - [ ] Redis for caching the access token.
 
 # Development
 
-Fork the repo
-run `pnpm i`
+Open the terminal
+
+Download the repo with git clone `https://github.com/YgorPerez/spotify-api-challenge.git`
+
+`cd spotify-api-challenge`
+
+Run `pnpm i`
+
 Then go to the env.example and follow the instructions
-run `pnpm dev`
+
+Now you can run `pnpm dev` for serving the application on localhost:3000
