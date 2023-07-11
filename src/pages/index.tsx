@@ -115,7 +115,11 @@ const SearchPage: NextPage<Props> = (
   return (
     <>
       <NextSeo
-        title={t('search:title')}
+        title={
+          searchTerm
+            ? `${t('search:searching-for')} ${searchTerm}`
+            : t('search:title')
+        }
         description={t('search:description')}
         canonical='https://music-api-challenge.vercel.app'
       />
