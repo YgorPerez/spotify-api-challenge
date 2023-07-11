@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@clerk/localizations':
-    specifier: ^1.22.0
-    version: 1.22.0(react@18.2.0)
   '@clerk/nextjs':
     specifier: ^4.21.1
     version: 4.21.1(next@13.4.4)(react-dom@18.2.0)(react@18.2.0)
@@ -196,12 +193,6 @@ devDependencies:
   tailwindcss-animate:
     specifier: ^1.0.6
     version: 1.0.6(tailwindcss@3.3.2)
-  tailwindcss-brand-colors:
-    specifier: ^0.3.3
-    version: 0.3.3
-  tailwindcss-debug-screens:
-    specifier: ^2.2.1
-    version: 2.2.1(tailwindcss@3.3.2)
   trpc-client-devtools-link:
     specifier: 0.2.1-next
     version: 0.2.1-next(@trpc/client@10.30.0)(@trpc/server@10.30.0)
@@ -266,16 +257,6 @@ packages:
       tslib: 2.4.1
     dev: false
 
-  /@clerk/localizations@1.22.0(react@18.2.0):
-    resolution: {integrity: sha512-iCU3ccNSOTjg8QMfwq6jkM3/fuF2jxuwOFDt/8/TFNHyemWFpqpAA5lpqJeS7G1nl0lLM23643DUd5JdGhri/Q==}
-    engines: {node: '>=14'}
-    peerDependencies:
-      react: '>=16'
-    dependencies:
-      '@clerk/types': 3.46.1
-      react: 18.2.0
-    dev: false
-
   /@clerk/nextjs@4.21.1(next@13.4.4)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-Kkx8rp48jm0kWrFhMtFUTolitA4PVd2OEjxanhfmzlIhYcnH2ji/8UnH8U/dG3BvFcSeRwM1QO9wM4RsdXIKQg==}
     engines: {node: '>=14'}
@@ -308,13 +289,6 @@ packages:
 
   /@clerk/types@3.42.0:
     resolution: {integrity: sha512-wEiBJFT3/Itzmu3jQfHK4zCMTqiE4fUheB1fpYx8JE2q498wzjTEHpglgxl88c0tudtWomUKqXIMJnBBEVVZBg==}
-    engines: {node: '>=14'}
-    dependencies:
-      csstype: 3.1.1
-    dev: false
-
-  /@clerk/types@3.46.1:
-    resolution: {integrity: sha512-IA/iSXJJZym4Z6f9OcT9OJayK2opVhxUVJky15aY4iVsJCPScgApBuuzC7N4vfXwA6RI/wGebFbvmsEQ3oI/UA==}
     engines: {node: '>=14'}
     dependencies:
       csstype: 3.1.1
@@ -5080,18 +5054,6 @@ packages:
     resolution: {integrity: sha512-4WigSGMvbl3gCCact62ZvOngA+PRqhAn7si3TQ3/ZuPuQZcIEtVap+ENSXbzWhpojKB8CpvnIsrwBu8/RnHtuw==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
-    dependencies:
-      tailwindcss: 3.3.2
-    dev: true
-
-  /tailwindcss-brand-colors@0.3.3:
-    resolution: {integrity: sha512-qNgt9e3q/1cF31jzQO5SRTfgJehqNKulgQx/ePpQgvxh8W5ATHzttW5MEOEZa6uyL4z92bk1YFHU2g6WfE9j6Q==}
-    dev: true
-
-  /tailwindcss-debug-screens@2.2.1(tailwindcss@3.3.2):
-    resolution: {integrity: sha512-EMyA0CYBzqcZJHtVDvBfmYzfx3NxuK4qDyVO5wnzcGOrmJsv25D9xPpWefVTORTvhE6pCh90Z1WYnLUKsg3yMw==}
-    peerDependencies:
-      tailwindcss: ^1.0 || ^2.0 || ^3.0.0-alpha.1 || ^3.0
     dependencies:
       tailwindcss: 3.3.2
     dev: true

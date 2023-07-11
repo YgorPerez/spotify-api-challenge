@@ -78,10 +78,7 @@ module.exports = {
     require('tailwindcss-animate'),
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('tailwind-scrollbar')({ nocompatible: true }),
-    // require("tailwind-scrollbar-hide"),
     // @ts-ignore
-    require('tailwindcss-brand-colors'),
-    // @ts-ignore
-    require('tailwindcss-debug-screens'),
+    require("tailwind-scrollbar-hide"),
   ],
 };
