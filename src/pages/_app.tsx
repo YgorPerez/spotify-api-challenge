@@ -4,11 +4,12 @@ import useSSRIntercept from '@hooks/useSSRIntercept';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { api } from '@utils/api';
 import { Analytics } from '@vercel/analytics/react';
+import { DefaultSeo } from 'next-seo';
 import { type AppType } from 'next/app';
 import dynamic from 'next/dynamic';
 import { Roboto } from 'next/font/google';
+import config from '../../next-seo.config';
 import '../styles/globals.css';
-import '/next-seo.config';
 
 const ErrorBoundary = dynamic(() => import('@components/hoc/ErrorBoundary'));
 
@@ -28,6 +29,7 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   useSSRIntercept(); // makes gssp run only once
   return (
     <>
+      <DefaultSeo {...config} />
       <ClerkProvider {...pageProps}>
         <div className={roboto.className}>
           <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
