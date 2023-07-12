@@ -5,7 +5,7 @@ describe('Test middleware', () => {
     cy.visit('/', { failOnStatusCode: false });
   });
 
-  it('Should be on the auth page', () => {
+  it('Should be on the sign in page', () => {
     {
       cy.contains('Sign in');
     }
