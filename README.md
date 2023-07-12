@@ -4,7 +4,7 @@
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 - [Clerk](https://clerk.dev)
-- [Cypress]([https://upstash.com/blog/upstash-ratelimit](https://www.cypress.io/))
+- [Cypress](https://www.cypress.io/)
 - [TanStack Query](https://tanstack.com/query/latest)
 - [T3 Stack](https://create.t3.gg/)
 - [Upstash Ratelimiting](https://upstash.com/blog/upstash-ratelimit)
