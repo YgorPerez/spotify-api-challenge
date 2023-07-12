@@ -40,7 +40,9 @@ A challenge from https://github.com/RodyRafa/challenge/tree/master/react
 - [x] Deployed online on vercel.
 - [x] Display song lyrics.
 - [x] Error handling and fallbacks.
-- [x] Errors observability with Axiom.
+- [x] Errors observability in production with Axiom.
+- [x] E2E tests withouth mocking.
+- [x] CI and CD pipeline, automated tests run in every push and is automatically deployed to vercel..  
 - [x] Analytics with @vercel/analytics.
 - [x] Reusable ui components that you can add classes to.
 - [x] Lazy loading components for better performance.
