@@ -15,7 +15,7 @@ const SignUpPage: NextPage = () => (
       path='/auth/sign-up'
       routing='path'
       signInUrl='/auth/sign-in'
-      redirectUrl='/search'
+      redirectUrl='/'
     />
   </div>
 );

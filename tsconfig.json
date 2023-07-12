@@ -36,5 +36,5 @@
     "i18n.js",
     "cypress.js"
   ],
-  "exclude": ["node_modules", "i18n.cjs"]
+  "exclude": ["node_modules", "i18n.cjs", "cypress.d.ts"]
 }

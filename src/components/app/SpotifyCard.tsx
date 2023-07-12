@@ -118,14 +118,19 @@ const SpotifyCard: FC<{
       <div
         className='m-auto max-w-[300px] items-center justify-center text-center
           lg:m-0 lg:max-w-[440px]'
+        data-cy='card'
       >
         <CardMain cardMainData={cardMainData} cardData={cardData} big />
         <div className='mt-4 flex flex-col items-center'>
-          <h1 className='mb-2 line-clamp-2 w-4/5  text-2xl lg:text-3xl'>
+          <h1
+            className='mb-2 line-clamp-2 w-4/5  text-2xl lg:text-3xl'
+            data-cy='card-title'
+          >
             {cardData.name}
           </h1>
           {cardSubData.slugUrl ? (
             <Link
+              data-cy='card-subname'
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
               onFocus={() => prefetchArtist(cardSubData.id)}
               onMouseEnter={() => prefetchArtist(cardSubData.id)}
@@ -134,7 +139,10 @@ const SpotifyCard: FC<{
               {cardSubData.name}
             </Link>
           ) : (
-            <span className='line-clamp-2 w-4/5 text-xl text-primary-foreground lg:text-2xl'>
+            <span
+              className='line-clamp-2 w-4/5 text-xl text-primary-foreground lg:text-2xl'
+              data-cy='card-subname'
+            >
               {cardSubData.name}
             </span>
           )}
@@ -148,6 +156,7 @@ const SpotifyCard: FC<{
         <div
           className='w-full max-w-[64px] items-center justify-center text-center
             sm:w-60 sm:max-w-[300px] 2xl:w-72'
+          data-cy='card'
         >
           <Link
             href={`/${cardMainData.slugUrl}/${cardData.id}`}
@@ -164,12 +173,14 @@ const SpotifyCard: FC<{
                 prefetchTrack(cardData as TrackType);
             }}
             className='group flex flex-col items-center'
+            data-cy='card-link'
           >
             <CardMain cardMainData={cardMainData} cardData={cardData} />
           </Link>
 
           {cardSubData?.slugUrl ? (
             <Link
+              data-cy='card-subname'
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
               onFocus={() => prefetchArtist(cardSubData.id)}
               onMouseEnter={() => prefetchArtist(cardSubData.id)}
@@ -178,7 +189,10 @@ const SpotifyCard: FC<{
               {cardSubData.name}
             </Link>
           ) : (
-            <span className='mt-2 line-clamp-2 w-full text-center text-xs text-primary-foreground sm:text-xl'>
+            <span
+              className='mt-2 line-clamp-2 w-full text-center text-xs text-primary-foreground sm:text-xl'
+              data-cy='card-subname'
+            >
               {cardSubData?.name}
             </span>
           )}
@@ -271,7 +285,10 @@ const CardMain: FC<{
             height={imageSize}
             width={imageSize}
           />
-          <p className='mt-2 line-clamp-2 w-full text-xs underline-offset-4 group-hover:underline sm:mt-4 sm:w-4/5 sm:text-2xl'>
+          <p
+            className='mt-2 line-clamp-2 w-full text-xs underline-offset-4 group-hover:underline sm:mt-4 sm:w-4/5 sm:text-2xl'
+            data-cy='card-title'
+          >
             {cardData.name}
           </p>
         </>

@@ -95,7 +95,7 @@ const SignInPage: NextPage = () => {
         path='/auth/sign-in'
         routing='path'
         signUpUrl='/auth/sign-up'
-        redirectUrl='/search'
+        redirectUrl='/'
       />
       <Toaster />
     </div>

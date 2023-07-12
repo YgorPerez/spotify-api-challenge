@@ -175,18 +175,21 @@ const SearchPage: NextPage<Props> = (
                 {shouldDisplayData &&
                   searchData.flatMap((searchResults, index) => (
                     <Fragment key={index}>
-                      {searchResults.albums?.map(album => (
+                      {searchResults.albums?.map((album, albumIndex) => (
                         <div key={album.id}>
-                          <SpotifyCard cardData={album} />
+                          <SpotifyCard
+                            cardData={album}
+                            data-cy={`album-${albumIndex}`}
+                          />
                         </div>
                       ))}
-                      {searchResults.tracks?.map(track => (
-                        <div key={track.id}>
+                      {searchResults.tracks?.map((track, trackIndex) => (
+                        <div key={track.id} data-cy={`track-${trackIndex}`}>
                           <SpotifyCard cardData={track} />
                         </div>
                       ))}
-                      {searchResults.artists?.map(artist => (
-                        <div key={artist.id}>
+                      {searchResults.artists?.map((artist, artistIndex) => (
+                        <div key={artist.id} data-cy={`artist-${artistIndex}`}>
                           <SpotifyCard cardData={artist} />
                         </div>
                       ))}
@@ -196,8 +199,8 @@ const SearchPage: NextPage<Props> = (
                 {!shouldDisplayData &&
                   !shouldDisplayLoadingData &&
                   !searchTerm &&
-                  lastSearchedAlbums?.map(album => (
-                    <div key={album.id}>
+                  lastSearchedAlbums?.map((album, index) => (
+                    <div key={album.id} data-cy={`album-${index}`}>
                       <SpotifyCard cardData={album} />
                     </div>
                   ))}
@@ -205,7 +208,7 @@ const SearchPage: NextPage<Props> = (
             </div>
           </main>
         </div>
-        <div ref={ref}>
+        <div ref={ref} data-cy='intersection'>
           <Footer />
         </div>
       </div>
