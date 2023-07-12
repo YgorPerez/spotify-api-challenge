@@ -1,12 +1,13 @@
 # Tecnologies
-- [T3 Stack](https://create.t3.gg/)
 - [Next.js](https://nextjs.org)
 - [React](https://nextjs.org)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
-- [TanStack Query](https://tanstack.com/query/latest)
-- [Upstash Ratelimiting](https://upstash.com/blog/upstash-ratelimit)
 - [Clerk](https://clerk.dev)
+- [Cypress]([https://upstash.com/blog/upstash-ratelimit](https://www.cypress.io/))
+- [TanStack Query](https://tanstack.com/query/latest)
+- [T3 Stack](https://create.t3.gg/)
+- [Upstash Ratelimiting](https://upstash.com/blog/upstash-ratelimit)
 - [Axiom](https://axiom.co)
 ---
 A challenge from https://github.com/RodyRafa/challenge/tree/master/react
@@ -22,7 +23,7 @@ A challenge from https://github.com/RodyRafa/challenge/tree/master/react
 - [x] I want to be able to run your project running yarn/npm start;
 - [x] The application must request the token that will be used to make requests to the API;
 - [x] TOKEN persistence, when expired request a new token;
-- [ ] We need to make sure that our application works as expected, some tests would be welcome, we are using enzyme and jest here, but feel free to test with what you feel most comfortable with.
+- [x] We need to make sure that our application works as expected, some tests would be welcome, we are using enzyme and jest here, but feel free to test with what you feel most comfortable with.
 - [x] Think that your application will go through 3 environments, DSV - HML - PRD, mount build and use environment variables.
 
 ## Nice to haves
