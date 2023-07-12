@@ -32,5 +32,18 @@ jobs:
           # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
           # in GitHub repo → Settings → Secrets → Actions
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # Creating a token https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPSTASH_REDIS_REST_URL: ${{secrets.UPSTASH_REDIS_REST_URL}}
+          UPSTASH_REDIS_REST_TOKEN: ${{secrets.UPSTASH_REDIS_REST_TOKEN}}
+          REDIS_URL: ${{secrets.REDIS_URL}}
+          CLERK_SECRET_KEY: ${{secrets.CLERK_SECRET_KEY}}
+          CLERK_REDIRECT_URI: ${{secrets.CLERK_REDIRECT_URI}}
+          SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
+          SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
+          GENIUS_CLIENT_SECRET: ${{secrets.GENIUS_CLIENT_SECRET}}
+          GENIUS_ACCESS_TOKEN: ${{secrets.GENIUS_ACCESS_TOKEN}}
+          NEXT_PUBLIC_CLERK_SIGN_IN_URL: '/auth/sign-in'
+          NEXT_PUBLIC_CLERK_SIGN_UP_URL: '/auth/sign-up'
+          NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: '/'
+          NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: '/'
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: 'pk_test_ZmxlZXQtb3Jpb2xlLTI4LmNsZXJrLmFjY291bnRzLmRldiQ'
