@@ -1,11 +1,13 @@
 /// <reference types="cypress" />
 
-describe('example to-do app', () => {
+describe('Test middleware', () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visit('/', { failOnStatusCode: false });
   });
 
-  it('displays two todo items by default', () => {
-    cy.get('input').should('be.visible');
+  it('Should be on the auth page', () => {
+    {
+      cy.contains('Sign in');
+    }
   });
 });
