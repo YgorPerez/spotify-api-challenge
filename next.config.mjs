@@ -13,7 +13,6 @@ const config = withAxiom({
   ...nextTranslate(),
   swcMinify: true,
   optimizeFonts: true,
-  output: 'standalone',
   images: {
     domains: ['i.scdn.co'],
     remotePatterns: [
