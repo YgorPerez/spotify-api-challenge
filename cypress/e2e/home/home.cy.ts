@@ -2,7 +2,7 @@
 
 describe('example to-do app', () => {
   beforeEach(() => {
-    cy.visit('https://music-api-challenge.vercel.app');
+    cy.visit('/');
   });
 
   it('displays two todo items by default', () => {
