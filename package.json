@@ -2,11 +2,14 @@
   "name": "spotify-api-challenge",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@8.6.7",
   "scripts": {
     "build": "next build",
     "dev": "cross-env NODE_OPTIONS='inspect' next dev",
     "start": "next start",
     "lint": "next lint",
+    "cypress:open": "cypress open",
+    "preinstall": "npx only-allow pnpm",
     "tailwind-config-viewer": "tailwind-config-viewer -o -p 3005 -c tailwind.config.cjs"
   },
   "dependencies": {
@@ -62,9 +65,11 @@
     "@typescript-eslint/parser": "^5.59.11",
     "autoprefixer": "^10.4.14",
     "cross-env": "^7.0.3",
+    "cypress": "^12.17.1",
     "eslint": "^8.42.0",
     "eslint-config-next": "^13.4.7",
     "next-translate-plugin": "^2.4.4",
+    "only-allow": "^1.1.1",
     "postcss": "^8.4.24",
     "postcss-nesting": "^12.0.0",
     "prettier": "^2.8.8",

@@ -33,7 +33,8 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "i18n.js"
+    "i18n.js",
+    "cypress.js"
   ],
   "exclude": ["node_modules", "i18n.cjs"]
 }
