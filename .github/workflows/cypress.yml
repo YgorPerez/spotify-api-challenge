@@ -15,7 +15,6 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-        - name: Checkout
           uses: actions/checkout@v3
       - name: Cypress run
         # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
