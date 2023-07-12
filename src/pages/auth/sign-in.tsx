@@ -1,14 +1,24 @@
 import { SignIn } from '@clerk/nextjs';
 import { Button } from '@components/ui/Button';
-import { Toaster } from '@components/ui/Toaster';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@components/ui/Tooltip';
 import { toast } from '@hooks/use-toast';
 import { type NextPage } from 'next';
+import dynamic from 'next/dynamic';
+
+const TooltipProvider = dynamic(() =>
+  import('@components/ui/Tooltip').then(mod => mod.TooltipProvider),
+);
+const TooltipContent = dynamic(() =>
+  import('@components/ui/Tooltip').then(mod => mod.TooltipContent),
+);
+const TooltipTrigger = dynamic(() =>
+  import('@components/ui/Tooltip').then(mod => mod.TooltipTrigger),
+);
+const Tooltip = dynamic(() =>
+  import('@components/ui/Tooltip').then(mod => mod.Tooltip),
+);
+const Toaster = dynamic(() =>
+  import('@components/ui/Toaster').then(mod => mod.Toaster),
+);
 
 const SignInPage: NextPage = () => {
   return (
