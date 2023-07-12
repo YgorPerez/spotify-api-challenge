@@ -1,13 +1,14 @@
 # Tecnologias
-- [T3 Stack](https://create.t3.gg/)
 - [Next.js](https://nextjs.org)
 - [React](https://nextjs.org)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
-- [TanStack Query](https://tanstack.com/query/latest)
-- [Upstash Ratelimiting](https://upstash.com/blog/upstash-ratelimit)
 - [Clerk](https://clerk.dev)
-- [Axiom](https://clerk.dev)
+- [Cypress](https://www.cypress.io/)
+- [TanStack Query](https://tanstack.com/query/latest)
+- [T3 Stack](https://create.t3.gg/)
+- [Upstash Ratelimiting](https://upstash.com/blog/upstash-ratelimit)
+- [Axiom](https://axiom.co)
 ---
 Um desafio de https://github.com/RodyRafa/challenge/tree/master/react
 ---
@@ -22,7 +23,7 @@ Um desafio de https://github.com/RodyRafa/challenge/tree/master/react
 - [x] Quero poder rodar o seu projeto com yarn/npm start;
 - [x] A aplicação deve solicitar o token que será utilizado para realizar as requisições para a API;
 - [x] Persistência do TOKEN, quando expirado solicitar um novo token;
-- [ ] Precisamos ter certeza que nossa aplicação funciona conforme o esperado, alguns testes seriam bem vindos, estamos usando por aqui enzyme e jest, mas sinta-se a vontade para testar com o que sente maior conforto.
+- [x] Precisamos ter certeza que nossa aplicação funciona conforme o esperado, alguns testes seriam bem vindos, estamos usando por aqui enzyme e jest, mas sinta-se a vontade para testar com o que sente maior conforto.
 - [x] Pense que sua aplicação passará por 3 ambientes, DSV - HML - PRD, monte build e use variaveis de ambiente.
 
 ## Requisitos adicionais
