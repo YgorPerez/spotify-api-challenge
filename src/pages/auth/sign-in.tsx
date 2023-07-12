@@ -25,10 +25,11 @@ const SignInPage: NextPage = () => {
   const { t } = useTranslation();
   return (
     <div className='h-screen w-screen bg-white'>
-      <div className='fixed left-1/2 top-[20%] -translate-x-1/2 text-secondary-foreground'>
-        <p>
+      <div className='fixed left-1/2 top-12 -translate-x-1/2 text-secondary-foreground sm:text-lg lg:top-[10%] xl:top-[15%] 2xl:top-[20%] 2xl:text-xl'>
+        <p className='mx-2'>
           {t('sign-in:log-out')} <span className='text-green-600'>Spotify</span>
         </p>
+        <p className='mt-4 text-center'>{t('sign-in:click-to-copy')}</p>
         <div className='mt-4 flex justify-between'>
           <TooltipProvider delayDuration={300} skipDelayDuration={0}>
             <Tooltip>
@@ -83,7 +84,8 @@ const SignInPage: NextPage = () => {
       <SignIn
         appearance={{
           elements: {
-            rootBox: 'fixed -translate-y-1/2 -translate-x-1/2 top-1/2 left-1/2',
+            rootBox:
+              'fixed -translate-y-1/2 -translate-x-1/2 top-[60%] left-1/2',
             logoBox: 'justify-center',
             formButtonPrimary:
               'bg-slate-500 hover:bg-slate-400 text-sm normal-case',
