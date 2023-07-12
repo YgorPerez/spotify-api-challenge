@@ -34,6 +34,7 @@ Um desafio de https://github.com/RodyRafa/challenge/tree/master/react
 ### Extras
 - [x] Tudo usando uma infraestrutura grátis.
 - [x] OAuth para fazer login e obter o token de acesso.
+- [x] Scroll infinito e botão de carregar mais para um melhor UX.
 - [x] Backend para que o token de acesso não fique exposto e para SSR.
 - [x] Hospedado online no vercel.
 - [x] Mostrar letras de músicas.
@@ -65,8 +66,32 @@ Abra o terminal
 
 Baixe o repositório com `git clone https://github.com/YgorPerez/spotify-api-challenge.git`
 
-cd spotify-api-challenge
+`cd spotify-api-challenge`
 
 Rode `pnpm i`
 
+Abra o arquivo .env.example e siga as intruçöes
+
 Agora você pode rodar o projeto com `pnpm dev` e vai estar no localhost:3000
+
+# Limitaçöes
+O spotify deixa apenas emails registrados no dashboard conectar no app com a versäo de desenvolvedor 
+entäo qualquer um que quiser ver o app vai ter que me pedir para adicionar seu email do spotify lá.
+Eu já requisitei acesso a extensäo de quota deles para permitir qualquer usuário, mas é possível que 
+eu näo consiga já que eles tem muitos e muitos requistos que acabariam degradando a UI do aplicativo
+e eu decidi näo implementar para seguir layout.
+
+Eu näo consigo rodar todo o backend no edge runtime devido à uma limitação da vercel em modo 
+gratuíto que permite apenas 1MB para o tamanho da funçäo edge e eu utilizo 80KB a mais que isso. 
+
+# Veja o app
+Página inicial do app
+![Página inicial do app](/public/images/home-preview.png "Página inicial do app")
+Página inicial do app no light mode
+![Página inicial do app no light mode](/public/images/home-preview-light.png "Página inicial do app no light mode")
+![Página inicial do app no mobile](/public/images/home-preview-mobile.png "Página inicial do app no mobile")
+Página de álbum do app
+![Página de álbum do app](/public/images/album-preview.png "Página de álbum do app")
+Página de álbum do app no light mode
+![Página de álbum do app no light mode](/public/images/album-preview-light.png "Página de álbum do app no light mode")
+![Página de álbum do app no mobile](/public/images/album-preview-mobile.png "Página de álbum do app no mobile")
