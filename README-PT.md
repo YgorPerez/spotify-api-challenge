@@ -40,7 +40,9 @@ Um desafio de https://github.com/RodyRafa/challenge/tree/master/react
 - [x] Hospedado online no vercel.
 - [x] Mostrar letras de músicas.
 - [x] Tratamento de erros e fallbacks.
-- [x] Observabilidade de erros com Axiom.
+- [x] Testes E2E sem mockar nada.
+- [x] CI e CD pipeline, testes automatizados em todo commit e deploy direto para a vercel.  
+- [x] Observabilidade de erros em produção com Axiom.
 - [x] Analitcs com @vercel/analytics.
 - [x] Componentes de interface do usuário reutilizáveis aos quais você pode adicionar classes.
 - [x] Lazy loading componens para carregar mais rápido.
