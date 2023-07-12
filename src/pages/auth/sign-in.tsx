@@ -1,11 +1,10 @@
 import { SignIn } from '@clerk/nextjs';
+import { Button } from '@components/ui/Button';
 import { toast } from '@hooks/use-toast';
 import { type NextPage } from 'next';
+import useTranslation from 'next-translate/useTranslation';
 import dynamic from 'next/dynamic';
 
-const Button = dynamic(() =>
-  import('@components/ui/Button').then(mod => mod.Button),
-);
 const TooltipProvider = dynamic(() =>
   import('@components/ui/Tooltip').then(mod => mod.TooltipProvider),
 );
@@ -23,12 +22,12 @@ const Toaster = dynamic(() =>
 );
 
 const SignInPage: NextPage = () => {
+  const { t } = useTranslation();
   return (
     <div className='h-screen w-screen bg-white'>
       <div className='fixed left-1/2 top-[20%] -translate-x-1/2 text-secondary-foreground'>
         <p>
-          Log out of your Spotify account and use these credentials for Signing
-          in the <span className='text-green-600'>Spotify</span>
+          {t('sign-in:log-out')} <span className='text-green-600'>Spotify</span>
         </p>
         <div className='mt-4 flex justify-between'>
           <TooltipProvider delayDuration={300} skipDelayDuration={0}>
@@ -39,7 +38,7 @@ const SignInPage: NextPage = () => {
                   onClick={() => {
                     void navigator.clipboard.writeText('55122zazaz@gmail.com');
                     toast({
-                      title: 'Copied email with success',
+                      title: t('sign-in:copy-success', { credential: 'email' }),
                     });
                   }}
                 >
@@ -47,7 +46,7 @@ const SignInPage: NextPage = () => {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Copy email to clipboard</p>
+                <p>{t('sign-in:copy-to', { credential: 'email' })}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -59,15 +58,23 @@ const SignInPage: NextPage = () => {
                   onClick={() => {
                     void navigator.clipboard.writeText('Pass@1234');
                     toast({
-                      title: 'Copied password with success',
+                      title: t('sign-in:copy-success', {
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        credential: t('sign-in:password'),
+                      }),
                     });
                   }}
                 >
-                  Password: Pass@1234
+                  {t('sign-in:Password')}: Pass@1234
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Copy password to clipboard</p>
+                <p>
+                  {t('sign-in:copy-to', {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    credential: t('sign-in:password'),
+                  })}
+                </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

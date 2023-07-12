@@ -1,0 +1,7 @@
+{
+  "log-out": "Saia da sua conta do Spotify e use as credenciais abaixo para logar no",
+  "password": "senha",
+  "Password": "Senha",
+  "copy-to": "Copiar {{credential}} para a àrea de transferência",
+  "copy-success": "{{credential}} copiada com successo"
+}

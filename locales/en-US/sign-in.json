@@ -1,0 +1,7 @@
+{
+  "log-out": "Log out of your Spotify account and use these credentials for Signing in the",
+  "password": "password",
+  "Password": "Password",
+  "copy-to": "Copy {{credential}} to clipboard",
+  "copy-success": "Copied {{credential}} to clipboard successufully"
+}
