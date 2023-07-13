@@ -60,6 +60,7 @@ const Player: FC<{
           </p>
           {isPremium ? (
             <SpotifyPlayer
+              data-cy='premium-player'
               token={token as string}
               uris={uris}
               initialVolume={0.4}
@@ -70,6 +71,7 @@ const Player: FC<{
                 <link href='/player.css' rel='stylesheet' />
               </Head>
               <AudioPlayer
+                data-cy='free-player'
                 preload='metadata'
                 src={songSource}
                 showSkipControls={isPlaylist}

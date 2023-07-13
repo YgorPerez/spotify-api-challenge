@@ -121,7 +121,7 @@ const SingleArtistPage: NextPage<Props> = (
             <ScrollArea className='lg:max-h-[75vh]'>
               <ol className='mx-2 flex w-[95vw] list-decimal flex-col justify-center lg:w-[55vw]'>
                 {albums?.map((album, index) => (
-                  <Album album={album} key={index} />
+                  <Album album={album} key={index} data-cy={`album-${index}`} />
                 ))}
                 {isFetchingAlbums && loadingData}
               </ol>
@@ -129,6 +129,7 @@ const SingleArtistPage: NextPage<Props> = (
             <Separator className='my-2' />
             <div className='mb-4 mt-4 flex justify-center lg:block'>
               <LoadMore
+                data-cy='button-fetch-next'
                 fetchNextPage={() => void fetchNextPage()}
                 isLoading={isFetchingAlbums}
                 hasNextPage={hasNextPage}

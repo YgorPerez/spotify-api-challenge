@@ -175,21 +175,18 @@ const SearchPage: NextPage<Props> = (
                 {shouldDisplayData &&
                   searchData.flatMap((searchResults, index) => (
                     <Fragment key={index}>
-                      {searchResults.albums?.map((album, albumIndex) => (
+                      {searchResults.albums?.map(album => (
                         <div key={album.id}>
-                          <SpotifyCard
-                            cardData={album}
-                            data-cy={`album-${albumIndex}`}
-                          />
+                          <SpotifyCard cardData={album} data-cy='card-album' />
                         </div>
                       ))}
-                      {searchResults.tracks?.map((track, trackIndex) => (
-                        <div key={track.id} data-cy={`track-${trackIndex}`}>
+                      {searchResults.tracks?.map(track => (
+                        <div key={track.id} data-cy='card-track'>
                           <SpotifyCard cardData={track} />
                         </div>
                       ))}
-                      {searchResults.artists?.map((artist, artistIndex) => (
-                        <div key={artist.id} data-cy={`artist-${artistIndex}`}>
+                      {searchResults.artists?.map(artist => (
+                        <div key={artist.id} data-cy='card-artist'>
                           <SpotifyCard cardData={artist} />
                         </div>
                       ))}
@@ -199,8 +196,8 @@ const SearchPage: NextPage<Props> = (
                 {!shouldDisplayData &&
                   !shouldDisplayLoadingData &&
                   !searchTerm &&
-                  lastSearchedAlbums?.map((album, index) => (
-                    <div key={album.id} data-cy={`album-${index}`}>
+                  lastSearchedAlbums?.map(album => (
+                    <div key={album.id} data-cy='card-last-album'>
                       <SpotifyCard cardData={album} />
                     </div>
                   ))}

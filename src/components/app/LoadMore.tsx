@@ -17,6 +17,7 @@ const LoadMore: React.FC<Props> = ({
 
   return (
     <Button
+      data-cy='button-load-more'
       className='sm:text-base'
       variant='secondary'
       disabled={isLoading || !hasNextPage}

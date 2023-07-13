@@ -37,13 +37,13 @@ const SignInPage: NextPage = () => {
                 <Button
                   variant='outlineSecondary'
                   onClick={() => {
-                    void navigator.clipboard.writeText('55122zazaz@gmail.com');
+                    void navigator.clipboard.writeText('music-api@gmail.com	');
                     toast({
                       title: t('sign-in:copy-success', { credential: 'email' }),
                     });
                   }}
                 >
-                  Email: 55122zazaz@gmail.com
+                  Email: music-api@gmail.com
                 </Button>
               </TooltipTrigger>
               <TooltipContent>

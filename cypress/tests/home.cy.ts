@@ -1,25 +1,53 @@
 /// <reference types="cypress" />
 
-describe('Test search', () => {
+describe('Test search and spotify card', () => {
   beforeEach(() => {
     cy.login();
     cy.visit('/');
+    cy.typeSearch('Taylor Swift');
   });
   it('Should display search results', () => {
     {
-      cy.typeSearch('Taylor Swift');
-      cy.get('[data-cy=artist-0] [data-cy=card-title]').should(
-        'contain.text',
-        'Taylor',
-      );
+      cy.get('[data-cy=card-artist] [data-cy=card-title]')
+        .eq(0)
+        .should('contain.text', 'Taylor');
     }
   });
-  it('Infinite scrolling should work', () => {
+  it('Should fecth the next page if footer in view', () => {
     {
-      cy.typeSearch('Taylor Swift');
-      cy.get('[data-cy=artist-0] [data-cy=card-title]');
+      cy.get('[data-cy=card-artist] [data-cy=card-title]').eq(0);
       cy.get('footer').scrollIntoView();
-      cy.get('[data-cy*=artist-0] [data-cy=card-title]').eq(1);
+      cy.get('[data-cy*card-=artist] [data-cy=card-title]').eq(1);
+    }
+  });
+  it('Artist card should link to artist page', () => {
+    {
+      cy.get('[data-cy=card-artist] [data-cy=card-title]').eq(0).click();
+      cy.url().should('contain', '/albums/');
+    }
+  });
+  it('Album card should link to album page', () => {
+    {
+      cy.get('[data-cy=card-album] [data-cy=card-title]').eq(0).click();
+      cy.url().should('contain', '/album/');
+    }
+  });
+  it('Track card should link to track page', () => {
+    {
+      cy.get('[data-cy=card-track] [data-cy=card-title]').eq(0).click();
+      cy.url().should('contain', '/track/');
+    }
+  });
+  it('Track card should have a link to the artist page', () => {
+    {
+      cy.get('[data-cy=card-track] [data-cy=card-subname]').eq(0).click();
+      cy.url().should('contain', '/albums/');
+    }
+  });
+  it('Album card should have a link to the artist page', () => {
+    {
+      cy.get('[data-cy=card-album] [data-cy=card-subname]').eq(0).click();
+      cy.url().should('contain', '/albums/');
     }
   });
 });

@@ -173,7 +173,6 @@ const SpotifyCard: FC<{
                 prefetchTrack(cardData as TrackType);
             }}
             className='group flex flex-col items-center'
-            data-cy='card-link'
           >
             <CardMain cardMainData={cardMainData} cardData={cardData} />
           </Link>
@@ -257,7 +256,10 @@ const CardMain: FC<{
           />
         </div>
       ) : (
-        <div className='flex flex-col items-center justify-center'>
+        <div
+          className='flex flex-col items-center justify-center'
+          data-cy='card-skeleton'
+        >
           <Skeleton
             className='min-h-[300px] min-w-[300px] rounded-none lg:h-full lg:min-h-[320px] lg:w-full lg:min-w-[320px]
               2xl:min-h-[448px] 2xl:min-w-[448px]'

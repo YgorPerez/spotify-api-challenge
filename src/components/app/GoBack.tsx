@@ -9,6 +9,7 @@ const GoBack: React.FC = () => {
   const router = useRouter();
   return (
     <Button
+      data-cy='go-back'
       variant='link'
       onClick={() => router.back()}
       className='flex items-center px-0 sm:text-xl'
