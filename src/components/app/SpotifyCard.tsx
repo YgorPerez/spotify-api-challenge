@@ -296,7 +296,10 @@ const CardMain: FC<{
         </>
       ) : (
         <>
-          <Skeleton className='-mt-2 min-h-[64px] min-w-[64px] rounded-none sm:min-h-[240px] sm:min-w-[240px]' />
+          <Skeleton
+            className='-mt-2 min-h-[64px] min-w-[64px] rounded-none sm:min-h-[240px] sm:min-w-[240px]'
+            data-cy='card-skeleton'
+          />
           <div className='mt-3 flex flex-col items-center sm:mb-1 sm:mt-7'>
             <Skeleton className='h-2 w-[64px] sm:h-4 sm:w-[200px]' />
             <Skeleton className='mt-3 h-2 w-[64px] sm:mt-4 sm:h-4 sm:w-[150px]' />

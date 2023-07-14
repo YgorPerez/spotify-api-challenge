@@ -166,6 +166,9 @@ devDependencies:
   cypress:
     specifier: ^12.17.1
     version: 12.17.1
+  cypress-wait-until:
+    specifier: ^2.0.0
+    version: 2.0.0
   eslint:
     specifier: ^8.42.0
     version: 8.42.0
@@ -2335,6 +2338,11 @@ packages:
 
   /csstype@3.1.2:
     resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
+
+  /cypress-wait-until@2.0.0:
+    resolution: {integrity: sha512-ulUZyrWBn+OuC8oiQuGKAScDYfpaWnE3dEE/raUo64w4RHQxZrQ/iMIWT4ZjGMMPr3P+BFEALCRnjQeRqzZj6g==}
+    engines: {node: '>=18.16.0', npm: '>=9.5.1'}
+    dev: true
 
   /cypress@12.17.1:
     resolution: {integrity: sha512-eKfBgO6t8waEyhegL4gxD7tcI6uTCGttu+ZU7y9Hq8BlpMztd7iLeIF4AJFAnbZH1xjX+wwgg4cRKFNSvv3VWQ==}

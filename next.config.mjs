@@ -14,7 +14,7 @@ const config = withAxiom({
   swcMinify: true,
   optimizeFonts: true,
   images: {
-    domains: ['i.scdn.co'],
+    domains: ['i.scdn.co', 'api.spotify.com', 'https://api.clerk.dev'],
     remotePatterns: [
       {
         protocol: 'https',

@@ -40,7 +40,7 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
           </ThemeProvider>
         </div>
       </ClerkProvider>
-      <Analytics />
+      <Analytics mode={'production'} />
     </>
   );
 };

@@ -5,5 +5,6 @@ declare namespace Cypress {
       password,
     }: { email?: string; password?: string } = {}): void;
     typeSearch(searchTerm: string): void;
+    clearSearch(): void
   }
 }

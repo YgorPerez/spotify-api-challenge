@@ -37,13 +37,15 @@ const SignInPage: NextPage = () => {
                 <Button
                   variant='outlineSecondary'
                   onClick={() => {
-                    void navigator.clipboard.writeText('music-api@gmail.com	');
+                    void navigator.clipboard.writeText(
+                      'music-api-challenge@gmail.com	',
+                    );
                     toast({
                       title: t('sign-in:copy-success', { credential: 'email' }),
                     });
                   }}
                 >
-                  Email: music-api@gmail.com
+                  Email: music-api-challenge@gmail.com
                 </Button>
               </TooltipTrigger>
               <TooltipContent>

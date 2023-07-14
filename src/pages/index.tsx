@@ -176,8 +176,8 @@ const SearchPage: NextPage<Props> = (
                   searchData.flatMap((searchResults, index) => (
                     <Fragment key={index}>
                       {searchResults.albums?.map(album => (
-                        <div key={album.id}>
-                          <SpotifyCard cardData={album} data-cy='card-album' />
+                        <div key={album.id} data-cy='card-album'>
+                          <SpotifyCard cardData={album} />
                         </div>
                       ))}
                       {searchResults.tracks?.map(track => (

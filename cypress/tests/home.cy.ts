@@ -6,6 +6,11 @@ describe('Test search and spotify card', () => {
     cy.visit('/');
     cy.typeSearch('Taylor Swift');
   });
+  it('Should display skeleton on search', () => {
+    {
+      cy.get('[data-cy=card-skeleton]').eq(0);
+    }
+  });
   it('Should display search results', () => {
     {
       cy.get('[data-cy=card-artist] [data-cy=card-title]')
@@ -13,11 +18,18 @@ describe('Test search and spotify card', () => {
         .should('contain.text', 'Taylor');
     }
   });
+  it('Should display last searched albums results', () => {
+    {
+      cy.get('[data-cy=card-artist] [data-cy=card-title]').eq(0);
+      cy.clearSearch();
+      cy.get('[data-cy=card-album] [data-cy=card-title]').eq(0);
+    }
+  });
   it('Should fecth the next page if footer in view', () => {
     {
       cy.get('[data-cy=card-artist] [data-cy=card-title]').eq(0);
       cy.get('footer').scrollIntoView();
-      cy.get('[data-cy*card-=artist] [data-cy=card-title]').eq(1);
+      cy.get('[data-cy*=card-artist] [data-cy=card-title]').eq(1);
     }
   });
   it('Artist card should link to artist page', () => {
