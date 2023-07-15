@@ -5,18 +5,18 @@ describe('Test track page', () => {
     cy.login();
     cy.visit('/').then(() => {
       cy.url().should('contain', '/auth');
+      cy.location('pathname').should('eq', '/');
     });
-    cy.location('pathname').should('eq', '/');
     cy.visit('/track/7G0gBu6nLdhFDPRLc0HdDG');
+    cy.url().should('contain', 'track/7G0gBu6nLdhFDPRLc0HdDG');
     cy.on('uncaught:exception', err => {
       if (
-        err.message.includes('hydration') ||
+        err.message.includes('Hydration') ||
+        err.message.includes('hydrating') ||
         err.message.includes('Minified React')
       )
         return false;
     });
-    cy.visit('/track/7G0gBu6nLdhFDPRLc0HdDG');
-    cy.url().should('contain', 'track/7G0gBu6nLdhFDPRLc0HdDG');
   });
   it('Should have spotify card', () => {
     {

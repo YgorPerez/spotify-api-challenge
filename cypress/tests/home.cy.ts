@@ -22,7 +22,7 @@ describe('Test search and spotify card', () => {
     {
       cy.get('[data-cy=card-artist] [data-cy=card-title]').eq(0);
       cy.clearSearch();
-      cy.get('[data-cy=card-album] [data-cy=card-title]').eq(0);
+      cy.get('[data-cy=card-last-album] [data-cy=card-title]').eq(0);
     }
   });
   it('Should fecth the next page if footer in view', () => {

@@ -17,7 +17,7 @@ Cypress.Commands.add(
             cy.get('#login-button').click();
           },
         );
-        cy.location('pathname').should('eq', '/');
+        cy.document().its('cookie').should('contain', '__clerk_db_jwt');
       },
       { cacheAcrossSpecs: true },
     );

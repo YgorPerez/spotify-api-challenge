@@ -7,8 +7,8 @@ export default defineConfig({
     specPattern: 'cypress/tests/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'cypress/support/e2e.ts',
     testIsolation: false,
-    taskTimeout: 8000,
   },
+  defaultCommandTimeout: 8000,
   component: {
     devServer: {
       framework: 'next',

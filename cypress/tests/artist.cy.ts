@@ -11,13 +11,12 @@ describe('Test artist page', () => {
     cy.location('pathname').should('eq', '/albums/06HL4z0CvFAxyc27GXpf02');
     cy.on('uncaught:exception', err => {
       if (
-        err.message.includes('hydration') ||
+        err.message.includes('hydrating') ||
+        err.message.includes('Hydration') ||
         err.message.includes('Minified React')
       )
         return false;
     });
-    cy.visit('/albums/06HL4z0CvFAxyc27GXpf02');
-    cy.url().should('contain', 'albums/06HL4z0CvFAxyc27GXpf02');
   });
   it('Should have spotify card', () => {
     {

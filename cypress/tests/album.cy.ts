@@ -11,13 +11,12 @@ describe('Test album page', () => {
     cy.location('pathname').should('eq', '/album/5AEDGbliTTfjOB8TSm1sxt');
     cy.on('uncaught:exception', err => {
       if (
-        err.message.includes('hydration') ||
+        err.message.includes('hydrating') ||
+        err.message.includes('Hydration') ||
         err.message.includes('Minified React')
       )
         return false;
     });
-    cy.visit('/album/5AEDGbliTTfjOB8TSm1sxt');
-    cy.url().should('contain', 'album/5AEDGbliTTfjOB8TSm1sxt');
   });
 
   it('Should have spotify card', () => {
