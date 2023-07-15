@@ -9,6 +9,7 @@ export default defineConfig({
     testIsolation: false,
   },
   defaultCommandTimeout: 8000,
+    chromeWebSecurity: false,
   component: {
     devServer: {
       framework: 'next',
