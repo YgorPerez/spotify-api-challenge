@@ -25,6 +25,12 @@ const config: DefaultSeoProps = {
       },
     ],
   },
+  additionalMetaTags: [
+    {
+      name: 'view-transition',
+      content: 'same-origin',
+    },
+  ],
   additionalLinkTags: [
     {
       rel: 'icon',

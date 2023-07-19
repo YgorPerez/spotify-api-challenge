@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-css-tags */
+import { type SimplifiedTrackType } from '@schema/spotifyApiSchemas';
 import { api } from '@utils/api';
 import useTranslation from 'next-translate/useTranslation';
 import dynamic from 'next/dynamic';
 import { useState, type FC } from 'react';
-import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 
 const SpotifyPlayer = dynamic(() => import('react-spotify-web-playback'), {
   loading: () => <p>Loading...</p>,
@@ -14,7 +14,7 @@ const AudioPlayer = dynamic(() => import('react-h5-audio-player'), {
 const Head = dynamic(() => import('next/head'));
 
 const Player: FC<{
-  tracks: SimplifiedTrack[];
+  tracks: SimplifiedTrackType[];
 }> = ({ tracks: tracks }) => {
   const [currentSongIndex, setSongIndex] = useState(0);
   const { t } = useTranslation();
@@ -73,7 +73,7 @@ const Player: FC<{
               <AudioPlayer
                 data-cy='free-player'
                 preload='metadata'
-                src={songSource}
+                src={songSource as string}
                 showSkipControls={isPlaylist}
                 volume={0.3}
                 onClickNext={goToNextSong}

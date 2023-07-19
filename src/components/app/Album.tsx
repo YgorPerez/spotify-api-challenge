@@ -1,10 +1,10 @@
 import Skeleton from '@components/ui/Skeleton';
+import type { SimplifiedAlbumType } from '@schema/spotifyApiSchemas';
 import { api } from '@utils/api';
 import Link from 'next/link';
 import { type FC } from 'react';
-import { type SimplifiedAlbum as AlbumType } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 
-const Album: FC<{ album: AlbumType | null }> = ({ album }) => {
+const Album: FC<{ album: SimplifiedAlbumType | null }> = ({ album }) => {
   const utils = api.useContext();
 
   const prefetchAlbum = (albumId: string) => {

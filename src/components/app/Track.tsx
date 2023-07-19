@@ -1,9 +1,9 @@
 import Skeleton from '@components/ui/Skeleton';
+import { type SimplifiedTrackType } from '@schema/spotifyApiSchemas';
 import { api } from '@utils/api';
 import formatMilliseconds from '@utils/formatMilliseconds';
 import Link from 'next/link';
 import { type FC } from 'react';
-import { type SimplifiedTrack as SimplifiedTrackType } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 
 const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
   const utils = api.useContext();
@@ -48,8 +48,13 @@ const Track: FC<{ track: SimplifiedTrackType | null }> = ({ track }) => {
       >
         <div className='text-base sm:text-lg 2xl:text-2xl'>
           <div className='flex w-[85vw] justify-between py-1 lg:w-[55vw]'>
-            <h2 className='mx-2 line-clamp-1 sm:mr-4' data-cy="track-name">{track.name}</h2>
-            <span className='text-primary-foreground lg:mr-4' data-cy="track-duration">
+            <h2 className='mx-2 line-clamp-1 sm:mr-4' data-cy='track-name'>
+              {track.name}
+            </h2>
+            <span
+              className='text-primary-foreground lg:mr-4'
+              data-cy='track-duration'
+            >
               {formatMilliseconds({ milliseconds: track.duration_ms })}
             </span>
           </div>

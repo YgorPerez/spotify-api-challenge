@@ -1,4 +1,11 @@
 import Skeleton from '@components/ui/Skeleton';
+import type {
+  AlbumType,
+  ArtistType,
+  ImageType,
+  SimplifiedAlbumType,
+  TrackType,
+} from '@schema/spotifyApiSchemas';
 import { api } from '@utils/api';
 import formatFollowers from '@utils/formatFollowers';
 import { log } from 'next-axiom';
@@ -6,13 +13,6 @@ import useTranslation from 'next-translate/useTranslation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { type FC } from 'react';
-import type {
-  Album as AlbumType,
-  Artist as ArtistType,
-  SpotifyImage as ImageType,
-  SimplifiedAlbum as SimplifiedAlbumType,
-  Track as TrackType,
-} from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 import { useMediaQuery } from 'usehooks-ts';
 import artistFallBackImg from '/public/images/artist-placeholder.jpg';
 
@@ -47,7 +47,7 @@ const SpotifyCard: FC<{
         };
       }
       // Handle track data
-      if ('track_number' in cardData) {
+      if ('duration_ms' in cardData) {
         return {
           cardMainData: {
             images: cardData.album?.images || null,
@@ -116,8 +116,8 @@ const SpotifyCard: FC<{
   if (big && cardMainData && cardSubData && cardData) {
     return (
       <div
-        className='m-auto max-w-[300px] items-center justify-center text-center
-          lg:m-0 lg:max-w-[440px]'
+        className='m-auto max-w-[300px] items-center justify-center
+          text-center lg:m-0 lg:max-w-[440px]'
         data-cy='card'
       >
         <CardMain cardMainData={cardMainData} cardData={cardData} big />
@@ -154,8 +154,8 @@ const SpotifyCard: FC<{
     <>
       {cardData && cardMainData ? (
         <div
-          className='w-full max-w-[64px] items-center justify-center text-center
-            sm:w-60 sm:max-w-[300px] 2xl:w-72'
+          className='w-full max-w-[64px] items-center justify-center
+            text-center sm:w-60 sm:max-w-[300px] 2xl:w-72'
           data-cy='card'
         >
           <Link

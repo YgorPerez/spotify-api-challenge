@@ -1,5 +1,5 @@
+import { type SimplifiedAlbumType } from '@schema/spotifyApiSchemas';
 import { api } from '@utils/api';
-import { type SimplifiedAlbum } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 
 export default function useGetLastSearchedAlbum(lastSearchTerm: string) {
   const utils = api.useContext();
@@ -9,7 +9,7 @@ export default function useGetLastSearchedAlbum(lastSearchTerm: string) {
     limit: 5,
   })?.pages;
 
-  const lastSearchedAlbums: SimplifiedAlbum[] = [];
+  const lastSearchedAlbums: SimplifiedAlbumType[] = [];
   if (lastSearchedPages) {
     for (let i = lastSearchedPages.length - 1; i >= 0; i--) {
       if (lastSearchedPages[i]?.albums) {
