@@ -59,10 +59,6 @@ Um desafio de https://github.com/RodyRafa/challenge/tree/master/react
 - [x] Middleware para garantir que o usuário tem sessão iniciada.
 - [x] Painel com documentação para visualização da api do backend.
 - [x] Acessível para todos, Leitor de ecrã e navegação por teclado.
-- [ ] Container Docker.
-- [ ] Transformar numa PWA.
-- [ ] Criar uma blur url para imagem carregar uma versão com blur e transicionar para ela completamente carregada para velocidades de carregamento mais rápidas.
-- [ ] Redis para armazenar em cache o token de acesso.
 
 # Desenvolvimento
 Abra o terminal
