@@ -59,10 +59,6 @@ A challenge from https://github.com/RodyRafa/challenge/tree/master/react
 - [x] Middleware for ensuring that the user is logged in.
 - [x] Panel with documentation for viewing the backend api.
 - [x] Accesible for everyone, Screen reader friendly and keyboard navegation.
-- [ ] Docker container.
-- [ ] Transform in a PWA.
-- [ ] Create blur url for images on load through server, for faster load speeds.
-- [ ] Redis for caching the access token.
 
 # Development
 
