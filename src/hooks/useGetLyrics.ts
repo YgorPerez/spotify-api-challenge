@@ -1,13 +1,13 @@
-import { api } from '@utils/api'
+import { api } from '@utils/api';
 
 export default function useGetArtistsAlbums({
   artistName,
   songTitle,
 }: {
-  artistName: string
-  songTitle: string
+  artistName: string;
+  songTitle: string;
 }) {
-  return api.spotify.getSongLyrics.useQuery(
+  return api.lyrics.getSongLyrics.useQuery(
     {
       artistName,
       songTitle,
@@ -15,5 +15,5 @@ export default function useGetArtistsAlbums({
     {
       staleTime: Infinity,
     },
-  )
+  );
 }
