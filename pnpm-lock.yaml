@@ -38,9 +38,6 @@ dependencies:
   '@tanstack/react-query':
     specifier: ^4.29.13
     version: 4.29.13(react-dom@18.2.0)(react@18.2.0)
-  '@tanstack/react-query-devtools':
-    specifier: ^4.29.13
-    version: 4.29.13(@tanstack/react-query@4.29.13)(react-dom@18.2.0)(react@18.2.0)
   '@tanstack/react-query-persist-client':
     specifier: ^4.29.13
     version: 4.29.13(@tanstack/react-query@4.29.13)
@@ -56,12 +53,6 @@ dependencies:
   '@trpc/server':
     specifier: ^10.30.0
     version: 10.30.0
-  '@upstash/ratelimit':
-    specifier: ^0.4.3
-    version: 0.4.3
-  '@upstash/redis':
-    specifier: ^1.21.0
-    version: 1.21.0
   '@vercel/analytics':
     specifier: ^1.0.1
     version: 1.0.1
@@ -115,7 +106,7 @@ dependencies:
     version: 1.13.1
   trpc-transformer:
     specifier: ^2.3.5
-    version: 2.3.5(decimal.js@10.4.3)(superjson@1.12.3)
+    version: 2.3.5(decimal.js@10.4.3)(superjson@1.13.1)
   usehooks-ts:
     specifier: ^2.9.1
     version: 2.9.1(react-dom@18.2.0)(react@18.2.0)
@@ -133,6 +124,9 @@ devDependencies:
   '@tanstack/eslint-plugin-query':
     specifier: ^4.29.9
     version: 4.29.9
+  '@tanstack/react-query-devtools':
+    specifier: ^4.29.13
+    version: 4.29.13(@tanstack/react-query@4.29.13)(react-dom@18.2.0)(react@18.2.0)
   '@total-typescript/ts-reset':
     specifier: ^0.4.2
     version: 0.4.2
@@ -1310,11 +1304,10 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       remove-accents: 0.4.2
-    dev: false
+    dev: true
 
   /@tanstack/query-core@4.29.11:
     resolution: {integrity: sha512-8C+hF6SFAb/TlFZyS9FItgNwrw4PMa7YeX+KQYe2ZAiEz6uzg6yIr+QBzPkUwZ/L0bXvGd1sufTm3wotoz+GwQ==}
-    dev: false
 
   /@tanstack/query-persist-client-core@4.29.11:
     resolution: {integrity: sha512-CSmMZchr+446r79NJ/pjD2yfjqNqFV7k8BnqOq4yTZvXsaQLEIn3tsaU45IsPgs4N7g9OBfPUPDdapSQvck2WQ==}
@@ -1339,9 +1332,9 @@ packages:
       '@tanstack/react-query': 4.29.13(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      superjson: 1.12.3
+      superjson: 1.13.1
       use-sync-external-store: 1.2.0(react@18.2.0)
-    dev: false
+    dev: true
 
   /@tanstack/react-query-persist-client@4.29.13(@tanstack/react-query@4.29.13):
     resolution: {integrity: sha512-grHLh7SfAPZUN/D85sKk9b59xChUydX4p6tFl5z5QOP1Sm9aQw2ZTeXl+QdEtSxB5Cbk0bJ+1GNHcvr9NGmQzg==}
@@ -1368,7 +1361,6 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
-    dev: false
 
   /@total-typescript/ts-reset@0.4.2:
     resolution: {integrity: sha512-vqd7ZUDSrXFVT1n8b2kc3LnklncDQFPvR58yUS1kEP23/nHPAO9l1lMjUfnPrXYYk4Hj54rrLKMW5ipwk7k09A==}
@@ -1711,31 +1703,6 @@ packages:
       '@typescript-eslint/types': 5.59.11
       eslint-visitor-keys: 3.4.1
     dev: true
-
-  /@upstash/core-analytics@0.0.6:
-    resolution: {integrity: sha512-cpPSR0XJAJs4Ddz9nq3tINlPS5aLfWVCqhhtHnXt4p7qr5+/Znlt1Es736poB/9rnl1hAHrOsOvVj46NEXcVqA==}
-    engines: {node: '>=16.0.0'}
-    dependencies:
-      '@upstash/redis': 1.21.0
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
-  /@upstash/ratelimit@0.4.3:
-    resolution: {integrity: sha512-Dsp9Mw09Flg28JRklKgFiCXqr3bqv8bbG0kgpUYoHjcgPPolFFyaYOj/I2HExvYLZiogl77NUavBoNvMOK0zUQ==}
-    dependencies:
-      '@upstash/core-analytics': 0.0.6
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
-  /@upstash/redis@1.21.0:
-    resolution: {integrity: sha512-c6M+cl0LOgGK/7Gp6ooMkIZ1IDAJs8zFR+REPkoSkAq38o7CWFX5FYwYEqGZ6wJpUGBuEOr/7hTmippXGgL25A==}
-    dependencies:
-      isomorphic-fetch: 3.0.0
-    transitivePeerDependencies:
-      - encoding
-    dev: false
 
   /@vercel/analytics@1.0.1:
     resolution: {integrity: sha512-Ux0c9qUfkcPqng3vrR0GTrlQdqNJ2JREn/2ydrVuKwM3RtMfF2mWX31Ijqo1opSjNAq6rK76PwtANw6kl6TAow==}
@@ -3806,15 +3773,6 @@ packages:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
 
-  /isomorphic-fetch@3.0.0:
-    resolution: {integrity: sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==}
-    dependencies:
-      node-fetch: 2.6.11
-      whatwg-fetch: 3.6.2
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
   /isstream@0.1.2:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
     dev: true
@@ -4255,18 +4213,6 @@ packages:
 
   /node-fetch-native@1.0.1:
     resolution: {integrity: sha512-VzW+TAk2wE4X9maiKMlT+GsPU4OMmR1U9CrHSmd3DFLn2IcZ9VJ6M6BBugGfYUnPCLSYxXdZy17M0BEJyhUTwg==}
-    dev: false
-
-  /node-fetch@2.6.11:
-    resolution: {integrity: sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==}
-    engines: {node: 4.x || >=6.0.0}
-    peerDependencies:
-      encoding: ^0.1.0
-    peerDependenciesMeta:
-      encoding:
-        optional: true
-    dependencies:
-      whatwg-url: 5.0.0
     dev: false
 
   /node-html-parser@6.1.5:
@@ -4918,7 +4864,7 @@ packages:
 
   /remove-accents@0.4.2:
     resolution: {integrity: sha512-7pXIJqJOq5tFgG1A2Zxti3Ht8jJF337m4sowbuHsW30ZnkQFnDzy9qBNhgzX8ZLW4+UBcXiiR7SwR6pokHsxiA==}
-    dev: false
+    dev: true
 
   /request-progress@3.0.0:
     resolution: {integrity: sha512-MnWzEHHaxHO2iWiQuHrUPBi/1WeBf5PkxQqNyNvLl9VAYSdXkP8tQ3pBSeCPD+yw0v0Aq1zosWLz0BdeXpWwZg==}
@@ -5345,8 +5291,8 @@ packages:
       ts-interface-checker: 0.1.13
     dev: true
 
-  /superjson@1.12.3:
-    resolution: {integrity: sha512-0j+U70KUtP8+roVPbwfqkyQI7lBt7ETnuA7KXbTDX3mCKiD/4fXs2ldKSMdt0MCfpTwiMxo20yFU3vu6ewETpQ==}
+  /superjson@1.13.1:
+    resolution: {integrity: sha512-AVH2eknm9DEd3qvxM4Sq+LTCkSXE2ssfh1t11MHMXyYXFQyQ1HLgVvV+guLTsaQnJU3gnaVo34TohHPulY/wLg==}
     engines: {node: '>=10'}
     dependencies:
       copy-anything: 3.0.5
@@ -5532,10 +5478,6 @@ packages:
       punycode: 2.3.0
     dev: true
 
-  /tr46@0.0.3:
-    resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
-    dev: false
-
   /trpc-client-devtools-link@0.2.1-next(@trpc/client@10.30.0)(@trpc/server@10.30.0):
     resolution: {integrity: sha512-juHl8SSsVywR7U98KqcRb7/dYVnTcnZNboRF3l87zwtFcbVWz60R2dSAMrjD7jY2qAZ7VJYUbx1gvDKC2SaJvw==}
     peerDependencies:
@@ -5544,7 +5486,7 @@ packages:
     dependencies:
       '@trpc/client': 10.30.0(@trpc/server@10.30.0)
       '@trpc/server': 10.30.0
-      superjson: 1.12.3
+      superjson: 1.13.1
     dev: true
 
   /trpc-panel@1.3.4(@trpc/server@10.30.0)(zod@3.21.4):
@@ -5561,14 +5503,14 @@ packages:
       zod-to-json-schema: 3.21.1(zod@3.21.4)
     dev: true
 
-  /trpc-transformer@2.3.5(decimal.js@10.4.3)(superjson@1.12.3):
+  /trpc-transformer@2.3.5(decimal.js@10.4.3)(superjson@1.13.1):
     resolution: {integrity: sha512-5l6901UDqPX31OcoCnLXfKdShHktFVP24lXbmbGvwdcuBme2RTvx3CcSl9xMugLh9JC90QkbapcMmrEOS5iwyw==}
     peerDependencies:
       decimal.js: ^10.4.3
       superjson: ^1.12.3
     dependencies:
       decimal.js: 10.4.3
-      superjson: 1.12.3
+      superjson: 1.13.1
     dev: false
 
   /ts-interface-checker@0.1.13:
@@ -5735,7 +5677,6 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
-    dev: false
 
   /usehooks-ts@2.9.1(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-2FAuSIGHlY+apM9FVlj8/oNhd+1y+Uwv5QNkMQz1oSfdHk4PXo1qoCw9I5M7j0vpH8CSWFJwXbVPeYDjLCx9PA==}
@@ -5781,10 +5722,6 @@ packages:
       tslib: 2.5.3
     dev: false
 
-  /webidl-conversions@3.0.1:
-    resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
-    dev: false
-
   /webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
     engines: {node: '>=12'}
@@ -5823,13 +5760,6 @@ packages:
   /whatwg-mimetype@3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
     engines: {node: '>=12'}
-    dev: false
-
-  /whatwg-url@5.0.0:
-    resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
-    dependencies:
-      tr46: 0.0.3
-      webidl-conversions: 3.0.1
     dev: false
 
   /which-boxed-primitive@1.0.2:

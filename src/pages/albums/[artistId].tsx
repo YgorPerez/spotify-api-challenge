@@ -100,10 +100,10 @@ const SingleArtistPage: NextPage<Props> = (
           description: `${t('common:see-more')} ${artist?.name ?? ''}`,
           images: [
             {
-              url: artist?.images[0]?.url ?? '',
+              url: artist?.images?.[0]?.url ?? '',
               alt: `${t('common:artist-picture')} ${artist?.name ?? ''}`,
-              width: artist?.images[0]?.width,
-              height: artist?.images[0]?.height,
+              width: artist?.images?.[0]?.width,
+              height: artist?.images?.[0]?.height,
             },
           ],
         }}
