@@ -1,6 +1,5 @@
-import { lyricsRouter } from './routers/lyrics'
-import { spotifyRouter } from './routers/spotify'
-import { createTRPCRouter } from './trpc'
+import { spotifyRouter } from './routers/spotify';
+import { createTRPCRouter } from './trpc';
 
 /**
  * This is the primary router for your server.
@@ -9,8 +8,7 @@ import { createTRPCRouter } from './trpc'
  */
 export const appRouter = createTRPCRouter({
   spotify: spotifyRouter,
-  lyrics: lyricsRouter
-})
+});
 
 // export type definition of API
-export type AppRouter = typeof appRouter
+export type AppRouter = typeof appRouter;
