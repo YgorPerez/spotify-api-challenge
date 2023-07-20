@@ -19,8 +19,8 @@ const Player: FC<{
   const [currentSongIndex, setSongIndex] = useState(0);
   const { t } = useTranslation();
 
-  const { data: user } = api.lyrics.getUser.useQuery();
-  const { data: token } = api.lyrics.getAccessToken.useQuery();
+  const { data: user } = api.spotify.getUser.useQuery();
+  const { data: token } = api.spotify.getAccessToken.useQuery();
 
   const uris = tracks.map(track => {
     return track.uri;

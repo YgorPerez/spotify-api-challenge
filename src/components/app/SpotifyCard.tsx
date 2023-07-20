@@ -107,7 +107,7 @@ const SpotifyCard: FC<{
     void utils.spotify.getTrack.prefetch({
       trackId: track.id,
     });
-    void utils.lyrics.getSongLyrics.prefetch({
+    void utils.spotify.getSongLyrics.prefetch({
       artistName: track.artists[0]?.name as string,
       songTitle: track.name,
     });

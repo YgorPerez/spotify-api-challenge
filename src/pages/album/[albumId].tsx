@@ -163,8 +163,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     albumId,
     limit: tracksLimit,
   });
-  await trpc.lyrics.getUser.prefetch();
-  await trpc.lyrics.getAccessToken.prefetch();
+  await trpc.spotify.getUser.prefetch();
+  await trpc.spotify.getAccessToken.prefetch();
 
   return {
     props: {

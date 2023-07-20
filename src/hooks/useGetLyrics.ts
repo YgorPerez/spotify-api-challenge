@@ -7,7 +7,7 @@ export default function useGetArtistsAlbums({
   artistName: string;
   songTitle: string;
 }) {
-  return api.lyrics.getSongLyrics.useQuery(
+  return api.spotify.getSongLyrics.useQuery(
     {
       artistName,
       songTitle,
