@@ -101,9 +101,6 @@ dependencies:
   spotify-web-api-ts-edge:
     specifier: 0.9.5
     version: 0.9.5
-  superjson:
-    specifier: ^1.13.1
-    version: 1.13.1
   tailwind-merge:
     specifier: ^1.13.1
     version: 1.13.1
