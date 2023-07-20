@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-export const ExternalUrlSchema = z.record(z.string());
-
 export const FollowersSchema = z.object({
   href: z.string().nullable(),
   total: z.number(),
@@ -12,7 +10,6 @@ export const PrivateUserSchema = z.object({
 });
 
 export const SimplifiedArtistSchema = z.object({
-  external_urls: ExternalUrlSchema,
   href: z.string(),
   id: z.string(),
   name: z.string(),
@@ -27,7 +24,6 @@ export const SpotifyImageSchema = z.object({
 });
 
 export const ArtistSchema = z.object({
-  external_urls: ExternalUrlSchema,
   followers: FollowersSchema,
   href: z.string(),
   id: z.string(),
@@ -47,7 +43,6 @@ export const SimplifiedAlbumSchema = z.object({
     z.literal('COMPILATION'),
   ]),
   artists: z.array(SimplifiedArtistSchema),
-  external_urls: ExternalUrlSchema,
   href: z.string(),
   id: z.string(),
   images: z.array(SpotifyImageSchema),
@@ -59,7 +54,6 @@ export const SimplifiedAlbumSchema = z.object({
 export const SimplifiedTrackSchema = z.object({
   artists: z.array(SimplifiedArtistSchema),
   duration_ms: z.number(),
-  external_urls: ExternalUrlSchema,
   href: z.string(),
   id: z.string(),
   name: z.string(),
@@ -72,7 +66,6 @@ export const TrackSchema = z.object({
   album: SimplifiedAlbumSchema,
   artists: z.array(SimplifiedArtistSchema),
   duration_ms: z.number(),
-  external_urls: ExternalUrlSchema,
   href: z.string(),
   id: z.string(),
   name: z.string(),
@@ -99,7 +92,6 @@ export const AlbumSchema = z.object({
     z.literal('compilation'),
   ]),
   artists: z.array(SimplifiedArtistSchema),
-  external_urls: ExternalUrlSchema,
   href: z.string(),
   id: z.string(),
   images: z.array(SpotifyImageSchema),

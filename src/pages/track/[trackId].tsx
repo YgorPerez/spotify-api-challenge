@@ -73,7 +73,7 @@ const SingleTrackPage: NextPage<Props> = (
           description: `${t('common:you-can-listen')} ${
             track?.artists?.[0]?.name ?? ''
           } ${track?.name ?? ''} ${t('common:song')}`,
-          url: track?.album?.external_urls.spotify,
+          url: track?.href,
           audio: track?.preview_url
             ? [{ url: track.preview_url, type: 'audio/mpeg' }]
             : undefined,
@@ -115,7 +115,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   const track = await trpc.spotify.getTrack.fetch({ trackId });
 
   await trpc.spotify.getSongLyrics.prefetch({
-    artistName: track.track.artists[0]?.name as string,
+    artistName: track.track.artists?.[0]?.name as string,
     songTitle: track.track.name,
   });
 
