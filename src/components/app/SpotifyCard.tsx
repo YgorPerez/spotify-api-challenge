@@ -6,6 +6,7 @@ import type {
   SimplifiedAlbumType,
   TrackType,
 } from '@schema/spotifyApiSchemas';
+import { api } from '@utils/api';
 import formatFollowers from '@utils/formatFollowers';
 import { log } from 'next-axiom';
 import useTranslation from 'next-translate/useTranslation';
@@ -84,6 +85,34 @@ const SpotifyCard: FC<{
     log.error(message);
   }
 
+  const utils = api.useContext();
+  const prefetchArtist = (artistId: string) => {
+    void utils.spotify.getArtist.prefetch({ artistId });
+    void utils.spotify.getArtistAlbums.prefetchInfinite({
+      artistId,
+      limit: 15,
+    });
+  };
+
+  const prefetchAlbum = (albumId: string) => {
+    void utils.spotify.getAlbum.prefetchInfinite({
+      albumId,
+    });
+    void utils.spotify.getAlbumTracks.prefetchInfinite({
+      albumId,
+    });
+  };
+
+  const prefetchTrack = (track: TrackType) => {
+    void utils.spotify.getTrack.prefetch({
+      trackId: track.id,
+    });
+    void utils.lyrics.getSongLyrics.prefetch({
+      artistName: track.artists[0]?.name as string,
+      songTitle: track.name,
+    });
+  };
+
   if (big && cardMainData && cardSubData && cardData) {
     return (
       <div
@@ -103,6 +132,8 @@ const SpotifyCard: FC<{
             <Link
               data-cy='card-subname'
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
+              onFocus={() => prefetchArtist(cardSubData.id)}
+              onMouseEnter={() => prefetchArtist(cardSubData.id)}
               className='line-clamp-2 w-4/5 text-ellipsis text-xl text-primary-foreground underline-offset-4 hover:underline lg:text-2xl'
             >
               {cardSubData.name}
@@ -129,6 +160,18 @@ const SpotifyCard: FC<{
         >
           <Link
             href={`/${cardMainData.slugUrl}/${cardData.id}`}
+            onFocus={() => {
+              cardMainData.slugUrl === 'album' && prefetchAlbum(cardData.id);
+              cardMainData.slugUrl === 'albums' && prefetchArtist(cardData.id);
+              cardMainData.slugUrl === 'track' &&
+                prefetchTrack(cardData as TrackType);
+            }}
+            onMouseEnter={() => {
+              cardMainData.slugUrl === 'album' && prefetchAlbum(cardData.id);
+              cardMainData.slugUrl === 'albums' && prefetchArtist(cardData.id);
+              cardMainData.slugUrl === 'track' &&
+                prefetchTrack(cardData as TrackType);
+            }}
             className='group flex flex-col items-center'
           >
             <CardMain cardMainData={cardMainData} cardData={cardData} />
@@ -138,6 +181,8 @@ const SpotifyCard: FC<{
             <Link
               data-cy='card-subname'
               href={`/${cardSubData.slugUrl}/${cardSubData.id}`}
+              onFocus={() => prefetchArtist(cardSubData.id)}
+              onMouseEnter={() => prefetchArtist(cardSubData.id)}
               className='mt-2 line-clamp-2 w-full text-center text-xs text-primary-foreground underline-offset-4 hover:underline sm:text-xl'
             >
               {cardSubData.name}
