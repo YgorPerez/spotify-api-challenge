@@ -95,7 +95,7 @@ const SingleArtistPage: NextPage<Props> = (
         openGraph={{
           locale: lang,
           type: 'website',
-          url: artist?.external_urls.spotify,
+          url: artist?.href,
           title: `${t('common:artist')}: ${artist?.name ?? ''}`,
           description: `${t('common:see-more')} ${artist?.name ?? ''}`,
           images: [

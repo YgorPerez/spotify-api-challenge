@@ -101,7 +101,7 @@ const SingleAlbumPage: NextPage<Props> = (
           description: `${t('common:you-can-listen')} ${
             album?.artists?.[0]?.name ?? ''
           } ${album?.name ?? ''} ${t('common:album')}`,
-          url: album?.external_urls.spotify,
+          url: album?.href,
           audio: tracks?.[0]?.preview_url
             ? tracks?.map(track => {
                 return {
