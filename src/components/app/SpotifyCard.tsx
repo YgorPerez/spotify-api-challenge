@@ -220,22 +220,18 @@ const CardMain: FC<{
   const isSmallerSM = useMediaQuery('(max-width: 639px)');
   const isSmallerLG = useMediaQuery('(max-width: 1023px)');
   let imageSize;
-  let imageIndex;
+  let imageUrl;
   if (big) {
     if (isSmallerLG) {
-      imageIndex = 1;
-      imageSize = 300;
+      (imageUrl = cardMainData?.images?.[1]?.url), (imageSize = 300);
     } else {
-      imageIndex = 0;
-      imageSize = 640;
+      (imageUrl = cardMainData?.images?.[0]?.url), (imageSize = 640);
     }
   } else {
     if (isSmallerSM) {
-      imageIndex = 2;
-      imageSize = 64;
+      (imageUrl = cardMainData?.images?.[2]?.url), (imageSize = 64);
     } else {
-      imageIndex = 1;
-      imageSize = 300;
+      (imageUrl = cardMainData?.images?.[1]?.url), (imageSize = 300);
     }
   }
   return big ? (
@@ -243,9 +239,9 @@ const CardMain: FC<{
       {cardMainData && cardData ? (
         <div className='flex justify-center'>
           <Image
-            src={cardMainData?.images?.[imageIndex]?.url || artistFallBackImg}
+            src={imageUrl || artistFallBackImg}
             alt={
-              cardMainData?.images?.[imageIndex]?.url
+              imageUrl
                 ? `${cardData.name} ${t('common:album-cover')}`
                 : `${t('common:picture-from')} ${cardData.name}`
             }
@@ -277,10 +273,10 @@ const CardMain: FC<{
         <>
           <Image
             className='aspect-square'
-            src={cardMainData.images?.[imageIndex]?.url || artistFallBackImg}
+            src={imageUrl || artistFallBackImg}
             loading='eager'
             alt={
-              cardMainData?.images?.[imageIndex]?.url
+              imageUrl
                 ? `${cardData.name} ${t('common:album-cover')}`
                 : `${t('common:picture-from')} ${cardData.name}`
             }
