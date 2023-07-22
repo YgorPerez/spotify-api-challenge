@@ -2,6 +2,8 @@ import { type DefaultSeoProps } from 'next-seo';
 
 const config: DefaultSeoProps = {
   defaultTitle: 'Listen to Spotify songs',
+  description:
+    "Search for artists, albums or tracks and listen to the songs previews while reading it's lyrics",
   canonical: 'https://music-api-challenge.vercel.app/',
   themeColor: '#fafafa',
   robotsProps: {
