@@ -26,6 +26,9 @@ const config = withAxiom({
   eslint: {
     dirs: ['src'],
   },
+  sassOptions: {
+    includePaths: ['./src/styles'],
+  },
 });
 
 export default bundleAnalyzer(config);
