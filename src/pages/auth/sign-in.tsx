@@ -1,5 +1,4 @@
 import { SignIn } from '@clerk/nextjs';
-import { Button } from '@components/ui/Button';
 import { toast } from '@hooks/useToast';
 import { type NextPage } from 'next';
 import useTranslation from 'next-translate/useTranslation';
@@ -7,6 +6,9 @@ import dynamic from 'next/dynamic';
 
 const TooltipProvider = dynamic(() =>
   import('@components/ui/Tooltip').then(mod => mod.TooltipProvider),
+);
+const Button = dynamic(() =>
+  import('@components/ui/Button').then(mod => mod.Button),
 );
 const TooltipContent = dynamic(() =>
   import('@components/ui/Tooltip').then(mod => mod.TooltipContent),

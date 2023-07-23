@@ -1,5 +1,3 @@
-import ScrollArea from '@/components/ui/ScrollArea';
-import Track from '@components/app/Track';
 import useGetAlbum from '@hooks/useGetAlbum';
 import useGetAlbumTracks from '@hooks/useGetAlbumTracks';
 import { ssrHelper } from '@utils/ssrHelper';
@@ -11,7 +9,6 @@ import useTranslation from 'next-translate/useTranslation';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
-import { type SimplifiedTrack } from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 
 const Error = dynamic(() => import('next/error'));
 const SpotifyCard = dynamic(() => import('@components/app/SpotifyCard'), {
@@ -24,7 +21,11 @@ const Header = dynamic(() => import('@components/ui/Header'), {
 const LoadMore = dynamic(() => import('@components/app/LoadMore'), {
   loading: () => <p>Loading...</p>,
 });
+const ScrollArea = dynamic(() => import('@components/ui/ScrollArea'), {
+  loading: () => <p>Loading...</p>,
+});
 const Player = dynamic(() => import('@components/app/Player'));
+const Track = dynamic(() => import('@components/app/Track'));
 
 interface Props {
   albumId: string;
@@ -125,7 +126,7 @@ const SingleAlbumPage: NextPage<Props> = (
             <ScrollArea className='lg:max-h-[calc(75vh_-_10rem)] 2xl:max-h-[calc(75vh_-_6rem)]'>
               <ol className='mx-2 list-decimal lg:mb-4'>
                 {tracks?.map((track, index) => (
-                  <Track track={track as SimplifiedTrack} key={index} />
+                  <Track track={track} key={index} />
                 ))}
                 {isFetchingTracks && loadingData}
               </ol>
@@ -139,7 +140,7 @@ const SingleAlbumPage: NextPage<Props> = (
               />
             </div>
           </div>
-          {tracks && <Player tracks={tracks as SimplifiedTrack[]} />}
+          {tracks && <Player tracks={tracks} />}
         </main>
       </div>
     </>

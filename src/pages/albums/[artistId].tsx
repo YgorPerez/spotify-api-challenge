@@ -1,5 +1,3 @@
-import Album from '@components/app/Album';
-import ScrollArea from '@components/ui/ScrollArea';
 import useGetArtist from '@hooks/useGetArtist';
 import useGetArtistsAlbums from '@hooks/useGetArtistAlbums';
 import { ssrHelper } from '@utils/ssrHelper';
@@ -13,6 +11,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
 const Error = dynamic(() => import('next/error'));
+const Album = dynamic(() => import('@components/app/Album'));
 const Header = dynamic(() => import('@components/ui/Header'), {
   loading: () => <p>Loading...</p>,
 });
@@ -23,6 +22,9 @@ const SpotifyCard = dynamic(() => import('@components/app/SpotifyCard'), {
   loading: () => <p>Loading...</p>,
 });
 const Separator = dynamic(() => import('@components/ui/Separator'));
+const ScrollArea = dynamic(() => import('@components/ui/ScrollArea'), {
+  loading: () => <p>Loading...</p>,
+});
 
 interface Props {
   artistId: string;
