@@ -1,8 +1,14 @@
 import { env } from '@/env.mjs';
 import { UserTokenSchema } from '@schema/clerkSchemas';
 import { TRPCError } from '@trpc/server';
+import { redis } from './redis';
 
 export const getSpotifyToken = async (userId: string) => {
+  const cachedToken = await redis.get(userId);
+  if (cachedToken) {
+    return cachedToken;
+  }
+
   const userTokenResponse = await fetch(
     `https://api.clerk.dev/v1/users/${userId}/oauth_access_tokens/oauth_spotify`,
     {
@@ -29,6 +35,9 @@ export const getSpotifyToken = async (userId: string) => {
       code: 'INTERNAL_SERVER_ERROR',
     });
   }
+  const token = validatedUserToken.data[0]?.token;
+  const ONE_HOUR_IN_SECONDS = 60 * 60 * 60;
+  await redis.set(userId, token, { ex: ONE_HOUR_IN_SECONDS });
 
-  return validatedUserToken.data[0]?.token;
+  return token;
 };
