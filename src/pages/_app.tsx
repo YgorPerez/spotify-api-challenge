@@ -8,6 +8,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { type AppType } from 'next/app';
 import dynamic from 'next/dynamic';
 import { Roboto } from 'next/font/google';
+import Head from 'next/head';
 import config from '../../next-seo.config';
 import '../styles/globals.scss';
 
@@ -18,7 +19,7 @@ const ThemeProvider = dynamic(() =>
 );
 
 const roboto = Roboto({
-  weight: '400',
+  weight: ['300', '400', '500'],
   subsets: ['latin'],
   variable: '--font-roboto',
   fallback: ['Segoe UI'],
@@ -40,16 +41,60 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
           locale: lang,
           type: 'website',
           siteName: 'Music Api Challenge',
-          images: [
-            {
-              url: 'https://i.imgur.com/9uuDwGJ.png',
-              alt: 'home image preview, cropped to fit',
-              width: 1200,
-              height: 630,
-            },
-          ],
         }}
       />
+      <Head>
+        <link rel='manifest' href='/public/manifest.json' />
+        <link rel='apple-touch-icon' href='/public/images/favicon-32x32.png' />
+        <link
+          rel='apple-touch-icon'
+          sizes='152x152'
+          href='/public/images/touch-icon-ipad.png'
+        />
+        <link
+          rel='apple-touch-icon'
+          sizes='180x180'
+          href='/public/images/touch-icon-iphone-retina.png'
+        />
+        <link
+          rel='apple-touch-icon'
+          sizes='167x167'
+          href='/public/images/touch-icon-ipad-retina.png'
+        />
+        <link
+          rel='icon'
+          type='image/png'
+          sizes='32x32'
+          href='/public/images/favicon-32x32.png'
+        />
+        <link
+          rel='icon'
+          type='image/png'
+          sizes='16x16'
+          href='/public/images/favicon-16x16.png'
+        />
+        <link
+          rel='shortcut'
+          type='image/png'
+          sizes='16x16'
+          href='/public/images/favicon-16x16.png'
+        />
+        <link
+          rel='mask-icon'
+          type='image/png'
+          sizes='16x16'
+          color='#fafafa'
+          href='/public/images/favicon-16x16.png'
+        />
+        <meta
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover'
+        />
+        <meta
+          property='og:image'
+          content='/public/images/home-preview-cropped.png'
+        />
+      </Head>
       <div className={roboto.className}>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <ErrorBoundary>
