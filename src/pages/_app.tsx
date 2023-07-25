@@ -1,4 +1,3 @@
-import { ClerkProvider } from '@clerk/nextjs';
 import usePersistQueryClient from '@hooks/usePersistQueryClient';
 import useSSRIntercept from '@hooks/useSSRIntercept';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -30,16 +29,14 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   return (
     <>
       <DefaultSeo {...config} />
-      <ClerkProvider {...pageProps}>
-        <div className={roboto.className}>
-          <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-            <ErrorBoundary>
-              <Component {...pageProps} />
-            </ErrorBoundary>
-            <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
-          </ThemeProvider>
-        </div>
-      </ClerkProvider>
+      <div className={roboto.className}>
+        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+          <ErrorBoundary>
+            <Component {...pageProps} />
+          </ErrorBoundary>
+          <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
+        </ThemeProvider>
+      </div>
       <Analytics mode={'production'} />
     </>
   );

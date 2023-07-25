@@ -10,7 +10,7 @@ const ratelimiter = async ({
   userId,
   event,
 }: {
-  userId?: string;
+  userId: string;
   event?: NextFetchEvent;
 }) => {
   if (env.NODE_ENV === 'production' && event && userId) {
@@ -32,4 +32,4 @@ const ratelimiter = async ({
   }
 };
 
-export default ratelimiter
+export default ratelimiter;

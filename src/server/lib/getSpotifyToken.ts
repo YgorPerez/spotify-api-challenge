@@ -3,7 +3,11 @@ import { UserTokenSchema } from '@schema/clerkSchemas';
 import { TRPCError } from '@trpc/server';
 import { redis } from './redis';
 
-const getSpotifyToken = async (userId: string) => {
+const getSpotifyToken = async ({
+  userId = 'user_2NyeeLQSg6TEJ88FxsHm3GDUecb',
+}: {
+  userId?: string;
+}) => {
   const cachedToken = await redis.get(userId);
   if (cachedToken !== '' && cachedToken && typeof cachedToken === 'string') {
     return cachedToken;

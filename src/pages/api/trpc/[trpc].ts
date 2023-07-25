@@ -14,10 +14,14 @@ async function nextApiHandler(
   res: NextResponse,
   event: NextFetchEvent,
 ) {
+  const forwarded = req.headers.get('x-forwarded-for');
+
+  const ip = forwarded ? forwarded.split(/, /)[0] : '127.0.0.1';
+
   return fetchRequestHandler({
     router: appRouter,
     createContext: () =>
-      createTRPCContext({ req, resHeaders: res.headers, event }),
+      createTRPCContext({ req, resHeaders: res.headers, event, ip }),
     req,
     endpoint: '/api/trpc',
     onError: ({ path, error }) => {

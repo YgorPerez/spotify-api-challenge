@@ -12,7 +12,6 @@
     "tailwind-config-viewer": "tailwind-config-viewer -o -p 3005 -c tailwind.config.cjs"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.21.1",
     "@radix-ui/react-dropdown-menu": "^2.0.5",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-scroll-area": "^1.0.4",

@@ -1,34 +1,34 @@
-import { type RequestLike } from '@clerk/nextjs/dist/types/server/types';
-import type {
-  SignedInAuthObject,
-  SignedOutAuthObject,
-} from '@clerk/nextjs/server';
-import { getAuth } from '@clerk/nextjs/server';
 import { initTRPC, type inferAsyncReturnType } from '@trpc/server';
+import { type IncomingMessage } from 'http';
 import { type AxiomRequest } from 'next-axiom';
-import type { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
+import { type NextApiRequestCookies } from 'next/dist/server/api-utils';
+import type { NextFetchEvent, NextResponse } from 'next/server';
 import { type TRPCPanelMeta } from 'trpc-panel';
 import transformer from 'trpc-transformer';
 import { ZodError } from 'zod';
 
 interface AuthContext {
-  auth: SignedInAuthObject | SignedOutAuthObject;
-  req: RequestLike | AxiomRequest;
+  req:
+    | (IncomingMessage & {
+        cookies: NextApiRequestCookies;
+      })
+    | AxiomRequest;
   resHeaders?: NextResponse['headers'];
+  ip?: string;
   event?: NextFetchEvent | undefined;
 }
 
 export const createInnerTRPCContext = ({
-  auth,
   req,
   resHeaders,
   event,
+  ip,
 }: AuthContext) => {
   return {
-    auth,
     req,
     resHeaders,
     event,
+    ip,
   };
 };
 
@@ -36,12 +36,18 @@ export function createTRPCContext({
   req,
   resHeaders,
   event,
+  ip,
 }: {
-  req: NextRequest | AxiomRequest;
+  req:
+    | (IncomingMessage & {
+        cookies: NextApiRequestCookies;
+      })
+    | AxiomRequest;
   resHeaders: NextResponse['headers'];
+  ip?: string;
   event?: NextFetchEvent | undefined;
 }) {
-  return createInnerTRPCContext({ req, resHeaders, auth: getAuth(req), event });
+  return createInnerTRPCContext({ req, resHeaders, event, ip });
 }
 
 type TRPCContext = inferAsyncReturnType<typeof createTRPCContext>;
