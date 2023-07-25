@@ -2,7 +2,6 @@
 
 describe('Test search and spotify card', () => {
   beforeEach(() => {
-    cy.login();
     cy.visit('/');
     cy.typeSearch('Taylor Swift');
   });

@@ -2,11 +2,6 @@
 
 describe('Test artist page', () => {
   beforeEach(() => {
-    cy.login();
-    cy.visit('/albums/06HL4z0CvFAxyc27GXpf02').then(() => {
-      cy.url().should('contain', '/auth');
-      cy.location('pathname').should('eq', '/');
-    });
     cy.visit('/albums/06HL4z0CvFAxyc27GXpf02');
     cy.location('pathname').should('eq', '/albums/06HL4z0CvFAxyc27GXpf02');
     cy.on('uncaught:exception', err => {

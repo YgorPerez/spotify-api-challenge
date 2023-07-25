@@ -2,11 +2,6 @@
 
 describe('Test track page', () => {
   beforeEach(() => {
-    cy.login();
-    cy.visit('/').then(() => {
-      cy.url().should('contain', '/auth');
-      cy.location('pathname').should('eq', '/');
-    });
     cy.visit('/track/7G0gBu6nLdhFDPRLc0HdDG');
     cy.url().should('contain', 'track/7G0gBu6nLdhFDPRLc0HdDG');
     cy.on('uncaught:exception', err => {

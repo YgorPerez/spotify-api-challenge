@@ -35,6 +35,7 @@ jobs:
           parallel: true # Runs test in parallel using settings above
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CLERK_USER_ID: ${{ secrets.CLERK_USER_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPSTASH_REDIS_REST_URL: ${{secrets.UPSTASH_REDIS_REST_URL}}
           UPSTASH_REDIS_REST_TOKEN: ${{secrets.UPSTASH_REDIS_REST_TOKEN}}

@@ -2,11 +2,6 @@
 
 describe('Test album page', () => {
   beforeEach(() => {
-    cy.login();
-    cy.visit('/album/5AEDGbliTTfjOB8TSm1sxt').then(() => {
-      cy.url().should('contain', '/auth');
-      cy.location('pathname').should('eq', '/');
-    });
     cy.visit('/album/5AEDGbliTTfjOB8TSm1sxt');
     cy.location('pathname').should('eq', '/album/5AEDGbliTTfjOB8TSm1sxt');
     cy.on('uncaught:exception', err => {

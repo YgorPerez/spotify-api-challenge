@@ -17,6 +17,8 @@
   "server-error-extended": "O servidor se deparou com um erro interno. Por favor tente novamente",
   "page-not-found": "Página não encotrada",
   "not-found-suggestion": "Por favor cheque o endereço (URL) e tente novamente.",
+  "offline-extended": "Você não tem acesso à internet neste momento",
+  "try-checking-connection": "Por favor cheque sua conexão e tente novamente.",
   "go-home": "Voltar para o ínicio",
   "go-back": "Voltar",
   "try-again": "Tentar novamente",
