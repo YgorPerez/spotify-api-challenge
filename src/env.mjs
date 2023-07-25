@@ -18,6 +18,7 @@ export const env = createEnv({
     CLERK_SECRET_KEY: z.string(),
     CLERK_USER_ID: z.string(),
     REDIS_URL: z.string().url(),
+    GENIUS_ACCESS_TOKEN: z.string(),
     PORT: z
       .string()
       .optional()
@@ -41,6 +42,7 @@ export const env = createEnv({
     SPOTIFY_REFRESH_TOKEN: process.env.SPOTIFY_REFRESH_TOKEN,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     CLERK_USER_ID: process.env.CLERK_USER_ID,
+    GENIUS_ACCESS_TOKEN: process.env.GENIUS_ACCESS_TOKEN,
     REDIS_URL: process.env.REDIS_URL,
     PORT: process.env.PORT,
     ANALYZE: process.env.ANALYZE,

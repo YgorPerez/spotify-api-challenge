@@ -1,3 +1,4 @@
+import { env } from '@/env.mjs';
 import type {
   PagingArtistsType,
   PagingSimplifiedAlbumsType,
@@ -389,8 +390,7 @@ export const spotifyRouter = createTRPCRouter({
         title: songTitle,
         artist: artistName,
         optimizeQuery: true,
-      }).then(lyric => {
-        return lyric?.substring(0, lyric?.indexOf('Ocorreu um erro.'));
+        apiKey: env.GENIUS_ACCESS_TOKEN,
       });
 
       const validatedLyrics = z
