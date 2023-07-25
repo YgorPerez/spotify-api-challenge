@@ -120,8 +120,6 @@ const SearchPage: NextPage<Props> = (
             ? `${t('search:searching-for')} ${searchTerm}`
             : t('search:title')
         }
-        description={t('search:description')}
-        canonical='https://music-api-challenge.vercel.app'
         openGraph={{
           locale: lang,
           title: searchTerm
@@ -129,7 +127,7 @@ const SearchPage: NextPage<Props> = (
             : t('search:title'),
           description: searchTerm
             ? `${t('search:see-results-for')} ${searchTerm}`
-            : t('search:description'),
+            : t('common:description'),
         }}
       />
       <SiteLinksSearchBoxJsonLd
@@ -212,6 +210,8 @@ const SearchPage: NextPage<Props> = (
     </>
   );
 };
+
+export const runtime = 'experimental-edge';
 
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context: GetServerSidePropsContext,
