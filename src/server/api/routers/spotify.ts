@@ -381,7 +381,7 @@ export const spotifyRouter = createTRPCRouter({
         artistName: z.string().describe('The artist name.'),
       }),
     )
-    .output(z.string().nullable().describe('The lyrics of the song'))
+    .output(z.string().optional().nullable().describe('The lyrics of the song'))
     .query(async ({ input }) => {
       const { artistName, songTitle } = input;
 
@@ -389,9 +389,15 @@ export const spotifyRouter = createTRPCRouter({
         title: songTitle,
         artist: artistName,
         optimizeQuery: true,
+      }).then(lyric => {
+        return lyric?.substring(0, lyric?.indexOf('Ocorreu um erro.'));
       });
 
-      const validatedLyrics = z.string().nullable().safeParse(lyrics);
+      const validatedLyrics = z
+        .string()
+        .optional()
+        .nullable()
+        .safeParse(lyrics);
       if (!validatedLyrics.success) {
         throw new TRPCError({
           message: `Lyrics error on: ${songTitle} from ${artistName}`,
