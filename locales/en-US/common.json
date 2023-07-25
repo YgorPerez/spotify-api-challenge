@@ -1,4 +1,6 @@
 {
+  "description": "Search for artists, albums or tracks and listen to the songs previews while reading it's lyrics",
+  "title": "Listen to Spotify songs",
   "nothing-load": "Nothing more to load",
   "loading": "Loading...",
   "load-more": "Load more",

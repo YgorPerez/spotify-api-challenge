@@ -111,7 +111,14 @@ const SingleAlbumPage: NextPage<Props> = (
                 };
               })
             : undefined,
-          images: album?.images,
+          images: [
+            {
+              url: album?.images?.[0]?.url ?? '',
+              alt: `${t('common:album-cover')} ${album?.name ?? ''}`,
+              width: album?.images?.[0]?.width,
+              height: album?.images?.[0]?.height,
+            },
+          ],
         }}
       />
       <div>

@@ -103,7 +103,7 @@ const SingleArtistPage: NextPage<Props> = (
           images: [
             {
               url: artist?.images?.[0]?.url ?? '',
-              alt: `${t('common:artist-picture')} ${artist?.name ?? ''}`,
+              alt: `${t('common:picture-from')} ${artist?.name ?? ''}`,
               width: artist?.images?.[0]?.width,
               height: artist?.images?.[0]?.height,
             },

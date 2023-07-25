@@ -77,7 +77,14 @@ const SingleTrackPage: NextPage<Props> = (
           audio: track?.preview_url
             ? [{ url: track.preview_url, type: 'audio/mpeg' }]
             : undefined,
-          images: track?.album?.images,
+          images: [
+            {
+              url: track?.album?.images?.[0]?.url ?? '',
+              alt: `${t('common:album-cover')} ${track?.album?.name ?? ''}`,
+              width: track?.album?.images?.[0]?.width,
+              height: track?.album?.images?.[0]?.height,
+            },
+          ],
         }}
       />
       <div>
