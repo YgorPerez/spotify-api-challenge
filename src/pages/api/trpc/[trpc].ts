@@ -21,17 +21,15 @@ async function nextApiHandler(
     req,
     endpoint: '/api/trpc',
     onError: ({ path, error }) => {
+      const formatedError = `❌ tRPC failed on ${path ?? '<no-path>'}: ${
+        error.message
+      }, cause: ${(error.cause as unknown as string) ?? '<no-path>'}, code: ${
+        error.code
+      }, stack: ${error.stack ?? '<no-stack>'}`;
+
       env.NODE_ENV === 'development'
-        ? console.error(
-            `❌ tRPC failed on ${path ?? '<no-path>'}: ${error.message},
-            cause: ${(error.cause as unknown as string) ?? '<no-path>'},
-            code: ${error.code}, stack: ${error.stack ?? '<no-stack>'}`,
-          )
-        : req.log.error(
-            `❌ tRPC failed on ${path ?? '<no-path>'}: ${error.message},
-            cause: ${(error.cause as unknown as string) ?? '<no-path>'},
-            code: ${error.code}, stack: ${error.stack ?? '<no-stack>'}`,
-          );
+        ? console.error(formatedError)
+        : req.log.error(formatedError);
     },
   });
 }
