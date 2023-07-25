@@ -36,7 +36,7 @@ const getSpotifyToken = async (userId: string) => {
     });
   }
   const token = validatedUserToken.data[0]?.token;
-  const ONE_HOUR_IN_SECONDS = 60 * 60 * 60;
+  const ONE_HOUR_IN_SECONDS = 60 * 60;
   await redis.set(userId, token, { ex: ONE_HOUR_IN_SECONDS });
 
   return token;
