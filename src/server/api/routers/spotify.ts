@@ -1,4 +1,8 @@
-import { env } from '@/env.mjs';
+import type {
+  PagingArtistsType,
+  PagingSimplifiedAlbumsType,
+  PagingTracksType,
+} from '@schema/spotifyApiSchemas';
 import {
   AlbumSchema,
   ArtistSchema,
@@ -17,12 +21,6 @@ import {
   type inferRouterOutputs,
 } from '@trpc/server';
 import getLyrics from 'genius-lyrics-ts';
-import type {
-  Artist,
-  Paging,
-  SimplifiedAlbum,
-  Track,
-} from 'spotify-web-api-ts-edge/types/types/SpotifyObjects';
 import { z } from 'zod';
 import { createTRPCRouter } from '../trpc';
 import { protectedTokenProcedure } from '../trpc-middleware';
@@ -46,10 +44,11 @@ export const spotifyRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const album = await ctx.spotifyApi.albums.getAlbum(input.albumId);
-      const validatedAlbum = AlbumSchema.safeParse(album);
+      const validatedAlbum = SimplifiedAlbumSchema.safeParse(album);
       if (!validatedAlbum.success) {
         throw new TRPCError({
-          message: 'returned type from spotify-api.js get album not valid',
+          message:
+            'returned type from spotify-web-api-ts-edge get album not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedAlbum?.error,
         });
@@ -101,7 +100,7 @@ export const spotifyRouter = createTRPCRouter({
       if (!validatedTracks.success) {
         throw new TRPCError({
           message:
-            'returned type from spotify-api.js  get album tracks not valid',
+            'returned type from spotify-web-api-ts-edge  get album tracks not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedTracks?.error,
         });
@@ -141,7 +140,8 @@ export const spotifyRouter = createTRPCRouter({
       const validatedArtist = ArtistSchema.safeParse(artist);
       if (!validatedArtist.success) {
         throw new TRPCError({
-          message: 'returned type from spotify-api.js get artist not valid',
+          message:
+            'returned type from spotify-web-api-ts-edge get artist not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedArtist?.error,
         });
@@ -189,7 +189,7 @@ export const spotifyRouter = createTRPCRouter({
       if (!validatedAlbums.success) {
         throw new TRPCError({
           message:
-            'returned type from spotify-api.js  get artist albums not valid',
+            'returned type from spotify-web-api-ts-edge  get artist albums not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedAlbums?.error,
         });
@@ -220,7 +220,8 @@ export const spotifyRouter = createTRPCRouter({
         return { track: validatedTrack.data };
       } else {
         throw new TRPCError({
-          message: 'returned type from spotify-api.js get track not valid',
+          message:
+            'returned type from spotify-web-api-ts-edge get track not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedTrack.error,
         });
@@ -279,9 +280,9 @@ export const spotifyRouter = createTRPCRouter({
       const { cursor, mediaType, limit, searchTerm, includeExternalAudio } =
         input;
       type Promises = [
-        Promise<Paging<SimplifiedAlbum>> | undefined,
-        Promise<Paging<Track>> | undefined,
-        Promise<Paging<Artist>> | undefined,
+        Promise<PagingSimplifiedAlbumsType> | undefined,
+        Promise<PagingTracksType> | undefined,
+        Promise<PagingArtistsType> | undefined,
       ];
       const promises: Promises = [undefined, undefined, undefined];
       if (
@@ -326,7 +327,7 @@ export const spotifyRouter = createTRPCRouter({
           artistsSearchContent,
         });
         throw new TRPCError({
-          message: 'returned type from spotify-api.js not valid',
+          message: 'returned type from spotify-web-api-ts-edge not valid',
           code: 'INTERNAL_SERVER_ERROR',
           cause: validatedSearchContent.error,
         });
@@ -384,13 +385,11 @@ export const spotifyRouter = createTRPCRouter({
     .query(async ({ input }) => {
       const { artistName, songTitle } = input;
 
-      const options = {
-        apiKey: env.GENIUS_ACCESS_TOKEN,
+      const lyrics = await getLyrics({
         title: songTitle,
         artist: artistName,
-      };
-
-      const lyrics = await getLyrics(options);
+        optimizeQuery: true,
+      });
 
       const validatedLyrics = z.string().nullable().safeParse(lyrics);
       if (!validatedLyrics.success) {

@@ -96,7 +96,7 @@ export const AlbumSchema = z.object({
   id: z.string(),
   images: z.array(SpotifyImageSchema),
   name: z.string(),
-  tracks: PagingSimplifiedTracksSchema,
+  tracks: SimplifiedTrackSchema,
   type: z.literal('album'),
   uri: z.string(),
 });
@@ -143,6 +143,14 @@ export const SearchContentSchema = z.object({
   artists: PagingArtistsSchema.nullable().optional(),
 });
 
+export type PagingSimplifiedAlbumsType = z.infer<
+  typeof PagingSimplifiedAlbumsSchema
+>;
+export type PagingArtistsType = z.infer<typeof PagingArtistsSchema>;
+export type PagingTracksType = z.infer<typeof PagingTracksSchema>;
+export type PagingSimplifiedTracksType = z.infer<
+  typeof PagingSimplifiedTracksSchema
+>;
 export type TrackType = z.infer<typeof TrackSchema>;
 export type AlbumType = z.infer<typeof AlbumSchema>;
 export type ArtistType = z.infer<typeof ArtistSchema>;

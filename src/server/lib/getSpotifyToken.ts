@@ -4,8 +4,8 @@ import { TRPCError } from '@trpc/server';
 import { redis } from './redis';
 
 const getSpotifyToken = async (userId: string) => {
-  const cachedToken = (await redis.get(userId)) as string;
-  if (cachedToken) {
+  const cachedToken = await redis.get(userId);
+  if (cachedToken !== '' && cachedToken && typeof cachedToken === 'string') {
     return cachedToken;
   }
 
