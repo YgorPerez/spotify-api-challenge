@@ -48,6 +48,11 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
         <link rel='apple-touch-icon' href='/public/images/favicon-32x32.png' />
         <link
           rel='apple-touch-icon'
+          sizes='512x512'
+          href='/public/images/android-chrome-512x512.png'
+        />
+        <link
+          rel='apple-touch-icon'
           sizes='152x152'
           href='/public/images/touch-icon-ipad.png'
         />
