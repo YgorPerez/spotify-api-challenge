@@ -7,12 +7,7 @@ export const env = createEnv({
     process.env.SKIP_ENV_VALIDATION !== 'false' &&
     process.env.SKIP_ENV_VALIDATION !== '0',
   client: {
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
     NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT: z.string().url().optional(),
-    NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string(),
-    NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string(),
-    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: z.string(),
-    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string(),
   },
   server: {
     NODE_ENV: z.enum(['development', 'test', 'production']),
@@ -21,9 +16,7 @@ export const env = createEnv({
     SPOTIFY_CLIENT_SECRET: z.string(),
     SPOTIFY_REFRESH_TOKEN: z.string().optional(),
     CLERK_SECRET_KEY: z.string(),
-    GENIUS_CLIENT_SECRET: z.string(),
-    GENIUS_ACCESS_TOKEN: z.string(),
-    CLERK_REDIRECT_URI: z.string().url(),
+    CLERK_USER_ID: z.string(),
     REDIS_URL: z.string().url(),
     PORT: z
       .string()
@@ -41,23 +34,13 @@ export const env = createEnv({
       .transform(s => s === 'true'),
   },
   runtimeEnv: {
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL:
-      process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL,
-    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL:
-      process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,
-    NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
-    NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
     NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT:
       process.env.NEXT_PUBLIC_AXIOM_INGEST_ENDPOINT,
     SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
     SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
     SPOTIFY_REFRESH_TOKEN: process.env.SPOTIFY_REFRESH_TOKEN,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-    GENIUS_ACCESS_TOKEN: process.env.GENIUS_ACCESS_TOKEN,
-    GENIUS_CLIENT_SECRET: process.env.GENIUS_CLIENT_SECRET,
-    CLERK_REDIRECT_URI: process.env.CLERK_REDIRECT_URI,
+    CLERK_USER_ID: process.env.CLERK_USER_ID,
     REDIS_URL: process.env.REDIS_URL,
     PORT: process.env.PORT,
     ANALYZE: process.env.ANALYZE,

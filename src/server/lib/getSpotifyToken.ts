@@ -4,7 +4,7 @@ import { TRPCError } from '@trpc/server';
 import { redis } from './redis';
 
 const getSpotifyToken = async ({
-  userId = 'user_2NyeeLQSg6TEJ88FxsHm3GDUecb',
+  userId = env.CLERK_USER_ID,
 }: {
   userId?: string;
 }) => {
