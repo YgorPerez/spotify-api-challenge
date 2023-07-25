@@ -8,6 +8,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { type AppType } from 'next/app';
 import dynamic from 'next/dynamic';
 import { Roboto } from 'next/font/google';
+import config from '../../next-seo.config';
 import '../styles/globals.scss';
 
 const ErrorBoundary = dynamic(() => import('@components/hoc/ErrorBoundary'));
@@ -30,6 +31,7 @@ const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   return (
     <>
       <DefaultSeo
+        {...config}
         defaultTitle={t('common:title')}
         description={t('common:description')}
         openGraph={{
