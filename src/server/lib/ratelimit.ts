@@ -6,7 +6,7 @@ import { redis } from './redis';
 
 const rateLimitCache = new Map();
 
-export const ratelimiter = async ({
+const ratelimiter = async ({
   userId,
   event,
 }: {
@@ -31,3 +31,5 @@ export const ratelimiter = async ({
     }
   }
 };
+
+export default ratelimiter

@@ -1,5 +1,5 @@
-import { getSpotifyToken } from '@lib/getClerkSpotifyToken';
-import { ratelimiter } from '@lib/redis-ratelimit';
+import getSpotifyToken from '@lib/getSpotifyToken';
+import ratelimit from '@lib/ratelimit';
 import { globalForSpotifyClient, spotifyClientOauth } from '@lib/spotify-api';
 import { TRPCError } from '@trpc/server';
 import { t } from './trpc';
@@ -16,7 +16,7 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
   if (!userId) {
     throw unauthorizedError();
   }
-  await ratelimiter({ userId, event: ctx.event });
+  await ratelimit({ userId, event: ctx.event });
   return next({
     ctx: {
       ...ctx,
@@ -34,7 +34,7 @@ const IsAccessTokenValid = t.middleware(async ({ ctx, next }) => {
   if (!userId) {
     throw unauthorizedError();
   }
-  await ratelimiter({ userId, event: ctx.event });
+  await ratelimit({ userId, event: ctx.event });
 
   let spotifyApi = globalForSpotifyClient.spotifyApi;
   if (!globalForSpotifyClient.spotifyApi) {
