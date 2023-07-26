@@ -49,6 +49,61 @@ const config: DefaultSeoProps = {
       name: 'view-transition',
       content: 'same-origin',
     },
+    {
+      name: 'viewport',
+      content:
+        'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover',
+    },
+  ],
+  additionalLinkTags: [
+    {
+      rel: 'icon',
+      href: 'https://i.imgur.com/VdjeMM7.png',
+      sizes: '32x32',
+      type: 'image/png',
+    },
+    {
+      rel: 'icon',
+      href: 'https://i.imgur.com/DXIslqf.png',
+      sizes: '16x16',
+      type: 'image/png',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: 'https://i.imgur.com/VdjeMM7.png',
+      type: 'image/png',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: 'https://i.imgur.com/0DSX3j2.png',
+      type: 'image/png',
+      sizes: '152x152',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: 'https://i.imgur.com/3KqOPnF.png',
+      type: 'image/png',
+      sizes: '180x180',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: 'https://i.imgur.com/NIOAiwY.png',
+      type: 'image/png',
+      sizes: '167x167',
+    },
+    {
+      rel: 'manifest',
+      href: './public/pwa/manifest.json',
+    },
+    {
+      rel: 'shortcut',
+      href: 'https://i.imgur.com/DXIslqf.png',
+    },
+    {
+      rel: 'mask-icon',
+      href: 'https://i.imgur.com/DXIslqf.png',
+      color: '#fafafa',
+    },
   ],
   twitter: {
     handle: '@ygorperez',
