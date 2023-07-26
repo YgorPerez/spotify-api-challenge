@@ -14,6 +14,10 @@ const config: DefaultSeoProps = {
       content: 'Music Api Challenge',
     },
     {
+      name: 'google-site-verification',
+      content: 'knf0tBoTfCXjTWRmnCUDA5u-YHXtAD5fLY4YZizy1P4',
+    },
+    {
       name: 'apple-mobile-web-app-capable',
       content: 'yes',
     },
@@ -93,7 +97,7 @@ const config: DefaultSeoProps = {
     },
     {
       rel: 'manifest',
-      href: './public/pwa/manifest.json',
+      href: '/public/pwa/manifest.json',
     },
     {
       rel: 'shortcut',
