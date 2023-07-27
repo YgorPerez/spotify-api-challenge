@@ -27,7 +27,7 @@ const SpotifyCard: FC<{
   cardData: CardData;
   big?: boolean;
 }> = ({ cardData, big }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
 
   //iife
   const { cardMainData, cardSubData } = (() => {
@@ -69,7 +69,7 @@ const SpotifyCard: FC<{
             slugUrl: 'albums',
           },
           cardSubData: {
-            name: `${t('common:fans')}: ${formatFollowers(
+            name: `${t('fans')}: ${formatFollowers(
               cardData.followers.total || 0,
             )}`,
           },
@@ -216,7 +216,7 @@ const CardMain: FC<{
   cardData: CardData;
   big?: boolean;
 }> = ({ cardMainData, cardData, big }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
   const isSmallerSM = useMediaQuery('(max-width: 639px)');
   const isSmallerLG = useMediaQuery('(max-width: 1023px)');
   let imageSize;
@@ -242,8 +242,8 @@ const CardMain: FC<{
             src={imageUrl || artistFallBackImg}
             alt={
               imageUrl
-                ? `${cardData.name} ${t('common:album-cover')}`
-                : `${t('common:picture-from')} ${cardData.name}`
+                ? `${cardData.name} ${t('album-cover')}`
+                : `${t('picture-from')} ${cardData.name}`
             }
             loading='eager'
             width={imageSize}
@@ -277,8 +277,8 @@ const CardMain: FC<{
             loading='eager'
             alt={
               imageUrl
-                ? `${cardData.name} ${t('common:album-cover')}`
-                : `${t('common:picture-from')} ${cardData.name}`
+                ? `${cardData.name} ${t('album-cover')}`
+                : `${t('picture-from')} ${cardData.name}`
             }
             height={imageSize}
             width={imageSize}

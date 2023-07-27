@@ -29,11 +29,11 @@
   "include": [
     ".eslintrc.cjs",
     "next-env.d.ts",
+    "next-translate.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "i18n.js",
     "cypress.js"
   ],
   "exclude": ["node_modules", "i18n.cjs", "cypress.d.ts"]

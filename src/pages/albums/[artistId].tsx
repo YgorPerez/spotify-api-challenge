@@ -46,7 +46,7 @@ const SingleArtistPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const router = useRouter();
-  const { t, lang } = useTranslation();
+  const { t, lang } = useTranslation('common');
 
   const artistId = stringOrNull(
     props.artistId ? props.artistId : router.query.artistId,
@@ -92,18 +92,18 @@ const SingleArtistPage: NextPage<Props> = (
   return (
     <>
       <NextSeo
-        title={`${t('common:artist')}: ${artist?.name ?? ''}`}
-        description={`${t('common:see-more')} ${artist?.name ?? ''}`}
+        title={`${t('artist')}: ${artist?.name ?? ''}`}
+        description={`${t('see-more')} ${artist?.name ?? ''}`}
         openGraph={{
           locale: lang,
           type: 'website',
           url: artist?.href,
-          title: `${t('common:artist')}: ${artist?.name ?? ''}`,
-          description: `${t('common:see-more')} ${artist?.name ?? ''}`,
+          title: `${t('artist')}: ${artist?.name ?? ''}`,
+          description: `${t('see-more')} ${artist?.name ?? ''}`,
           images: [
             {
               url: artist?.images?.[0]?.url ?? '',
-              alt: `${t('common:picture-from')} ${artist?.name ?? ''}`,
+              alt: `${t('picture-from')} ${artist?.name ?? ''}`,
               width: artist?.images?.[0]?.width,
               height: artist?.images?.[0]?.height,
             },
@@ -144,7 +144,7 @@ const SingleArtistPage: NextPage<Props> = (
   );
 };
 
-export const runtime = "experimental-edge"
+export const runtime = 'experimental-edge';
 
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context: GetServerSidePropsContext,

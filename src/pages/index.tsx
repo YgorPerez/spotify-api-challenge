@@ -48,7 +48,7 @@ const SearchPage: NextPage<Props> = (
   const router = useRouter();
   const queryRouter = router.query.search as string | undefined;
 
-  const { t, lang } = useTranslation();
+  const { t, lang } = useTranslation('search');
 
   const ref = useRef<HTMLDivElement | null>(null);
   const inView = useIntersectionObserver(ref, {
@@ -117,17 +117,17 @@ const SearchPage: NextPage<Props> = (
       <NextSeo
         title={
           searchTerm
-            ? `${t('search:searching-for')} ${searchTerm}`
-            : t('search:title')
+            ? `${t('searching-for')} ${searchTerm}`
+            : t('title')
         }
         openGraph={{
           locale: lang,
           title: searchTerm
-            ? `${t('search:searching-for')} ${searchTerm}`
-            : t('search:title'),
+            ? `${t('searching-for')} ${searchTerm}`
+            : t('title'),
           description: searchTerm
-            ? `${t('search:see-results-for')} ${searchTerm}`
-            : t('common:description'),
+            ? `${t('see-results-for')} ${searchTerm}`
+            : t('description'),
         }}
       />
       <SiteLinksSearchBoxJsonLd
@@ -149,19 +149,19 @@ const SearchPage: NextPage<Props> = (
                 <div className='ml-8 sm:ml-0'>
                   {shouldDisplayData || shouldDisplayLoadingData ? (
                     <h1 className='my-4 mt-6 text-primary sm:mt-14 sm:text-2xl xl:text-3xl'>
-                      {t('search:results-for')} &#8220;{searchTerm}&#8221;
+                      {t('results-for')} &#8220;{searchTerm}&#8221;
                     </h1>
                   ) : searchTerm ? (
                     <h1 className='my-4 mt-6 text-primary sm:mt-14 sm:text-2xl xl:text-3xl'>
-                      {t('search:no-results')} &#8220;{searchTerm}&#8221;
+                      {t('no-results')} &#8220;{searchTerm}&#8221;
                     </h1>
                   ) : lastSearchedAlbums[0] ? (
                     <h1 className='my-4 mt-6 text-primary sm:mt-14 sm:text-2xl xl:text-3xl'>
-                      {t('search:last-searched')}
+                      {t('last-searched')}
                     </h1>
                   ) : (
                     <h1 className='my-4 mt-6 text-primary sm:mt-14 sm:text-2xl xl:text-3xl'>
-                      {t('search:did-not-search')}
+                      {t('did-not-search')}
                     </h1>
                   )}
                 </div>

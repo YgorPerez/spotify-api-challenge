@@ -29,7 +29,7 @@ const SingleTrackPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const router = useRouter();
-  const { t, lang } = useTranslation();
+  const { t, lang } = useTranslation('common');
 
   const trackId = stringOrNull(
     props.trackId ? props.trackId : router.query.trackId,
@@ -63,16 +63,16 @@ const SingleTrackPage: NextPage<Props> = (
   return (
     <>
       <NextSeo
-        title={`${t('common:listen-to')} ${track?.name ?? ''}`}
-        description={`${t('common:you-can-listen')} ${
+        title={`${t('listen-to')} ${track?.name ?? ''}`}
+        description={`${t('you-can-listen')} ${
           track?.artists?.[0]?.name ?? ''
-        } ${track?.name ?? ''} ${t('common:album')}`}
+        } ${track?.name ?? ''} ${t('album')}`}
         openGraph={{
           locale: lang,
-          title: `${t('common:listen-to')} ${track?.name ?? ''}`,
-          description: `${t('common:you-can-listen')} ${
+          title: `${t('listen-to')} ${track?.name ?? ''}`,
+          description: `${t('you-can-listen')} ${
             track?.artists?.[0]?.name ?? ''
-          } ${track?.name ?? ''} ${t('common:song')}`,
+          } ${track?.name ?? ''} ${t('song')}`,
           url: track?.href,
           audio: track?.preview_url
             ? [{ url: track.preview_url, type: 'audio/mpeg' }]
@@ -80,7 +80,7 @@ const SingleTrackPage: NextPage<Props> = (
           images: [
             {
               url: track?.album?.images?.[0]?.url ?? '',
-              alt: `${t('common:album-cover')} ${track?.album?.name ?? ''}`,
+              alt: `${t('album-cover')} ${track?.album?.name ?? ''}`,
               width: track?.album?.images?.[0]?.width,
               height: track?.album?.images?.[0]?.height,
             },
@@ -107,7 +107,7 @@ const SingleTrackPage: NextPage<Props> = (
   );
 };
 
-export const runtime = "experimental-edge"
+export const runtime = 'experimental-edge';
 
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context: GetServerSidePropsContext,

@@ -8,7 +8,7 @@ const Lyrics: FC<{
   isFetching: boolean;
   isError: boolean;
 }> = ({ lyrics, isFetching, isError }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
 
   if (!lyrics && !isError && isFetching) {
     return (
@@ -29,7 +29,7 @@ const Lyrics: FC<{
     return (
       <div className='grid w-1/2 place-items-center' data-cy='lyrics'>
         <p className='text-2x text-center 2xl:text-4xl'>
-          {t('common:lyrics-not-found')}
+          {t('lyrics-not-found')}
         </p>
       </div>
     );

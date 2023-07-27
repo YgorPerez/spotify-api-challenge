@@ -4,7 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
 
 const GoBack: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
 
   const router = useRouter();
   return (
@@ -15,7 +15,7 @@ const GoBack: React.FC = () => {
       className='flex items-center px-0 sm:text-xl'
     >
       <ChevronLeft size='30' />
-      <span className=''>{t('common:go-back')}</span>
+      <span className=''>{t('go-back')}</span>
     </Button>
   );
 };

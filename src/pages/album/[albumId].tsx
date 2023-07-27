@@ -47,7 +47,7 @@ const SingleAlbumPage: NextPage<Props> = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) => {
   const router = useRouter();
-  const { t, lang } = useTranslation();
+  const { t, lang } = useTranslation('common');
 
   const albumId = stringOrNull(
     props.albumId ? props.albumId : router.query.albumId,
@@ -92,16 +92,16 @@ const SingleAlbumPage: NextPage<Props> = (
   return (
     <>
       <NextSeo
-        title={`${t('common:listen-to')} ${album?.name ?? ''}`}
-        description={`${t('common:you-can-listen')} ${
+        title={`${t('listen-to')} ${album?.name ?? ''}`}
+        description={`${t('you-can-listen')} ${
           album?.artists?.[0]?.name ?? ''
-        } ${album?.name ?? ''} ${t('common:album')}`}
+        } ${album?.name ?? ''} ${t('album')}`}
         openGraph={{
           locale: lang,
-          title: `${t('common:listen-to')} ${album?.name ?? ''}`,
-          description: `${t('common:you-can-listen')} ${
+          title: `${t('listen-to')} ${album?.name ?? ''}`,
+          description: `${t('you-can-listen')} ${
             album?.artists?.[0]?.name ?? ''
-          } ${album?.name ?? ''} ${t('common:album')}`,
+          } ${album?.name ?? ''} ${t('album')}`,
           url: album?.href,
           audio: tracks?.[0]?.preview_url
             ? tracks?.map(track => {
@@ -114,7 +114,7 @@ const SingleAlbumPage: NextPage<Props> = (
           images: [
             {
               url: album?.images?.[0]?.url ?? '',
-              alt: `${t('common:album-cover')} ${album?.name ?? ''}`,
+              alt: `${t('album-cover')} ${album?.name ?? ''}`,
               width: album?.images?.[0]?.width,
               height: album?.images?.[0]?.height,
             },

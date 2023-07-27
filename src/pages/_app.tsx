@@ -27,16 +27,16 @@ const roboto = Roboto({
 const MyApp: AppType = ({ Component, pageProps: { ...pageProps } }) => {
   usePersistQueryClient();
   useSSRIntercept(); // makes gssp run only once
-  const { t, lang } = useTranslation();
+  const { t, lang } = useTranslation('common');
   return (
     <>
       <DefaultSeo
         {...config}
-        defaultTitle={t('common:title')}
-        description={t('common:description')}
+        defaultTitle={t('title')}
+        description={t('description')}
         openGraph={{
-          title: t('common:title'),
-          description: t('common:description'),
+          title: t('title'),
+          description: t('description'),
           locale: lang,
           type: 'website',
           siteName: 'Music Api Challenge',

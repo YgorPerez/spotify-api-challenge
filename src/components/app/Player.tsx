@@ -17,7 +17,7 @@ const Player: FC<{
   tracks: SimplifiedTrackType[];
 }> = ({ tracks: tracks }) => {
   const [currentSongIndex, setSongIndex] = useState(0);
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
 
   const { data: user } = api.spotify.getUser.useQuery();
   const { data: token } = api.spotify.getAccessToken.useQuery();
@@ -86,8 +86,8 @@ const Player: FC<{
         </div>
       ) : (
         <p className='mb-10 w-full text-center text-xl sm:text-2xl'>
-          {t('common:this')} {isPlaylist ? t('common:album') : t('common:song')}{' '}
-          {t('common:no-song-preview')}
+          {t('this')} {isPlaylist ? t('album') : t('song')}{' '}
+          {t('no-song-preview')}
         </p>
       )}
     </div>

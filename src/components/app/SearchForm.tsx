@@ -25,7 +25,7 @@ const SearchForm: FC<{ search: string | null }> = ({ search }) => {
     !search && setSearchQueryParam('');
   });
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('search');
 
   function submitHandler(e: React.FormEvent) {
     e.preventDefault();
@@ -42,7 +42,7 @@ const SearchForm: FC<{ search: string | null }> = ({ search }) => {
             className='ml-2 w-4/5 sm:text-left sm:text-xl'
             htmlFor={`search-${formId}`}
           >
-            {t('search:search-for')}
+            {t('search-for')}
           </Label>
         </div>
         <div className='flex justify-center'>
@@ -51,8 +51,8 @@ const SearchForm: FC<{ search: string | null }> = ({ search }) => {
             autoFocus
             id={`search-${formId}`}
             data-cy='search-input'
-            placeholder={t('search:input-placeholder')}
-            className='search-cancel:invert-100 mt-4 h-8 w-4/5 border-separate bg-background p-1 pb-2 text-2xl font-bold text-primary outline-none placeholder:text-primary-foreground placeholder:opacity-100 search-cancel:ml-2 search-cancel:brightness-[1.08] search-cancel:contrast-[1.01] search-cancel:hue-rotate-[336deg] search-cancel:saturate-[0] search-cancel:sepia-[.04]  focus:border-b-2 focus:border-border sm:-m-px sm:mt-4 sm:h-16 sm:w-full sm:p-3 sm:pb-4 sm:text-left sm:text-4xl sm:focus:border-b-4 lg:pb-8 xl:text-5xl'
+            placeholder={t('input-placeholder')}
+            className='search-cancel:invert-100 mt-4 h-8 w-4/5 border-separate bg-background p-1 pb-2 text-2xl font-bold text-primary outline-none placeholder:text-primary-foreground placeholder:opacity-100 focus:border-b-2 focus:border-border search-cancel:ml-2 search-cancel:brightness-[1.08] search-cancel:contrast-[1.01] search-cancel:hue-rotate-[336deg]  search-cancel:saturate-[0] search-cancel:sepia-[.04] sm:-m-px sm:mt-4 sm:h-16 sm:w-full sm:p-3 sm:pb-4 sm:text-left sm:text-4xl sm:focus:border-b-4 lg:pb-8 xl:text-5xl'
             defaultValue={search || ''}
             onInput={e => {
               setSearchQueryParam(e.currentTarget.value.trim().toLowerCase());

@@ -13,7 +13,7 @@ const LoadMore: React.FC<Props> = ({
   isLoading,
   hasNextPage,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
 
   return (
     <Button
@@ -26,12 +26,12 @@ const LoadMore: React.FC<Props> = ({
       {isLoading ? (
         <>
           <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-          {t('common:loading')}
+          {t('loading')}
         </>
       ) : hasNextPage ? (
-        <>{t('common:load-more')}</>
+        <>{t('load-more')}</>
       ) : (
-        <>{t('common:nothing-load')}</>
+        <>{t('nothing-load')}</>
       )}
     </Button>
   );
