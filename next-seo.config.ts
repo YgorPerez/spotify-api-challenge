@@ -18,45 +18,8 @@ const config: DefaultSeoProps = {
       content: 'knf0tBoTfCXjTWRmnCUDA5u-YHXtAD5fLY4YZizy1P4',
     },
     {
-      name: 'apple-mobile-web-app-capable',
-      content: 'yes',
-    },
-    {
-      name: 'apple-mobile-web-app-status-bar-style',
-      content: 'default',
-    },
-    {
-      name: 'apple-mobile-web-app-title',
-      content: 'Music Api Challenge',
-    },
-    {
-      name: 'format-detection',
-      content: 'telephone=no',
-    },
-    {
-      name: 'mobile-web-app-capable',
-      content: 'yes',
-    },
-    {
-      name: 'msapplication-config',
-      content: '/public/browserconfig.xml',
-    },
-    {
-      name: 'msapplication-TileColor',
-      content: '#fafafa',
-    },
-    {
-      name: 'theme-color',
-      content: '#fafafa',
-    },
-    {
       name: 'view-transition',
       content: 'same-origin',
-    },
-    {
-      name: 'viewport',
-      content:
-        'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover',
     },
   ],
   additionalLinkTags: [
@@ -94,10 +57,6 @@ const config: DefaultSeoProps = {
       href: 'https://i.imgur.com/NIOAiwY.png',
       type: 'image/png',
       sizes: '167x167',
-    },
-    {
-      rel: 'manifest',
-      href: '/public/pwa/manifest.json',
     },
     {
       rel: 'shortcut',
