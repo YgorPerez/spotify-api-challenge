@@ -72,7 +72,7 @@
     "eslint-config-next": "^13.4.7",
     "eslint-plugin-cypress": "^2.13.3",
     "next-translate-plugin": "^2.4.4",
-    "postcss": "^8.4.24",
+    "postcss": "^8.4.31",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0",
     "sass": "^1.64.1",
